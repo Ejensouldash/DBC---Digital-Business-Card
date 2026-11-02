@@ -1,16 +1,11 @@
 {
   "Meta": {
-    "siteName": "Kad Digital",
+    "siteName": "Digital Card",
     "siteDescription": "NFC business cards. Tap, save the contact, stay connected."
   },
   "NotFound": {
     "title": "Page not found",
     "description": "This link may be wrong or the profile is no longer published."
-  },
-  "LocaleSwitcher": {
-    "label": "Change language",
-    "ms": "BM",
-    "en": "EN"
   },
   "Validation": {
     "required": "This field is required.",
@@ -27,7 +22,7 @@
     "slugTaken": "This name is already taken. Please pick another."
   },
   "Landing": {
-    "brand": "Kad Digital",
+    "brand": "Digital Card",
     "login": "Sign in",
     "title": "One tap. All your contact details.",
     "subtitle": "An NFC business card that opens your digital profile on any phone, no app needed. Update it any time without changing the card.",
@@ -102,7 +97,7 @@
     }
   },
   "Dashboard": {
-    "brand": "Kad Digital",
+    "brand": "Digital Card",
     "signOut": "Sign out",
     "nav": {
       "label": "Main navigation",
@@ -180,7 +175,7 @@
     "qrDescription": "Show this code to share {name}'s profile.",
     "linkCopied": "Link copied",
     "copyFailed": "Couldn't copy the link",
-    "poweredBy": "Kad Digital",
+    "poweredBy": "Digital Card",
     "actions": {
       "call": "Call",
       "whatsapp": "WhatsApp",

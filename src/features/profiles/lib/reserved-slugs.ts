@@ -1,4 +1,4 @@
-// Slugs that would collide with routes, locales or look official.
+// Slugs that would collide with routes or look official.
 export const RESERVED_SLUGS: ReadonlySet<string> = new Set([
   "admin",
   "api",

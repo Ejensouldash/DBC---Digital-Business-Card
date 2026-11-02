@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import { LocaleSwitcher } from "@/components/shared/locale-switcher";
 import { TapBeacon } from "@/features/analytics/components/tap-beacon";
 import { ProfileShareActions } from "@/features/profiles/components/profile-share-actions";
 import { ProfileView } from "@/features/profiles/components/profile-view";
@@ -13,9 +12,7 @@ import { env } from "@/lib/env";
 // The whole page depends on the slug and query, so it renders at request time.
 export const instant = false;
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/[locale]/p/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/p/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const profile = await getPublicProfile(slug);
   if (!profile) return { robots: { index: false } };
@@ -37,10 +34,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function PublicProfilePage({
-  params,
-  searchParams,
-}: PageProps<"/[locale]/p/[slug]">) {
+export default async function PublicProfilePage({ params, searchParams }: PageProps<"/p/[slug]">) {
   const [{ slug }, query] = await Promise.all([params, searchParams]);
   const profile = await getPublicProfile(slug);
   if (!profile) notFound();
@@ -68,10 +62,7 @@ export default async function PublicProfilePage({
             profileUrl={profileUrl}
           />
         </ProfileView>
-        <footer className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>{t("poweredBy")}</span>
-          <LocaleSwitcher />
-        </footer>
+        <footer className="text-center text-xs text-muted-foreground">{t("poweredBy")}</footer>
       </div>
     </main>
   );

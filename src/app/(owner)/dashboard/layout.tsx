@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
-import { LocaleSwitcher } from "@/components/shared/locale-switcher";
 import { SignOutButton } from "@/features/auth/components/sign-out-button";
-import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth/session";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -11,7 +10,7 @@ export const metadata: Metadata = { robots: { index: false } };
 // Every dashboard page depends on the session, so the segment renders at request time.
 export const instant = false;
 
-export default async function DashboardLayout({ children }: LayoutProps<"/[locale]/dashboard">) {
+export default async function DashboardLayout({ children }: LayoutProps<"/dashboard">) {
   await requireUser("/dashboard");
   const t = await getTranslations("Dashboard");
 
@@ -39,7 +38,6 @@ export default async function DashboardLayout({ children }: LayoutProps<"/[local
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-1">
-            <LocaleSwitcher />
             <SignOutButton />
           </div>
         </div>

@@ -2,13 +2,13 @@
 
 import { Loader2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import type { OwnerProfileSummary } from "@/features/profiles/queries";
-import { useRouter } from "@/i18n/navigation";
 
 import { claimCard } from "../actions";
 
@@ -31,7 +31,7 @@ export function ClaimCardForm({ code, profiles }: ClaimCardFormProps) {
         toast.error(errorMessage(result.error));
         return;
       }
-      router.replace({ pathname: "/dashboard", query: { claimed: "1" } });
+      router.replace("/dashboard?claimed=1");
     });
   }
 

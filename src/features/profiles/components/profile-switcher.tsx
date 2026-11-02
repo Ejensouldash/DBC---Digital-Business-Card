@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 import {
   Select,
@@ -10,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "@/i18n/navigation";
 
 import type { OwnerProfileSummary } from "../queries";
 
@@ -26,10 +26,11 @@ export function ProfileSwitcher({ profiles, currentId }: ProfileSwitcherProps) {
     <Select
       value={currentId ?? NEW_PROFILE}
       onValueChange={(value) =>
-        router.push({
-          pathname: "/dashboard/profile",
-          query: value === NEW_PROFILE ? { new: "1" } : { profile: value },
-        })
+        router.push(
+          value === NEW_PROFILE
+            ? "/dashboard/profile?new=1"
+            : `/dashboard/profile?profile=${value}`,
+        )
       }
     >
       <SelectTrigger className="w-56" aria-label={t("switchProfile")}>

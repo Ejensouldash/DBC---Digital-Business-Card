@@ -2,10 +2,10 @@
 
 import { LogOutIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { useRouter } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth/client";
 
 export function SignOutButton() {

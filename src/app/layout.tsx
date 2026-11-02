@@ -1,20 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { Toaster } from "@/components/ui/sonner";
-import { routing } from "@/i18n/routing";
+import { APP_LOCALE } from "@/i18n/request";
 import { env } from "@/lib/env";
 
-import "../globals.css";
+import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Meta");
@@ -31,12 +27,10 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
-export default async function LocaleLayout({ children }: LayoutProps<"/[locale]">) {
-  const locale = await getLocale();
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang={locale}
+      lang={APP_LOCALE}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">

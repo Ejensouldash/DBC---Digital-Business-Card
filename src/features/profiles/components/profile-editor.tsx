@@ -3,12 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { useRouter } from "@/i18n/navigation";
 
 import { createProfile, updateProfile } from "../actions";
 import { profileFormSchema, type ProfileFormInput, type ProfileFormValues } from "../schemas";
@@ -73,7 +73,7 @@ export function ProfileEditor({
       }
       toast.success(t("saved"));
       if (result.data?.id) {
-        router.replace({ pathname: "/dashboard/profile", query: { profile: result.data.id } });
+        router.replace(`/dashboard/profile?profile=${result.data.id}`);
       } else {
         router.refresh();
       }

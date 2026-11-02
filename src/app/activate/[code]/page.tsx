@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 import { StatusMessage } from "@/components/shared/status-message";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,6 @@ import { ClaimCardForm } from "@/features/cards/components/claim-card-form";
 import { OnboardingForm } from "@/features/cards/components/onboarding-form";
 import { resolveCard } from "@/features/cards/queries";
 import { listOwnerProfiles } from "@/features/profiles/queries";
-import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth/session";
 import { cardCodeSchema } from "@/lib/card-code";
 import { env } from "@/lib/env";
@@ -18,7 +18,7 @@ export const metadata: Metadata = { robots: { index: false } };
 // Reads the session and redirects, so it renders at request time.
 export const instant = false;
 
-export default async function ActivatePage({ params }: PageProps<"/[locale]/activate/[code]">) {
+export default async function ActivatePage({ params }: PageProps<"/activate/[code]">) {
   const { code: rawCode } = await params;
   const user = await requireUser(`/activate/${rawCode}`);
   const t = await getTranslations("Activate");

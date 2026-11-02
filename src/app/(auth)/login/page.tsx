@@ -15,13 +15,13 @@ export async function generateMetadata(): Promise<Metadata> {
 async function LoginFormWithNext({
   searchParams,
 }: {
-  searchParams: PageProps<"/[locale]/login">["searchParams"];
+  searchParams: PageProps<"/login">["searchParams"];
 }) {
   const { next } = await searchParams;
   return <LoginForm next={safeNextPath(typeof next === "string" ? next : null)} />;
 }
 
-export default async function LoginPage({ searchParams }: PageProps<"/[locale]/login">) {
+export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const t = await getTranslations("Login");
 
   return (

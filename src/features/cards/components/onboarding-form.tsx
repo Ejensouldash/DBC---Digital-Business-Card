@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -17,7 +18,6 @@ import {
   type OnboardingInput,
   type OnboardingValues,
 } from "@/features/profiles/schemas";
-import { useRouter } from "@/i18n/navigation";
 
 import { createProfileAndClaimCard } from "../actions";
 
@@ -46,7 +46,7 @@ export function OnboardingForm({ code, defaultName, profileBaseUrl }: Onboarding
         toast.error(errorMessage(result.error));
         return;
       }
-      router.replace({ pathname: "/dashboard", query: { claimed: "1" } });
+      router.replace("/dashboard?claimed=1");
     }),
   );
 

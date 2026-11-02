@@ -4,8 +4,8 @@ import { recordTap } from "@/features/analytics/lib/record-tap";
 import { resolveCard } from "@/features/cards/queries";
 import { cardCodeSchema } from "@/lib/card-code";
 
-// NFC entry point written on every chip: https://<site>/c/<CODE>. No locale prefix, so the
-// chip URL never changes. Visitors land on BM pages; the language switcher is on each page.
+// NFC entry point written on every chip: https://<site>/c/<CODE>. The chip URL never changes;
+// the server decides where each tap goes.
 function redirectTo(request: NextRequest, path: string) {
   const response = NextResponse.redirect(new URL(path, request.url), 307);
   response.headers.set("Cache-Control", "no-store");

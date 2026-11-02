@@ -44,9 +44,7 @@ function toFormInput(profile: Profile): ProfileFormInput {
   };
 }
 
-export default async function ProfilePage({
-  searchParams,
-}: PageProps<"/[locale]/dashboard/profile">) {
+export default async function ProfilePage({ searchParams }: PageProps<"/dashboard/profile">) {
   const [user, query, t] = await Promise.all([
     requireUser("/dashboard/profile"),
     searchParams,

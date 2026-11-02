@@ -1,10 +1,8 @@
 import "server-only";
 
-import { getLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { cache } from "react";
-
-import { redirect } from "@/i18n/navigation";
 
 import { auth } from "./server";
 
@@ -35,6 +33,5 @@ export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
 export async function requireUser(returnTo: string): Promise<SessionUser> {
   const user = await getCurrentUser();
   if (user) return user;
-  const locale = await getLocale();
-  return redirect({ href: { pathname: "/login", query: { next: returnTo } }, locale });
+  redirect(`/login?next=${encodeURIComponent(returnTo)}`);
 }

@@ -1,5 +1,6 @@
 import { ExternalLinkIcon, PencilIcon, PlusIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 import { FlashToast } from "@/components/shared/flash-toast";
 import { Badge } from "@/components/ui/badge";
@@ -14,10 +15,9 @@ import {
 } from "@/components/ui/card";
 import { getOwnerCardCount } from "@/features/cards/queries";
 import { listOwnerProfiles } from "@/features/profiles/queries";
-import { Link } from "@/i18n/navigation";
 import { requireUser } from "@/lib/auth/session";
 
-export default async function DashboardPage({ searchParams }: PageProps<"/[locale]/dashboard">) {
+export default async function DashboardPage({ searchParams }: PageProps<"/dashboard">) {
   const [user, { claimed }, t] = await Promise.all([
     requireUser("/dashboard"),
     searchParams,

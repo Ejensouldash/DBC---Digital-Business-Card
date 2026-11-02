@@ -1,9 +1,8 @@
 import { NfcIcon, UserPlusIcon, ZapIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
-import { LocaleSwitcher } from "@/components/shared/locale-switcher";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
 
 const FEATURES = [
   { key: "tap", Icon: NfcIcon },
@@ -19,7 +18,6 @@ export default function LandingPage() {
       <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4">
         <span className="font-semibold">{t("brand")}</span>
         <div className="flex items-center gap-1">
-          <LocaleSwitcher />
           <Button asChild variant="ghost" size="sm">
             <Link href="/login">{t("login")}</Link>
           </Button>

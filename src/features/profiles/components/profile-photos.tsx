@@ -1,11 +1,11 @@
 "use client";
 
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useState, type KeyboardEvent } from "react";
 
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 type Photo = { id: string; url: string };
@@ -74,6 +74,7 @@ export function ProfilePhotos({ photos, ownerName, preview }: ProfilePhotosProps
         <DialogContent
           onKeyDown={onKeyDown}
           aria-describedby={undefined}
+          showCloseButton={false}
           className="max-w-[calc(100%-1rem)] gap-0 border-0 bg-black/95 p-0 text-white ring-0 sm:max-w-3xl"
         >
           <DialogTitle className="sr-only">{t("title", { name: ownerName })}</DialogTitle>
@@ -105,6 +106,12 @@ export function ProfilePhotos({ photos, ownerName, preview }: ProfilePhotosProps
               >
                 <ChevronRightIcon className="size-6" aria-hidden />
               </button>
+              <DialogClose
+                aria-label={t("close")}
+                className={cn(NAV_BUTTON, "top-3 right-3 translate-y-0")}
+              >
+                <XIcon className="size-5" aria-hidden />
+              </DialogClose>
               <p
                 aria-live="polite"
                 className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-white/15 px-3 py-1 text-sm backdrop-blur"

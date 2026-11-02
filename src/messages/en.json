@@ -307,7 +307,8 @@
       "more": "+{count}",
       "previous": "Previous photo",
       "next": "Next photo",
-      "counter": "{n} / {total}"
+      "counter": "{n} / {total}",
+      "close": "Close photos"
     }
   },
   "LeadForm": {

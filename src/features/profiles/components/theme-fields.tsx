@@ -44,10 +44,7 @@ export function ThemeFields({ control }: ThemeFieldsProps) {
                     />
                     <span
                       className="flex size-5 shrink-0 items-center justify-center rounded-full ring-1 ring-white/20"
-                      style={{
-                        backgroundColor: THEME_ACCENTS[accent].solid,
-                        color: THEME_ACCENTS[accent].on,
-                      }}
+                      style={{ backgroundColor: THEME_ACCENTS[accent], color: "#ffffff" }}
                       aria-hidden
                     >
                       {field.value === accent ? <CheckIcon className="size-3" /> : null}

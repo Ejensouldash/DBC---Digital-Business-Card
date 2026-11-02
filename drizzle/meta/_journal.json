@@ -15,6 +15,13 @@
       "when": 1793603642670,
       "tag": "0001_lead_rate_limit",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793606788239,
+      "tag": "0002_profile_company_and_photos",
+      "breakpoints": true
     }
   ]
 }

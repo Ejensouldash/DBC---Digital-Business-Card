@@ -9,7 +9,7 @@ These rules keep the code consistent; follow them unless the user says otherwise
 
 Next.js 16 App Router with Cache Components, TypeScript strict, Tailwind v4 + shadcn/ui
 (radix-nova style), Neon Postgres via Drizzle (`pg` pool), Neon Auth (`@neon/auth`, Managed
-Better Auth), Neon Object Storage (S3 API), next-intl, Zod 4, react-hook-form, Vitest,
+Better Auth), Cloudflare R2 for images (S3 API, `src/lib/storage.ts`), next-intl, Zod 4, react-hook-form, Vitest,
 Playwright, pnpm.
 
 This is Next 16, not the Next.js in your training data: `proxy.ts` replaces middleware, and

@@ -16,11 +16,17 @@ import {
 import { OwnerStatsSection } from "@/features/analytics/components/owner-stats";
 import { getOwnerStats } from "@/features/analytics/queries";
 import { getOwnerCardCount } from "@/features/cards/queries";
-import { listOwnerProfiles } from "@/features/profiles/queries";
+import { ProfileSwitcher } from "@/features/profiles/components/profile-switcher";
+import { QuickProfileForm } from "@/features/profiles/components/quick-profile-form";
+import { ShareHub } from "@/features/profiles/components/share-hub";
+import { imageUrl } from "@/features/profiles/lib/images";
+import { selectProfile } from "@/features/profiles/lib/select-profile";
+import { getOwnerProfile, listOwnerProfiles } from "@/features/profiles/queries";
 import { requireUser } from "@/lib/auth/session";
+import { env } from "@/lib/env";
 
 export default async function DashboardPage({ searchParams }: PageProps<"/dashboard">) {
-  const [user, { claimed }, t] = await Promise.all([
+  const [user, query, t] = await Promise.all([
     requireUser("/dashboard"),
     searchParams,
     getTranslations("Dashboard"),
@@ -30,16 +36,58 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
     getOwnerCardCount(user.id),
     getOwnerStats(user.id),
   ]);
+  const selected = selectProfile(ownerProfiles, query.profile);
+  const hubProfile = selected ? await getOwnerProfile(user.id, selected.id) : null;
 
   return (
     <div className="flex flex-col gap-8">
-      {claimed === "1" ? <FlashToast message={t("claimedToast")} /> : null}
+      {query.claimed === "1" ? <FlashToast message={t("claimedToast")} /> : null}
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">
           {t("welcome", { name: user.name || user.email })}
         </h1>
         <p className="text-muted-foreground">{t("activeCards", { count: cardCount })}</p>
       </div>
+
+      {hubProfile ? (
+        <div className="flex flex-col gap-3">
+          {ownerProfiles.length > 1 ? (
+            <div className="flex justify-end">
+              <ProfileSwitcher
+                profiles={ownerProfiles}
+                currentId={hubProfile.id}
+                basePath="/dashboard"
+              />
+            </div>
+          ) : null}
+          <div className="mx-auto w-full max-w-md">
+            <ShareHub
+              displayName={hubProfile.displayName}
+              jobTitle={hubProfile.jobTitle}
+              company={hubProfile.company}
+              avatarUrl={imageUrl(hubProfile.avatarPath)}
+              slug={hubProfile.slug}
+              profileUrl={`${env.NEXT_PUBLIC_SITE_URL}/p/${hubProfile.slug}`}
+              isPublished={hubProfile.isPublished}
+            />
+          </div>
+        </div>
+      ) : (
+        <section
+          aria-labelledby="onboarding-title"
+          className="relative overflow-hidden rounded-3xl glass p-5 sm:p-8"
+        >
+          <div
+            aria-hidden
+            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgb(124_58_237/0.35),transparent_60%)]"
+          />
+          <h2 id="onboarding-title" className="text-xl font-semibold sm:text-2xl">
+            {t("onboarding.title")}
+          </h2>
+          <p className="mt-1 mb-6 text-muted-foreground">{t("onboarding.description")}</p>
+          <QuickProfileForm name={user.name} email={user.email} />
+        </section>
+      )}
 
       <OwnerStatsSection stats={stats} />
 
@@ -55,9 +103,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
             </Link>
           </Button>
         </div>
-        {ownerProfiles.length === 0 ? (
-          <p className="text-muted-foreground">{t("noProfiles")}</p>
-        ) : (
+        {ownerProfiles.length === 0 ? null : (
           <ul className="grid gap-3 sm:grid-cols-2">
             {ownerProfiles.map((profile) => (
               <li key={profile.id}>

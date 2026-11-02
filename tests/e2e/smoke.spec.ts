@@ -63,13 +63,23 @@ test.describe("signed-out access", () => {
 test.describe("published profile", () => {
   test.skip(!profileSlug, "Set E2E_PROFILE_SLUG to a published profile to run these");
 
-  test("shows the owner and a Save Contact button", async ({ page }) => {
+  test("shows the owner and Save Contact buttons", async ({ page }) => {
     await page.goto(`/p/${profileSlug}`);
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Save Contact" })).toHaveAttribute(
-      "href",
-      `/api/vcard/${profileSlug}`,
-    );
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Hi! I am");
+    // Hero, sticky bar and contact card all offer it.
+    const saveContact = page.getByRole("link", { name: "Save Contact" });
+    await expect(saveContact.first()).toBeVisible();
+    for (const link of await saveContact.all()) {
+      await expect(link).toHaveAttribute("href", `/api/vcard/${profileSlug}`);
+    }
+  });
+
+  test("sticky bar appears after scrolling past the hero", async ({ page }) => {
+    await page.goto(`/p/${profileSlug}`);
+    const bar = page.locator(".sticky > div");
+    await expect(bar).toHaveAttribute("inert", "");
+    await page.mouse.wheel(0, 900);
+    await expect(bar).not.toHaveAttribute("inert");
   });
 
   test("serves a vCard 3.0 file", async ({ request }) => {

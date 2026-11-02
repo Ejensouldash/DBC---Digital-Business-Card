@@ -66,12 +66,15 @@ export function LeadFormDialog({ slug, ownerName }: LeadFormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="lg" className="h-11 w-full lift rounded-xl">
-          <SendIcon aria-hidden />
+        <button
+          type="button"
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white text-sm font-medium text-zinc-900 transition outline-none hover:bg-zinc-50 focus-visible:ring-3 focus-visible:ring-ring/60 active:scale-[0.97]"
+        >
+          <SendIcon className="size-4" aria-hidden />
           {t("open")}
-        </Button>
+        </button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-md">
+      <DialogContent className="light max-h-[90dvh] overflow-y-auto sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{t("title", { name: ownerName })}</DialogTitle>
           <DialogDescription>{t("description", { name: ownerName })}</DialogDescription>

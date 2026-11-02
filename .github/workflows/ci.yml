@@ -24,10 +24,6 @@ jobs:
       DATABASE_URL_UNPOOLED: postgresql://ci:ci@localhost:5432/ci
       NEON_AUTH_BASE_URL: https://auth.ci.example.test/neondb/auth
       NEON_AUTH_COOKIE_SECRET: ci-only-cookie-secret-at-least-32-characters
-      AWS_ACCESS_KEY_ID: ci
-      AWS_SECRET_ACCESS_KEY: ci
-      AWS_ENDPOINT_URL_S3: https://storage.ci.example.test
-      AWS_REGION: ap-southeast-1
       NEXT_TELEMETRY_DISABLED: "1"
     steps:
       - uses: actions/checkout@v4

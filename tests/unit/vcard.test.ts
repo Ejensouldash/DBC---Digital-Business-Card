@@ -11,6 +11,8 @@ const profile: VCardProfile = {
   email: "ahmad@example.com",
   website: "https://example.com",
   address: "No 1, Jalan Ampang\nKuala Lumpur",
+  officePhone: null,
+  companyWebsite: null,
   profileUrl: "https://dbc.test/p/ahmad",
 };
 
@@ -82,6 +84,15 @@ describe("buildVCard", () => {
       [],
     );
     expect(minimal).not.toMatch(/^(ORG|TITLE|TEL|EMAIL|ADR|NOTE)/m);
+  });
+
+  it("adds the office phone and company website as work entries", () => {
+    const vcard = buildVCard(
+      { ...profile, officePhone: "03-2345 6789", companyWebsite: "https://abc.example.com" },
+      [],
+    );
+    expect(vcard).toContain("TEL;TYPE=WORK,VOICE:+60323456789\r\n");
+    expect(vcard).toContain("URL;TYPE=WORK:https://abc.example.com\r\n");
   });
 
   it("embeds and folds a JPEG photo", () => {

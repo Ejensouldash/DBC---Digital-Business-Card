@@ -1,11 +1,11 @@
 "use client";
 
-import { QrCodeIcon, Share2Icon, UserPlusIcon } from "lucide-react";
+import { QrCodeIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { toast } from "sonner";
 
 import { QrCode } from "@/components/shared/qr-code";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,68 +15,67 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-type ProfileShareActionsProps = {
+// Native share sheet where there is one (phones), otherwise copy the link.
+export async function shareProfile(title: string, url: string, messages: Record<string, string>) {
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, url });
+    } catch {
+      // The visitor closed the share sheet.
+    }
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    toast.success(messages.copied);
+  } catch {
+    toast.error(messages.failed);
+  }
+}
+
+type ShareButtonProps = {
   displayName: string;
-  vcardUrl: string;
   profileUrl: string;
+  className: string;
+  children: ReactNode;
 };
 
-export function ProfileShareActions({
-  displayName,
-  vcardUrl,
-  profileUrl,
-}: ProfileShareActionsProps) {
+export function ShareButton({ displayName, profileUrl, className, children }: ShareButtonProps) {
   const t = useTranslations("Profile");
-  const qrUrl = `${profileUrl}?src=qr`;
-
-  async function share() {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: displayName, url: profileUrl });
-      } catch {
-        // The visitor closed the share sheet.
-      }
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(profileUrl);
-      toast.success(t("linkCopied"));
-    } catch {
-      toast.error(t("copyFailed"));
-    }
-  }
-
   return (
-    <div className="flex w-full flex-col gap-2">
-      <Button asChild size="lg" className="sheen h-12 w-full rounded-xl text-base glow">
-        <a href={vcardUrl}>
-          <UserPlusIcon aria-hidden />
-          {t("saveContact")}
-        </a>
-      </Button>
-      <div className="grid grid-cols-2 gap-2">
-        <Button variant="outline" size="lg" className="h-11 lift rounded-xl" onClick={share}>
-          <Share2Icon aria-hidden />
-          {t("share")}
-        </Button>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline" size="lg" className="h-11 lift rounded-xl">
-              <QrCodeIcon aria-hidden />
-              {t("qr")}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-sm">
-            <DialogHeader>
-              <DialogTitle>{t("qrTitle")}</DialogTitle>
-              <DialogDescription>{t("qrDescription", { name: displayName })}</DialogDescription>
-            </DialogHeader>
-            <div className="flex justify-center py-2">
-              <QrCode value={qrUrl} label={t("qrTitle")} />
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-    </div>
+    <button
+      type="button"
+      className={className}
+      onClick={() =>
+        shareProfile(displayName, profileUrl, { copied: t("linkCopied"), failed: t("copyFailed") })
+      }
+    >
+      {children}
+    </button>
+  );
+}
+
+type QrButtonProps = { displayName: string; profileUrl: string; className: string };
+
+export function QrButton({ displayName, profileUrl, className }: QrButtonProps) {
+  const t = useTranslations("Profile");
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button type="button" className={className}>
+          <QrCodeIcon className="size-4" aria-hidden />
+          {t("qr")}
+        </button>
+      </DialogTrigger>
+      <DialogContent className="light sm:max-w-sm">
+        <DialogHeader>
+          <DialogTitle>{t("qrTitle")}</DialogTitle>
+          <DialogDescription>{t("qrDescription", { name: displayName })}</DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-center py-2">
+          <QrCode value={`${profileUrl}?src=qr`} label={t("qrTitle")} />
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -2,7 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* `.light` re-enters the light theme inside the dark app (the public profile's cards). */
+@custom-variant dark (&:is(.dark *):not(:is(.light, .light *)));
 
 @theme inline {
   --color-background: var(--background);
@@ -49,7 +50,10 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-:root {
+:root,
+.light {
+  color-scheme: light;
+  --accent-soft: #6d28d9;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -139,7 +143,8 @@
 
 /* Data-viz categorical slots (validated: blue, orange, aqua; adjacent + all-pairs CVD-safe).
    Aqua is under 3:1 on the surface, so charts must also show values as text. */
-:root {
+:root,
+.light {
   --series-1: #2a78d6;
   --series-2: #eb6834;
   --series-3: #1baf7a;

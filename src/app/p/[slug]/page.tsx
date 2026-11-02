@@ -2,23 +2,14 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { CSSProperties } from "react";
 
-import { Aurora } from "@/components/shared/aurora";
 import { TapBeacon } from "@/features/analytics/components/tap-beacon";
 import { LeadFormDialog } from "@/features/leads/components/lead-form-dialog";
-import { ProfileShareActions } from "@/features/profiles/components/profile-share-actions";
 import { ProfileView } from "@/features/profiles/components/profile-view";
 import { imageUrl } from "@/features/profiles/lib/images";
 import { getPublicProfile } from "@/features/profiles/queries";
 import { env } from "@/lib/env";
-import { parseTheme, THEME_ACCENTS, type ProfileTheme } from "@/lib/profile-theme";
-
-// The background picks up the owner's accent.
-function auroraTint({ accent }: ProfileTheme): CSSProperties {
-  const { solid, soft } = THEME_ACCENTS[accent];
-  return { "--aurora-1": solid, "--aurora-2": soft, "--aurora-3": solid } as CSSProperties;
-}
+import { parseTheme } from "@/lib/profile-theme";
 
 // The whole page depends on the slug and query, so it renders at request time.
 export const instant = false;
@@ -54,32 +45,31 @@ export default async function PublicProfilePage({ params, searchParams }: PagePr
   const isCardTap = query.via === "card";
   const source = query.src === "qr" ? "qr" : "link";
   const t = await getTranslations("Profile");
-  const profileUrl = `${env.NEXT_PUBLIC_SITE_URL}/p/${profile.slug}`;
-  const theme = parseTheme(profile.theme);
 
   return (
-    <main className="flex grow flex-col items-center px-4 py-6 sm:py-10">
-      <Aurora style={auroraTint(theme)} />
+    <main className="light flex grow justify-center bg-zinc-200">
       {isCardTap ? null : <TapBeacon slug={profile.slug} source={source} />}
-      <div className="flex w-full max-w-[480px] flex-col gap-4">
+      <div className="flex w-full max-w-[480px] flex-col bg-[#eef0f4] sm:my-6 sm:overflow-hidden sm:rounded-3xl sm:shadow-xl">
         <ProfileView
           profile={{
             ...profile,
             avatarUrl: imageUrl(profile.avatarPath),
             coverUrl: imageUrl(profile.coverPath),
-            theme,
+            companyLogoUrl: imageUrl(profile.companyLogoPath),
+            photos: profile.photos.flatMap((photo) => {
+              const url = imageUrl(photo.path);
+              return url ? [{ id: photo.id, url }] : [];
+            }),
+            theme: parseTheme(profile.theme),
           }}
+          vcardUrl={`/api/vcard/${profile.slug}`}
+          profileUrl={`${env.NEXT_PUBLIC_SITE_URL}/p/${profile.slug}`}
         >
-          <ProfileShareActions
-            displayName={profile.displayName}
-            vcardUrl={`/api/vcard/${profile.slug}`}
-            profileUrl={profileUrl}
-          />
           {profile.leadFormEnabled ? (
             <LeadFormDialog slug={profile.slug} ownerName={profile.displayName} />
           ) : null}
         </ProfileView>
-        <footer className="flex justify-center gap-3 text-xs text-muted-foreground">
+        <footer className="flex justify-center gap-3 pb-8 text-xs text-zinc-500">
           <span>{t("poweredBy")}</span>
           <Link href="/privacy" className="hover:underline">
             {t("privacy")}

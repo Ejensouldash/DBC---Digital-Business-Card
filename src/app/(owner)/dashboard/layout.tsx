@@ -19,7 +19,6 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
   const nav = [
     { href: "/dashboard", label: t("nav.overview") },
     { href: "/dashboard/profile", label: t("nav.profile") },
-    { href: "/dashboard/links", label: t("nav.links") },
     { href: "/dashboard/cards", label: t("nav.cards") },
     { href: "/dashboard/leads", label: t("nav.leads") },
     { href: "/dashboard/settings", label: t("nav.settings") },

@@ -10,15 +10,45 @@ import {
 
 import { env } from "@/lib/env";
 
-// Neon Object Storage bucket declared in neon.ts (access: public_read).
-export const AVATARS_BUCKET = "avatars";
+// Images live in a Cloudflare R2 bucket (S3-compatible API). Uploads go through our Server
+// Actions; visitors load them from the bucket's public URL (r2.dev or a custom domain).
+// Until the R2_* vars are set the app still runs: images are hidden and uploads fail cleanly.
 
-// Credentials, endpoint and region come from the AWS_* vars Neon injects.
-// Neon requires path-style addressing.
-const s3 = new S3Client({ forcePathStyle: true });
+type R2Config = { client: S3Client; bucket: string; publicUrl: string };
 
-export function publicObjectUrl(key: string): string {
-  return `${env.AWS_ENDPOINT_URL_S3.replace(/\/$/, "")}/${AVATARS_BUCKET}/${key}`;
+let config: R2Config | null | undefined;
+
+function r2(): R2Config | null {
+  if (config !== undefined) return config;
+  const { R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET, R2_PUBLIC_URL } = env;
+  config =
+    R2_ACCOUNT_ID && R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY && R2_BUCKET && R2_PUBLIC_URL
+      ? {
+          client: new S3Client({
+            region: "auto",
+            endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+            credentials: { accessKeyId: R2_ACCESS_KEY_ID, secretAccessKey: R2_SECRET_ACCESS_KEY },
+          }),
+          bucket: R2_BUCKET,
+          publicUrl: R2_PUBLIC_URL.replace(/\/$/, ""),
+        }
+      : null;
+  return config;
+}
+
+export function isStorageConfigured(): boolean {
+  return r2() !== null;
+}
+
+function requireR2(): R2Config {
+  const r2Config = r2();
+  if (!r2Config) throw new Error("R2 storage is not configured (R2_* env vars)");
+  return r2Config;
+}
+
+export function publicObjectUrl(key: string): string | null {
+  const r2Config = r2();
+  return r2Config ? `${r2Config.publicUrl}/${key}` : null;
 }
 
 export async function putPublicObject(
@@ -26,9 +56,10 @@ export async function putPublicObject(
   body: Uint8Array | string,
   contentType: string,
 ): Promise<void> {
-  await s3.send(
+  const { client, bucket } = requireR2();
+  await client.send(
     new PutObjectCommand({
-      Bucket: AVATARS_BUCKET,
+      Bucket: bucket,
       Key: key,
       Body: body,
       ContentType: contentType,
@@ -39,20 +70,18 @@ export async function putPublicObject(
 }
 
 export async function deleteObject(key: string): Promise<void> {
-  await s3.send(new DeleteObjectCommand({ Bucket: AVATARS_BUCKET, Key: key }));
+  const { client, bucket } = requireR2();
+  await client.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
 }
 
 // Deletes every object under a prefix, e.g. all of one user's images ("<userId>/").
 export async function deleteObjectsWithPrefix(prefix: string): Promise<number> {
+  const { client, bucket } = requireR2();
   let deleted = 0;
   let token: string | undefined;
   do {
-    const page = await s3.send(
-      new ListObjectsV2Command({
-        Bucket: AVATARS_BUCKET,
-        Prefix: prefix,
-        ContinuationToken: token,
-      }),
+    const page = await client.send(
+      new ListObjectsV2Command({ Bucket: bucket, Prefix: prefix, ContinuationToken: token }),
     );
     const keys = (page.Contents ?? []).flatMap((object) => (object.Key ? [object.Key] : []));
     await Promise.all(keys.map(deleteObject));
@@ -63,5 +92,6 @@ export async function deleteObjectsWithPrefix(prefix: string): Promise<number> {
 }
 
 export async function checkBucket(): Promise<void> {
-  await s3.send(new HeadBucketCommand({ Bucket: AVATARS_BUCKET }));
+  const { client, bucket } = requireR2();
+  await client.send(new HeadBucketCommand({ Bucket: bucket }));
 }

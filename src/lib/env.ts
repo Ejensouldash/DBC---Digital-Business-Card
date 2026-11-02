@@ -8,10 +8,14 @@ const serverEnvSchema = z.object({
   DATABASE_URL: z.url(),
   NEON_AUTH_BASE_URL: z.url(),
   NEON_AUTH_COOKIE_SECRET: z.string().min(32),
-  AWS_ACCESS_KEY_ID: z.string().min(1),
-  AWS_SECRET_ACCESS_KEY: z.string().min(1),
-  AWS_ENDPOINT_URL_S3: z.url(),
-  AWS_REGION: z.string().min(1),
+  // Cloudflare R2 bucket for profile images. Optional so the app boots without it; images are
+  // hidden and uploads fail with a clear error until all five are set.
+  R2_ACCOUNT_ID: z.string().min(1).optional(),
+  R2_ACCESS_KEY_ID: z.string().min(1).optional(),
+  R2_SECRET_ACCESS_KEY: z.string().min(1).optional(),
+  R2_BUCKET: z.string().min(1).optional(),
+  // Public base URL: https://pub-<hash>.r2.dev, or your custom domain in production.
+  R2_PUBLIC_URL: z.url().optional(),
   // Shown on the privacy notice for PDPA requests (access, correction, withdrawing consent).
   CONTACT_EMAIL: z.email().optional(),
   // Neon API access, used only to delete a user's Neon Auth account (Settings > Delete account).

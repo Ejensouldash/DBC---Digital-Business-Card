@@ -117,7 +117,6 @@
       "label": "Main navigation",
       "overview": "Overview",
       "profile": "Profile",
-      "links": "Links",
       "cards": "My cards",
       "leads": "Leads",
       "settings": "Settings",
@@ -127,12 +126,30 @@
     "activeCards": "{count, plural, =0 {No active cards} one {# active card} other {# active cards}}",
     "claimedToast": "Card activated!",
     "profilesTitle": "My profiles",
-    "noProfiles": "You don't have a profile yet. Activate a card or create a new profile.",
     "createProfile": "New profile",
     "edit": "Edit",
     "viewPublic": "View",
     "published": "Published",
-    "draft": "Draft"
+    "draft": "Draft",
+    "share": {
+      "copy": "Copy link",
+      "downloadQr": "QR code",
+      "whatsapp": "WhatsApp",
+      "share": "Share",
+      "open": "Open",
+      "qrLabel": "QR code for {name}'s profile",
+      "qrFailed": "Couldn't create the QR code",
+      "draft": "Draft: publish the profile so people can open this link."
+    },
+    "onboarding": {
+      "title": "Create your digital card",
+      "description": "Add your name, a link and a photo. You can fill in the rest later.",
+      "photo": "Photo",
+      "cover": "Cover",
+      "slugHint": "Your link: the part after /p/, e.g. aisyah-rahman.",
+      "submit": "Create my card",
+      "created": "Your card is ready!"
+    }
   },
   "ProfileEditor": {
     "title": "Edit profile",
@@ -144,9 +161,6 @@
     "save": "Save changes",
     "create": "Create profile",
     "saved": "Profile saved",
-    "saveBeforeImages": "Save the profile first to upload images.",
-    "changeAvatar": "Change profile photo",
-    "changeCover": "Change cover image",
     "imageUploaded": "Image updated",
     "imageFailed": "The image couldn't be uploaded. Try another one.",
     "imageInvalid": "Please choose an image file.",
@@ -154,13 +168,14 @@
       "images": "Images",
       "about": "About you",
       "contact": "Contact",
-      "visibility": "Visibility"
+      "visibility": "Visibility",
+      "company": "Company"
     },
     "fields": {
       "displayName": "Display name",
       "slug": "Profile link",
       "jobTitle": "Job title",
-      "company": "Company",
+      "company": "Company name",
       "bio": "Short bio",
       "phone": "Phone",
       "whatsapp": "WhatsApp",
@@ -170,7 +185,11 @@
       "mapsUrl": "Google Maps link",
       "isPublished": "Publish profile",
       "allowIndexing": "Allow search engines",
-      "leadFormEnabled": "Exchange contacts form"
+      "leadFormEnabled": "Exchange contacts form",
+      "location": "Location",
+      "industry": "Industry",
+      "officePhone": "Office phone",
+      "companyWebsite": "Company website"
     },
     "hints": {
       "slug": "Your profile: {url}",
@@ -178,21 +197,23 @@
       "mapsUrl": "Optional. If empty, we use your address.",
       "isPublished": "When off, your card and links show \"not active\".",
       "allowIndexing": "Let Google show this profile in search results.",
-      "leadFormEnabled": "Let visitors send you their name and number. You'll find them under Leads."
+      "leadFormEnabled": "Let visitors send you their name and number. You'll find them under Leads.",
+      "locationPlaceholder": "e.g. Seremban, Negeri Sembilan"
     },
     "errors": {
       "unauthorized": "Please sign in again",
       "invalid": "Please check the details you entered",
       "not_found": "Profile not found",
       "slug_taken": "This profile link is already taken",
-      "unexpected": "Something went wrong. Try again."
+      "unexpected": "Something went wrong. Try again.",
+      "unavailable": "Image uploads aren't set up yet."
     },
     "theme": {
       "title": "Appearance",
       "accent": "Button colour",
       "layout": "Layout",
       "accents": {
-        "neutral": "Silver",
+        "neutral": "Charcoal",
         "blue": "Blue",
         "teal": "Teal",
         "green": "Green",
@@ -207,7 +228,39 @@
         "compact": "Compact",
         "compactDescription": "No banner. Your photo and name come first."
       }
-    }
+    },
+    "tabs": {
+      "details": "Details",
+      "links": "Links",
+      "photos": "Photos"
+    },
+    "images": {
+      "avatar": {
+        "label": "Profile photo",
+        "upload": "Upload profile photo",
+        "change": "Change profile photo"
+      },
+      "cover": {
+        "label": "Cover image",
+        "upload": "Upload cover image",
+        "change": "Change cover image"
+      },
+      "logo": {
+        "label": "Company logo",
+        "upload": "Upload company logo",
+        "change": "Change company logo"
+      },
+      "pending": "These upload as soon as you create the profile."
+    },
+    "photos": {
+      "count": "{count} of {max} photos",
+      "add": "Add photos",
+      "remove": "Remove photo {n}",
+      "limit": "You can add up to {max} photos.",
+      "empty": "No photos yet. They show as a grid on your profile, and visitors can tap to see them full size."
+    },
+    "linksNeedProfile": "Create the profile first, then add your links here.",
+    "imagesUnavailable": "Image uploads aren't set up yet (storage isn't configured)."
   },
   "Profile": {
     "saveContact": "Save Contact",
@@ -236,7 +289,26 @@
       "telegram": "Telegram",
       "custom": "Link"
     },
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "greeting": "Hi! I am <b>{name}</b>",
+    "location": "Location",
+    "companyWebsite": "Company website",
+    "office": "Office",
+    "sections": {
+      "work": "Work",
+      "photos": "Photos",
+      "about": "About me",
+      "links": "Links",
+      "contact": "Contact"
+    },
+    "gallery": {
+      "title": "Photos from {name}",
+      "photoAlt": "Photo {n} of {total} from {name}",
+      "more": "+{count}",
+      "previous": "Previous photo",
+      "next": "Next photo",
+      "counter": "{n} / {total}"
+    }
   },
   "LeadForm": {
     "open": "Exchange contacts",
@@ -512,7 +584,7 @@
       "sections": {
         "collect": {
           "title": "What we collect",
-          "body": "<ul><li><b>Card owners:</b> your email address and name, used to sign in, and the profile details you choose to publish, such as your name, job title, company, photo, contact details and links.</li><li><b>Visitors:</b> when a profile is opened we record the time, how it was opened (NFC tap, QR code or link), your browser and device type, your approximate country and the page you came from. We do not store IP addresses.</li><li><b>Exchange contacts form:</b> if you send your details to a profile owner, we store what you enter and the fact that you agreed.</li></ul>"
+          "body": "<ul><li><b>Card owners:</b> your email address and name, used to sign in, and the profile details you choose to publish, such as your name, job title, company details, location, photos, contact details and links.</li><li><b>Visitors:</b> when a profile is opened we record the time, how it was opened (NFC tap, QR code or link), your browser and device type, your approximate country and the page you came from. We do not store IP addresses.</li><li><b>Exchange contacts form:</b> if you send your details to a profile owner, we store what you enter and the fact that you agreed.</li></ul>"
         },
         "use": {
           "title": "Why we use it",
@@ -520,7 +592,7 @@
         },
         "share": {
           "title": "Who can see it",
-          "body": "<ul><li>A published profile is public on purpose. Owners decide what it shows and can unpublish it at any time.</li><li>Details sent through the exchange contacts form are shown only to that profile's owner.</li><li>We use service providers to run the service: Neon (database, sign-in and file storage) and Vercel (website hosting). They process data only to provide their service to us.</li><li>We do not sell personal data.</li></ul>"
+          "body": "<ul><li>A published profile is public on purpose. Owners decide what it shows and can unpublish it at any time.</li><li>Details sent through the exchange contacts form are shown only to that profile's owner.</li><li>We use service providers to run the service: Neon (database and sign-in), Cloudflare R2 (image storage) and Vercel (website hosting). They process data only to provide their service to us.</li><li>We do not sell personal data.</li></ul>"
         },
         "keep": {
           "title": "How long we keep it",
@@ -549,7 +621,7 @@
       "sections": {
         "collect": {
           "title": "Data yang kami kumpul",
-          "body": "<ul><li><b>Pemilik kad:</b> alamat e-mel dan nama anda untuk log masuk, serta butiran profil yang anda pilih untuk diterbitkan, seperti nama, jawatan, syarikat, foto, butiran hubungan dan pautan.</li><li><b>Pelawat:</b> apabila profil dibuka, kami merekodkan masa, cara ia dibuka (sentuhan NFC, kod QR atau pautan), jenis pelayar dan peranti, anggaran negara dan halaman asal anda. Kami tidak menyimpan alamat IP.</li><li><b>Borang tukar kenalan:</b> jika anda menghantar butiran anda kepada pemilik profil, kami menyimpan maklumat yang anda isi dan rekod persetujuan anda.</li></ul>"
+          "body": "<ul><li><b>Pemilik kad:</b> alamat e-mel dan nama anda untuk log masuk, serta butiran profil yang anda pilih untuk diterbitkan, seperti nama, jawatan, butiran syarikat, lokasi, foto, butiran hubungan dan pautan.</li><li><b>Pelawat:</b> apabila profil dibuka, kami merekodkan masa, cara ia dibuka (sentuhan NFC, kod QR atau pautan), jenis pelayar dan peranti, anggaran negara dan halaman asal anda. Kami tidak menyimpan alamat IP.</li><li><b>Borang tukar kenalan:</b> jika anda menghantar butiran anda kepada pemilik profil, kami menyimpan maklumat yang anda isi dan rekod persetujuan anda.</li></ul>"
         },
         "use": {
           "title": "Tujuan kami menggunakannya",
@@ -557,7 +629,7 @@
         },
         "share": {
           "title": "Siapa yang boleh melihatnya",
-          "body": "<ul><li>Profil yang diterbitkan memang terbuka kepada umum. Pemilik menentukan apa yang dipaparkan dan boleh menyahterbitkannya pada bila-bila masa.</li><li>Butiran yang dihantar melalui borang tukar kenalan hanya dipaparkan kepada pemilik profil tersebut.</li><li>Kami menggunakan penyedia perkhidmatan untuk menjalankan perkhidmatan ini: Neon (pangkalan data, log masuk dan storan fail) dan Vercel (pengehosan laman web). Mereka memproses data hanya untuk menyediakan perkhidmatan mereka kepada kami.</li><li>Kami tidak menjual data peribadi.</li></ul>"
+          "body": "<ul><li>Profil yang diterbitkan memang terbuka kepada umum. Pemilik menentukan apa yang dipaparkan dan boleh menyahterbitkannya pada bila-bila masa.</li><li>Butiran yang dihantar melalui borang tukar kenalan hanya dipaparkan kepada pemilik profil tersebut.</li><li>Kami menggunakan penyedia perkhidmatan untuk menjalankan perkhidmatan ini: Neon (pangkalan data dan log masuk), Cloudflare R2 (storan imej) dan Vercel (pengehosan laman web). Mereka memproses data hanya untuk menyediakan perkhidmatan mereka kepada kami.</li><li>Kami tidak menjual data peribadi.</li></ul>"
         },
         "keep": {
           "title": "Tempoh penyimpanan",

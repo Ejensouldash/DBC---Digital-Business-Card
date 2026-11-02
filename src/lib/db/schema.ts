@@ -50,6 +50,11 @@ export const profiles = pgTable(
     website: text("website"),
     address: text("address"),
     mapsUrl: text("maps_url"),
+    location: text("location"),
+    industry: text("industry"),
+    officePhone: text("office_phone"),
+    companyWebsite: text("company_website"),
+    companyLogoPath: text("company_logo_path"),
     theme: jsonb("theme").$type<Partial<ProfileTheme>>().notNull().default({}),
     isPublished: boolean("is_published").notNull().default(false),
     allowIndexing: boolean("allow_indexing").notNull().default(false),
@@ -64,6 +69,21 @@ export const profiles = pgTable(
     check("profiles_display_name_length", sql`char_length(${t.displayName}) between 1 and 80`),
     check("profiles_bio_length", sql`char_length(${t.bio}) <= 500`),
   ],
+);
+
+// Gallery photos shown in the profile's Photos card (at most 8, enforced in the action).
+export const profilePhotos = pgTable(
+  "profile_photos",
+  {
+    id: id(),
+    profileId: uuid("profile_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade" }),
+    path: text("path").notNull(),
+    position: integer("position").notNull().default(0),
+    createdAt: createdAt(),
+  },
+  (t) => [index("profile_photos_profile_position_idx").on(t.profileId, t.position)],
 );
 
 export const profileLinks = pgTable(
@@ -171,6 +191,7 @@ export const leads = pgTable(
 
 export type Profile = typeof profiles.$inferSelect;
 export type ProfileLink = typeof profileLinks.$inferSelect;
+export type ProfilePhoto = typeof profilePhotos.$inferSelect;
 export type Card = typeof cards.$inferSelect;
 export type CardStatus = (typeof cardStatus.enumValues)[number];
 export type TapSource = (typeof tapSource.enumValues)[number];

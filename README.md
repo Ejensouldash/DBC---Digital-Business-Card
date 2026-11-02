@@ -11,7 +11,7 @@ their profile and lost cards can be switched off without rewriting the chip.
 - **Admins** create card batches (CSV for NFC writing and printing), manage cards and users.
 
 **Stack:** Next.js 16 (App Router, Cache Components), TypeScript, Tailwind v4, shadcn/ui,
-Neon (Postgres, Neon Auth, Object Storage), Drizzle ORM, next-intl, Zod, react-hook-form,
+Neon (Postgres, Neon Auth), Cloudflare R2 (images), Drizzle ORM, next-intl, Zod, react-hook-form,
 Vitest, Playwright. Hosted on Vercel.
 
 ## Local development
@@ -21,18 +21,19 @@ with `neon login`.
 
 ```bash
 pnpm install
-neon env pull            # writes the Neon vars into .env.local (database, auth, storage)
+neon env pull            # writes the Neon vars into .env.local (database, auth)
 ```
 
 Then add the app's own values to `.env.local` (see `.env.example`):
 
-| Variable                           | What it is                                                                                                 |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`             | Base URL, no trailing slash. `http://localhost:3000` locally.                                              |
-| `NEON_AUTH_COOKIE_SECRET`          | 32+ random characters: `openssl rand -base64 32`.                                                          |
-| `CONTACT_EMAIL`                    | Shown on `/privacy` for PDPA requests. Optional locally, required in production.                           |
-| `NEON_PROJECT_ID`/`NEON_BRANCH_ID` | IDs of the Neon project and branch (`neon branches list`).                                                 |
-| `NEON_API_KEY`                     | Project-scoped Neon API key, used only for "Delete my account". See [Account deletion](#account-deletion). |
+| Variable                                                                                  | What it is                                                                                                 |
+| ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                                                                    | Base URL, no trailing slash. `http://localhost:3000` locally.                                              |
+| `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL` | Cloudflare R2 bucket for profile images. See [Images (Cloudflare R2)](#images-cloudflare-r2).              |
+| `NEON_AUTH_COOKIE_SECRET`                                                                 | 32+ random characters: `openssl rand -base64 32`.                                                          |
+| `CONTACT_EMAIL`                                                                           | Shown on `/privacy` for PDPA requests. Optional locally, required in production.                           |
+| `NEON_PROJECT_ID`/`NEON_BRANCH_ID`                                                        | IDs of the Neon project and branch (`neon branches list`).                                                 |
+| `NEON_API_KEY`                                                                            | Project-scoped Neon API key, used only for "Delete my account". See [Account deletion](#account-deletion). |
 
 ```bash
 pnpm db:migrate          # apply drizzle/ migrations
@@ -121,6 +122,23 @@ neon neon-auth config email-password update --enabled false   # the app signs in
 3. Deploy. `GET /api/health` reports database, storage and auth status.
 4. **Domain:** in Vercel go to _Settings → Domains_, add `your-domain.com` and set the DNS
    records it shows. Then add the same domain to Neon Auth's trusted domains (above).
+
+### Images (Cloudflare R2)
+
+Avatars, covers, company logos and gallery photos (up to 8 per profile) are stored in R2.
+The browser resizes them first; uploads go through Server Actions, so the bucket needs no CORS.
+
+1. Cloudflare dashboard → **R2** → **Create bucket** (e.g. `dbc-images`).
+2. Bucket → **Settings** → **Public access**: for development enable the `r2.dev` URL; for
+   production connect a custom domain (e.g. `img.your-domain.com`). Put that URL in
+   `R2_PUBLIC_URL` (no trailing slash).
+3. **R2 → Manage API tokens → Create API token** with _Object Read & Write_, limited to this
+   bucket. Copy the Access Key ID and Secret into `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY`,
+   and your account ID (R2 overview page) into `R2_ACCOUNT_ID`.
+4. Restart `pnpm dev` (the image domain is read at startup). `GET /api/health` reports
+   `storage: ok` when the bucket is reachable.
+
+Without these variables the app still runs: images are hidden and uploads say they aren't set up.
 
 ### Account deletion
 

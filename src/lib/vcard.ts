@@ -9,6 +9,8 @@ export type VCardProfile = {
   email: string | null;
   website: string | null;
   address: string | null;
+  officePhone: string | null;
+  companyWebsite: string | null;
   profileUrl: string;
 };
 
@@ -64,8 +66,11 @@ export function buildVCard(
 
   const phone = profile.phone ? toInternationalDigits(profile.phone) : null;
   if (phone) lines.push(`TEL;TYPE=CELL:+${phone}`);
+  const office = profile.officePhone ? toInternationalDigits(profile.officePhone) : null;
+  if (office) lines.push(`TEL;TYPE=WORK,VOICE:+${office}`);
   if (profile.email) lines.push(`EMAIL;TYPE=INTERNET:${escapeText(profile.email)}`);
   if (profile.website) lines.push(`URL:${profile.website}`);
+  if (profile.companyWebsite) lines.push(`URL;TYPE=WORK:${profile.companyWebsite}`);
   lines.push(`URL;TYPE=PROFILE:${profile.profileUrl}`);
   for (const link of links) {
     lines.push(`X-SOCIALPROFILE;TYPE=${link.type}:${link.url}`);

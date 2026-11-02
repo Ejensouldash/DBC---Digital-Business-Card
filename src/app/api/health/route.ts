@@ -17,7 +17,7 @@ async function run(check: () => Promise<unknown>): Promise<CheckResult> {
   }
 }
 
-// Read-only liveness check for Postgres, Object Storage and Neon Auth.
+// Read-only liveness check for Postgres, the R2 image bucket and Neon Auth.
 export async function GET() {
   await connection();
 

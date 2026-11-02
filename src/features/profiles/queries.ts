@@ -5,11 +5,24 @@ import { cacheLife, cacheTag } from "next/cache";
 
 import { listProfileLinks } from "@/features/links/queries";
 import { db } from "@/lib/db";
-import { profiles, type Profile } from "@/lib/db/schema";
+import { profilePhotos, profiles, type Profile } from "@/lib/db/schema";
 
 import { profileTag } from "./lib/images";
 
-export type PublicProfile = Profile & { links: Awaited<ReturnType<typeof listProfileLinks>> };
+export type PublicProfile = Profile & {
+  links: Awaited<ReturnType<typeof listProfileLinks>>;
+  photos: ProfilePhotoRow[];
+};
+
+export async function listProfilePhotos(profileId: string) {
+  return db
+    .select({ id: profilePhotos.id, path: profilePhotos.path })
+    .from(profilePhotos)
+    .where(eq(profilePhotos.profileId, profileId))
+    .orderBy(asc(profilePhotos.position), asc(profilePhotos.createdAt));
+}
+
+export type ProfilePhotoRow = Awaited<ReturnType<typeof listProfilePhotos>>[number];
 
 // Public pages are hit on every tap, so they are cached and invalidated by tag on edit.
 export async function getPublicProfile(slug: string): Promise<PublicProfile | null> {
@@ -21,7 +34,11 @@ export async function getPublicProfile(slug: string): Promise<PublicProfile | nu
     where: and(eq(profiles.slug, slug), eq(profiles.isPublished, true)),
   });
   if (!profile) return null;
-  return { ...profile, links: await listProfileLinks(profile.id, { visibleOnly: true }) };
+  const [links, photos] = await Promise.all([
+    listProfileLinks(profile.id, { visibleOnly: true }),
+    listProfilePhotos(profile.id),
+  ]);
+  return { ...profile, links, photos };
 }
 
 export async function listOwnerProfiles(ownerId: string) {

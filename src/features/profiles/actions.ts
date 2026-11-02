@@ -9,13 +9,14 @@ import { getCurrentUser } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 import { isUniqueViolation } from "@/lib/db/errors";
 import { profiles } from "@/lib/db/schema";
-import { deleteObject, putPublicObject } from "@/lib/storage";
+import { deleteObject, isStorageConfigured, putPublicObject } from "@/lib/storage";
 
 import { IMAGE_CONTENT_TYPES, readImage } from "./lib/image-validation";
 import { imageKey, imageUrl, profileTag, vcardPhotoKey } from "./lib/images";
-import { IMAGE_KINDS, profileFormSchema, type ProfileFormInput } from "./schemas";
+import { IMAGE_KINDS, profileFormSchema, type ImageKind, type ProfileFormInput } from "./schemas";
 
-type ProfileError = "unauthorized" | "invalid" | "not_found" | "slug_taken" | "unexpected";
+export type ProfileError =
+  "unauthorized" | "invalid" | "not_found" | "slug_taken" | "unavailable" | "unexpected";
 
 function saveError(error: unknown): ActionResult<never, ProfileError> {
   if (isUniqueViolation(error, "profiles_slug_key")) return fail("slug_taken");
@@ -70,13 +71,20 @@ export async function updateProfile(
 
 const uploadSchema = z.object({ profileId: z.uuid(), kind: z.enum(IMAGE_KINDS) });
 
+const IMAGE_COLUMNS = {
+  avatar: "avatarPath",
+  cover: "coverPath",
+  logo: "companyLogoPath",
+} as const satisfies Record<ImageKind, keyof typeof profiles.$inferSelect>;
+
 // The browser resizes before upload: avatar → 512px square + 256px JPEG twin (vCard),
-// cover → 1200px wide. WebP where the browser can encode it, JPEG otherwise (Safari).
+// cover → 1200px wide, logo → 256px. WebP where the browser can encode it, JPEG otherwise.
 export async function uploadProfileImage(
   formData: FormData,
 ): Promise<ActionResult<{ url: string }, ProfileError>> {
   const user = await getCurrentUser();
   if (!user) return fail("unauthorized");
+  if (!isStorageConfigured()) return fail("unavailable");
   const parsed = uploadSchema.safeParse({
     profileId: formData.get("profileId"),
     kind: formData.get("kind"),
@@ -87,7 +95,7 @@ export async function uploadProfileImage(
   const ownedBy = and(eq(profiles.id, profileId), eq(profiles.ownerId, user.id));
   const existing = await db.query.profiles.findFirst({
     where: ownedBy,
-    columns: { slug: true, avatarPath: true, coverPath: true },
+    columns: { slug: true, avatarPath: true, coverPath: true, companyLogoPath: true },
   });
   if (!existing) return fail("not_found");
 
@@ -102,7 +110,7 @@ export async function uploadProfileImage(
     if (vcardPhoto) await putPublicObject(vcardPhotoKey(key), vcardPhoto.bytes, "image/jpeg");
     await db
       .update(profiles)
-      .set(kind === "avatar" ? { avatarPath: key } : { coverPath: key })
+      .set({ [IMAGE_COLUMNS[kind]]: key })
       .where(ownedBy);
   } catch (error) {
     console.error("[profiles] image upload failed", error);
@@ -110,7 +118,7 @@ export async function uploadProfileImage(
   }
   updateTag(profileTag(existing.slug));
 
-  const previous = kind === "avatar" ? existing.avatarPath : existing.coverPath;
+  const previous = existing[IMAGE_COLUMNS[kind]];
   if (previous) {
     const stale = kind === "avatar" ? [previous, vcardPhotoKey(previous)] : [previous];
     await Promise.allSettled(stale.map(deleteObject));

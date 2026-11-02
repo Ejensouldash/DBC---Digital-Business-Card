@@ -75,8 +75,39 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
             spellCheck={false}
           />
           <FormTextField control={control} name="jobTitle" label={t("fields.jobTitle")} />
-          <FormTextField control={control} name="company" label={t("fields.company")} />
+          <FormTextField
+            control={control}
+            name="location"
+            label={t("fields.location")}
+            placeholder={t("hints.locationPlaceholder")}
+          />
           <FormTextField control={control} name="bio" label={t("fields.bio")} multiline />
+        </FieldGroup>
+      </FieldSet>
+
+      <FieldSet>
+        <FieldLegend>{t("sections.company")}</FieldLegend>
+        <FieldGroup>
+          <FormTextField
+            control={control}
+            name="company"
+            label={t("fields.company")}
+            autoComplete="organization"
+          />
+          <FormTextField control={control} name="industry" label={t("fields.industry")} />
+          <FormTextField
+            control={control}
+            name="companyWebsite"
+            label={t("fields.companyWebsite")}
+            type="url"
+            placeholder="https://"
+          />
+          <FormTextField
+            control={control}
+            name="officePhone"
+            label={t("fields.officePhone")}
+            type="tel"
+          />
         </FieldGroup>
       </FieldSet>
 

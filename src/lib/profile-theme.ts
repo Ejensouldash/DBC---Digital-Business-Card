@@ -1,18 +1,17 @@
 import { z } from "zod";
 
-// Curated accents rather than a free colour picker, so an owner can't pick something visitors
-// can't read on the dark glass card. Each has:
-//   solid: button background, with `on` as its text colour (at least 4.5:1, WCAG AA)
-//   soft:  icons, glow and aurora tint on the dark surface (at least 4.5:1 against it)
+// Curated accents rather than a free colour picker: each has at least 4.5:1 contrast with white
+// (WCAG AA), so it works both as a button with white text and as icon/text colour on the
+// public profile's white cards.
 export const THEME_ACCENTS = {
-  neutral: { solid: "#e4e4e7", on: "#18181b", soft: "#e4e4e7" },
-  blue: { solid: "#2563eb", on: "#ffffff", soft: "#93c5fd" },
-  teal: { solid: "#0f766e", on: "#ffffff", soft: "#5eead4" },
-  green: { solid: "#15803d", on: "#ffffff", soft: "#86efac" },
-  orange: { solid: "#c2410c", on: "#ffffff", soft: "#fdba74" },
-  red: { solid: "#dc2626", on: "#ffffff", soft: "#fca5a5" },
-  pink: { solid: "#db2777", on: "#ffffff", soft: "#f9a8d4" },
-  purple: { solid: "#7c3aed", on: "#ffffff", soft: "#c4b5fd" },
+  neutral: "#18181b",
+  blue: "#1d4ed8",
+  teal: "#0f766e",
+  green: "#15803d",
+  orange: "#c2410c",
+  red: "#b91c1c",
+  pink: "#be185d",
+  purple: "#6d28d9",
 } as const;
 
 export type ThemeAccent = keyof typeof THEME_ACCENTS;

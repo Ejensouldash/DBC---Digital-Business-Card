@@ -27,6 +27,10 @@ export const profileFormSchema = z.object({
   website: optionalUrl,
   address: optionalText(300),
   mapsUrl: optionalUrl,
+  location: optionalText(100),
+  industry: optionalText(60),
+  officePhone: optionalPhone,
+  companyWebsite: optionalUrl,
   isPublished: z.boolean(),
   allowIndexing: z.boolean(),
   leadFormEnabled: z.boolean(),
@@ -43,8 +47,23 @@ export const onboardingSchema = profileFormSchema.pick({
   phone: true,
 });
 
+// Dashboard quick start: the first profile in one step.
+export const quickProfileSchema = profileFormSchema.pick({
+  displayName: true,
+  slug: true,
+  jobTitle: true,
+});
+
+export type QuickProfileInput = z.input<typeof quickProfileSchema>;
+export type QuickProfileValues = z.output<typeof quickProfileSchema>;
+
 export type OnboardingInput = z.input<typeof onboardingSchema>;
 export type OnboardingValues = z.output<typeof onboardingSchema>;
 
-export const IMAGE_KINDS = ["avatar", "cover"] as const;
+export const MAX_PROFILE_PHOTOS = 8;
+
+export const EDITOR_TABS = ["details", "links", "photos"] as const;
+export type EditorTab = (typeof EDITOR_TABS)[number];
+
+export const IMAGE_KINDS = ["avatar", "cover", "logo"] as const;
 export type ImageKind = (typeof IMAGE_KINDS)[number];

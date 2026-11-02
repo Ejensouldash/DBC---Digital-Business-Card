@@ -1,5 +1,6 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { PageHeader } from "@/components/shared/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -37,6 +38,8 @@ export default async function AdminCardsPage({ searchParams }: PageProps<"/admin
     searchCards(filter),
   ]);
   const pages = Math.max(1, Math.ceil(total / CARDS_PAGE_SIZE));
+  // A stale or hand-edited ?page= past the end lands on the last page instead of an empty list.
+  if (filter.page > pages) redirect(pageHref(filter, pages));
 
   return (
     <div className="flex flex-col gap-6">

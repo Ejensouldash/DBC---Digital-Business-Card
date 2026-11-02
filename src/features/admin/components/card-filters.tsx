@@ -16,28 +16,45 @@ export function CardFilters({ filter, batches }: CardFiltersProps) {
 
   return (
     <form method="get" className="flex flex-wrap items-end gap-3" role="search">
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="font-medium">{t("search")}</span>
+      <div className="flex flex-col gap-1 text-sm">
+        <label htmlFor="filter-q" className="font-medium">
+          {t("search")}
+        </label>
         <Input
+          id="filter-q"
           name="q"
           defaultValue={filter.q ?? ""}
           placeholder="ABCD…"
           className="w-36 uppercase"
           autoCapitalize="characters"
         />
-      </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="font-medium">{t("statusFilter")}</span>
-        <select name="status" defaultValue={filter.status ?? ""} className={SELECT_CLASS}>
+      </div>
+      <div className="flex flex-col gap-1 text-sm">
+        <label htmlFor="filter-status" className="font-medium">
+          {t("statusFilter")}
+        </label>
+        <select
+          id="filter-status"
+          name="status"
+          defaultValue={filter.status ?? ""}
+          className={SELECT_CLASS}
+        >
           <option value="">{t("all")}</option>
           <option value="unclaimed">{t("status.unclaimed")}</option>
           <option value="active">{t("status.active")}</option>
           <option value="disabled">{t("status.disabled")}</option>
         </select>
-      </label>
-      <label className="flex flex-col gap-1 text-sm">
-        <span className="font-medium">{t("batchFilter")}</span>
-        <select name="batch" defaultValue={filter.batch ?? ""} className={SELECT_CLASS}>
+      </div>
+      <div className="flex flex-col gap-1 text-sm">
+        <label htmlFor="filter-batch" className="font-medium">
+          {t("batchFilter")}
+        </label>
+        <select
+          id="filter-batch"
+          name="batch"
+          defaultValue={filter.batch ?? ""}
+          className={SELECT_CLASS}
+        >
           <option value="">{t("all")}</option>
           {batches.map((batch) => (
             <option key={batch.id} value={batch.id}>
@@ -45,7 +62,7 @@ export function CardFilters({ filter, batches }: CardFiltersProps) {
             </option>
           ))}
         </select>
-      </label>
+      </div>
       <Button type="submit" size="sm">
         {t("apply")}
       </Button>

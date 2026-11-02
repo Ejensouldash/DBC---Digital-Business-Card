@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition, type FormEvent } from "react";
 import { toast } from "sonner";
 
+import { useConfirm } from "@/components/shared/use-confirm";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,6 +36,7 @@ export function AdminCardActions({ card }: { card: Pick<AdminCardRow, "id" | "co
   const [pending, startTransition] = useTransition();
   const [reassigning, setReassigning] = useState(false);
   const [slug, setSlug] = useState("");
+  const [confirm, confirmDialog] = useConfirm();
 
   function run(action: () => Promise<ActionResult<undefined, AdminError>>, done: string) {
     startTransition(async () => {
@@ -83,10 +85,14 @@ export function AdminCardActions({ card }: { card: Pick<AdminCardRow, "id" | "co
           <DropdownMenuItem
             variant="destructive"
             disabled={card.status === "unclaimed"}
-            onSelect={() => {
-              if (window.confirm(t("confirmReset", { code: card.code }))) {
-                run(() => resetCard(card.id), t("resetDone"));
-              }
+            onSelect={async () => {
+              const confirmed = await confirm({
+                title: t("confirmReset", { code: card.code }),
+                description: t("confirmResetDescription"),
+                confirmLabel: t("reset"),
+                destructive: true,
+              });
+              if (confirmed) run(() => resetCard(card.id), t("resetDone"));
             }}
           >
             {t("reset")}
@@ -120,6 +126,7 @@ export function AdminCardActions({ card }: { card: Pick<AdminCardRow, "id" | "co
           </form>
         </DialogContent>
       </Dialog>
+      {confirmDialog}
     </>
   );
 }

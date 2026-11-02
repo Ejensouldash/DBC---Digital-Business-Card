@@ -1,7 +1,13 @@
 {
   "Meta": {
     "siteName": "Digital Card",
-    "siteDescription": "NFC business cards. Tap, save the contact, stay connected."
+    "siteDescription": "NFC business cards. Tap, save the contact, stay connected.",
+    "loading": "Loading…"
+  },
+  "Common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete"
   },
   "NotFound": {
     "title": "Page not found",
@@ -355,7 +361,8 @@
       "reassignHint": "The part after /p/, e.g. siti-nur-aisyah. The card moves to that profile's owner.",
       "reassigned": "Card {code} moved",
       "reset": "Reset to not activated",
-      "confirmReset": "Reset card {code}? It will be unlinked from its owner and can be activated again.",
+      "confirmReset": "Reset card {code}?",
+      "confirmResetDescription": "It will be unlinked from its owner and can be activated again.",
       "resetDone": "Card reset",
       "pagination": "Pages",
       "previous": "Previous",
@@ -378,9 +385,12 @@
       "owner": "Owner",
       "promote": "Make admin",
       "demote": "Remove admin",
+      "promoteFor": "Make {email} an admin",
+      "demoteFor": "Remove admin access from {email}",
       "confirmPromote": "Give {email} admin access?",
       "confirmDemote": "Remove admin access from {email}?",
-      "confirmDemoteSelf": "Remove your own admin access? You'll lose access to this area.",
+      "confirmDemoteSelf": "Remove your own admin access?",
+      "confirmDemoteSelfDescription": "You'll lose access to this area.",
       "promoted": "{email} is now an admin",
       "demoted": "{email} is no longer an admin"
     }

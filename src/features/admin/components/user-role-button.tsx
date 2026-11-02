@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
+import { useConfirm } from "@/components/shared/use-confirm";
 import { Button } from "@/components/ui/button";
 
 import { setUserRole } from "../actions";
@@ -16,12 +17,20 @@ export function UserRoleButton({ userId, email, isAdmin, isSelf }: UserRoleButto
   const tErrors = useTranslations("Admin.errors");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [confirm, confirmDialog] = useConfirm();
 
-  function toggle() {
-    const message = isAdmin
-      ? t(isSelf ? "confirmDemoteSelf" : "confirmDemote", { email })
-      : t("confirmPromote", { email });
-    if (!window.confirm(message)) return;
+  async function toggle() {
+    const confirmed = await confirm(
+      isAdmin
+        ? {
+            title: t(isSelf ? "confirmDemoteSelf" : "confirmDemote", { email }),
+            description: isSelf ? t("confirmDemoteSelfDescription") : undefined,
+            confirmLabel: t("demote"),
+            destructive: true,
+          }
+        : { title: t("confirmPromote", { email }), confirmLabel: t("promote") },
+    );
+    if (!confirmed) return;
     startTransition(async () => {
       const result = await setUserRole(userId, isAdmin ? "user" : "admin");
       if (!result.ok) return void toast.error(tErrors(result.error));
@@ -31,13 +40,17 @@ export function UserRoleButton({ userId, email, isAdmin, isSelf }: UserRoleButto
   }
 
   return (
-    <Button
-      variant={isAdmin ? "outline" : "secondary"}
-      size="sm"
-      disabled={pending}
-      onClick={toggle}
-    >
-      {isAdmin ? t("demote") : t("promote")}
-    </Button>
+    <>
+      <Button
+        variant={isAdmin ? "outline" : "secondary"}
+        size="sm"
+        disabled={pending}
+        onClick={toggle}
+        aria-label={isAdmin ? t("demoteFor", { email }) : t("promoteFor", { email })}
+      >
+        {isAdmin ? t("demote") : t("promote")}
+      </Button>
+      {confirmDialog}
+    </>
   );
 }

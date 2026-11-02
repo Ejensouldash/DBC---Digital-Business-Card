@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { useConfirm } from "@/components/shared/use-confirm";
 import { Button } from "@/components/ui/button";
 import type { ActionResult } from "@/lib/action-result";
 
@@ -43,6 +44,7 @@ type LinksManagerProps = { profileId: string; initialLinks: ManagedLink[] };
 
 export function LinksManager({ profileId, initialLinks }: LinksManagerProps) {
   const t = useTranslations("Links");
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const [links, setLinks] = useState(initialLinks);
   // Adopt fresh server data after router.refresh() without an effect.
@@ -52,6 +54,7 @@ export function LinksManager({ profileId, initialLinks }: LinksManagerProps) {
     setLinks(initialLinks);
   }
   const accessibility = useLinkAnnouncements(links);
+  const [confirm, confirmDialog] = useConfirm();
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
@@ -142,8 +145,13 @@ export function LinksManager({ profileId, initialLinks }: LinksManagerProps) {
                     router.refresh();
                     return true;
                   }}
-                  onDelete={() => {
-                    if (!window.confirm(t("confirmDelete"))) return;
+                  onDelete={async () => {
+                    const confirmed = await confirm({
+                      title: t("confirmDelete"),
+                      confirmLabel: tCommon("delete"),
+                      destructive: true,
+                    });
+                    if (!confirmed) return;
                     void mutate(
                       links.filter((l) => l.id !== link.id),
                       () => deleteLink(link.id),
@@ -156,6 +164,7 @@ export function LinksManager({ profileId, initialLinks }: LinksManagerProps) {
         </DndContext>
       )}
       <p className="text-xs text-muted-foreground">{t("hint")}</p>
+      {confirmDialog}
     </div>
   );
 }

@@ -1,0 +1,203 @@
+{
+  "Meta": {
+    "siteName": "Kad Digital",
+    "siteDescription": "NFC business cards. Tap, save the contact, stay connected."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "This link may be wrong or the profile is no longer published."
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "ms": "BM",
+    "en": "EN"
+  },
+  "Validation": {
+    "required": "This field is required.",
+    "tooLong": "Too long.",
+    "invalid": "Invalid value.",
+    "invalidEmail": "Enter a valid email address.",
+    "invalidOtp": "Enter the 6-digit code.",
+    "invalidPhone": "Enter a valid phone number.",
+    "invalidUrl": "Enter a full link starting with https://.",
+    "slugTooShort": "At least 3 characters.",
+    "slugTooLong": "At most 30 characters.",
+    "slugFormat": "Use lowercase letters, numbers and hyphens only (no hyphen at the start or end).",
+    "slugReserved": "This name is reserved. Please pick another.",
+    "slugTaken": "This name is already taken. Please pick another."
+  },
+  "Landing": {
+    "brand": "Kad Digital",
+    "login": "Sign in",
+    "title": "One tap. All your contact details.",
+    "subtitle": "An NFC business card that opens your digital profile on any phone, no app needed. Update it any time without changing the card.",
+    "cta": "Manage my cards",
+    "features": {
+      "tap": {
+        "title": "Tap to share",
+        "description": "People just tap the card on their phone. No app, no sign-in."
+      },
+      "save": {
+        "title": "Save the contact instantly",
+        "description": "The Save Contact button adds you straight to iPhone and Android contacts."
+      },
+      "update": {
+        "title": "Always up to date",
+        "description": "Change your title, number or links any time. The same card keeps working."
+      }
+    }
+  },
+  "Login": {
+    "title": "Sign in",
+    "description": "We'll email you a 6-digit code.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "sendCode": "Send code",
+    "sendFailed": "We couldn't send the code. Try again in a moment.",
+    "codeLabel": "Verification code",
+    "codeSent": "We sent a code to {email}. Check your spam folder too.",
+    "verify": "Sign in",
+    "codeInvalid": "The code is wrong or has expired.",
+    "useOtherEmail": "Use a different email",
+    "or": "or",
+    "google": "Continue with Google",
+    "googleFailed": "Google sign-in failed. Try again."
+  },
+  "CardState": {
+    "invalid": {
+      "title": "Invalid card",
+      "description": "We don't recognise the code on this card. Please contact the card owner or your supplier."
+    },
+    "inactive": {
+      "title": "Card not active",
+      "description": "This card has been deactivated or isn't linked to a profile yet."
+    }
+  },
+  "Activate": {
+    "title": "Activate card",
+    "onboardingTitle": "Set up your first profile",
+    "description": "Card {code}.",
+    "signedInAs": "Signed in as {email}.",
+    "chooseProfile": "Choose the profile this card opens",
+    "claim": "Activate card",
+    "displayName": "Display name",
+    "slug": "Profile link",
+    "slugHint": "Your profile: {url}",
+    "phone": "Phone number",
+    "createAndClaim": "Create profile & activate card",
+    "notFoundHint": "Check the link again or contact your card supplier.",
+    "alreadyYoursTitle": "This card is already yours",
+    "alreadyYoursDescription": "You can change which profile this card opens from your dashboard.",
+    "contactSupport": "If this is your card, please contact us for help.",
+    "goToDashboard": "Go to dashboard",
+    "errors": {
+      "not_found": "Card not found",
+      "disabled": "This card has been deactivated",
+      "already_claimed": "This card was already activated by someone else",
+      "profile_not_found": "Profile not found",
+      "slug_taken": "This profile link is already taken",
+      "invalid": "Please check the details you entered",
+      "unauthorized": "Please sign in again",
+      "unexpected": "Something went wrong. Try again."
+    }
+  },
+  "Dashboard": {
+    "brand": "Kad Digital",
+    "signOut": "Sign out",
+    "nav": {
+      "label": "Main navigation",
+      "overview": "Overview",
+      "profile": "Profile"
+    },
+    "welcome": "Welcome, {name}",
+    "activeCards": "{count, plural, =0 {No active cards} one {# active card} other {# active cards}}",
+    "claimedToast": "Card activated!",
+    "profilesTitle": "My profiles",
+    "noProfiles": "You don't have a profile yet. Activate a card or create a new profile.",
+    "createProfile": "New profile",
+    "edit": "Edit",
+    "viewPublic": "View",
+    "published": "Published",
+    "draft": "Draft"
+  },
+  "ProfileEditor": {
+    "title": "Edit profile",
+    "newTitle": "New profile",
+    "switchProfile": "Switch profile",
+    "newProfile": "+ New profile",
+    "preview": "Preview",
+    "previewName": "Your name",
+    "save": "Save changes",
+    "create": "Create profile",
+    "saved": "Profile saved",
+    "saveBeforeImages": "Save the profile first to upload images.",
+    "changeAvatar": "Change profile photo",
+    "changeCover": "Change cover image",
+    "imageUploaded": "Image updated",
+    "imageFailed": "The image couldn't be uploaded. Try another one.",
+    "imageInvalid": "Please choose an image file.",
+    "sections": {
+      "images": "Images",
+      "about": "About you",
+      "contact": "Contact",
+      "visibility": "Visibility"
+    },
+    "fields": {
+      "displayName": "Display name",
+      "slug": "Profile link",
+      "jobTitle": "Job title",
+      "company": "Company",
+      "bio": "Short bio",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "website": "Website",
+      "address": "Address",
+      "mapsUrl": "Google Maps link",
+      "isPublished": "Publish profile",
+      "allowIndexing": "Allow search engines"
+    },
+    "hints": {
+      "slug": "Your profile: {url}",
+      "whatsapp": "Leave empty to use your phone number.",
+      "mapsUrl": "Optional. If empty, we use your address.",
+      "isPublished": "When off, your card and links show \"not active\".",
+      "allowIndexing": "Let Google show this profile in search results."
+    },
+    "errors": {
+      "unauthorized": "Please sign in again",
+      "invalid": "Please check the details you entered",
+      "not_found": "Profile not found",
+      "slug_taken": "This profile link is already taken",
+      "unexpected": "Something went wrong. Try again."
+    }
+  },
+  "Profile": {
+    "saveContact": "Save Contact",
+    "share": "Share",
+    "qr": "QR code",
+    "qrTitle": "Scan to open the profile",
+    "qrDescription": "Show this code to share {name}'s profile.",
+    "linkCopied": "Link copied",
+    "copyFailed": "Couldn't copy the link",
+    "poweredBy": "Kad Digital",
+    "actions": {
+      "call": "Call",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "website": "Website",
+      "waze": "Waze",
+      "maps": "Maps"
+    },
+    "linkTypes": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "x": "X",
+      "youtube": "YouTube",
+      "telegram": "Telegram",
+      "custom": "Link"
+    }
+  }
+}

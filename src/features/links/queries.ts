@@ -12,6 +12,7 @@ export async function listProfileLinks(profileId: string, { visibleOnly = false 
       type: profileLinks.type,
       label: profileLinks.label,
       url: profileLinks.url,
+      isVisible: profileLinks.isVisible,
     })
     .from(profileLinks)
     .where(
@@ -19,5 +20,7 @@ export async function listProfileLinks(profileId: string, { visibleOnly = false 
         ? and(eq(profileLinks.profileId, profileId), eq(profileLinks.isVisible, true))
         : eq(profileLinks.profileId, profileId),
     )
-    .orderBy(asc(profileLinks.position));
+    .orderBy(asc(profileLinks.position), asc(profileLinks.createdAt));
 }
+
+export type ManagedLink = Awaited<ReturnType<typeof listProfileLinks>>[number];

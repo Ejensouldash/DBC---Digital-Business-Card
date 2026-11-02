@@ -4,8 +4,8 @@ import { getTranslations } from "next-intl/server";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { Toaster } from "@/components/ui/sonner";
-import { APP_LOCALE } from "@/i18n/request";
 import { env } from "@/lib/env";
+import { APP_LOCALE } from "@/lib/locale";
 
 import "./globals.css";
 

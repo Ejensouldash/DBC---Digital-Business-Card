@@ -1,25 +1,18 @@
 import {
-  AtSignIcon,
-  BriefcaseIcon,
-  CameraIcon,
   GlobeIcon,
-  LinkIcon,
   MailIcon,
   MapIcon,
   MessageCircleIcon,
-  MusicIcon,
   NavigationIcon,
   PhoneIcon,
-  PlayIcon,
-  SendIcon,
-  UsersIcon,
   type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import type { ReactNode } from "react";
 
-import type { ProfileLink } from "@/lib/db/schema";
+import { LINK_ICONS } from "@/features/links/lib/link-icons";
+import type { LinkType } from "@/lib/link-types";
 import { cn } from "@/lib/utils";
 
 import {
@@ -27,8 +20,6 @@ import {
   type ContactActionKind,
   type ContactFields,
 } from "../lib/contact-actions";
-
-type LinkType = ProfileLink["type"];
 
 export type ProfileViewData = ContactFields & {
   displayName: string;
@@ -50,17 +41,6 @@ const ACTION_ICONS: Record<ContactActionKind, LucideIcon> = {
 };
 
 const EXTERNAL_ACTIONS: ReadonlySet<ContactActionKind> = new Set(["website", "waze", "maps"]);
-
-const LINK_ICONS: Record<LinkType, LucideIcon> = {
-  instagram: CameraIcon,
-  facebook: UsersIcon,
-  tiktok: MusicIcon,
-  linkedin: BriefcaseIcon,
-  x: AtSignIcon,
-  youtube: PlayIcon,
-  telegram: SendIcon,
-  custom: LinkIcon,
-};
 
 const NEW_TAB = { target: "_blank", rel: "noopener noreferrer" } as const;
 const INERT = { tabIndex: -1, "aria-disabled": true } as const;

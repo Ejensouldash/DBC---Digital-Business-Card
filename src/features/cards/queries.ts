@@ -1,9 +1,9 @@
 import "server-only";
 
-import { and, eq } from "drizzle-orm";
+import { and, asc, count, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
-import { cards, profiles, type CardStatus } from "@/lib/db/schema";
+import { cards, profiles, tapEvents, type CardStatus } from "@/lib/db/schema";
 
 export type ResolvedCard = {
   id: string;
@@ -43,3 +43,23 @@ export async function resolveCard(code: string): Promise<ResolvedCard | null> {
 export async function getOwnerCardCount(ownerId: string): Promise<number> {
   return db.$count(cards, and(eq(cards.ownerId, ownerId), eq(cards.status, "active")));
 }
+
+export async function listOwnerCards(ownerId: string) {
+  return db
+    .select({
+      id: cards.id,
+      code: cards.code,
+      label: cards.label,
+      status: cards.status,
+      profileId: cards.profileId,
+      claimedAt: cards.claimedAt,
+      taps: count(tapEvents.id),
+    })
+    .from(cards)
+    .leftJoin(tapEvents, eq(tapEvents.cardId, cards.id))
+    .where(eq(cards.ownerId, ownerId))
+    .groupBy(cards.id)
+    .orderBy(asc(cards.claimedAt));
+}
+
+export type OwnerCard = Awaited<ReturnType<typeof listOwnerCards>>[number];

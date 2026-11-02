@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Placeholder values so env validation passes at build time. CI never talks to Neon:
+    # nothing is prerendered from the database, and unit tests are pure.
+    env:
+      NEXT_PUBLIC_SITE_URL: https://ci.example.test
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+      DATABASE_URL_UNPOOLED: postgresql://ci:ci@localhost:5432/ci
+      NEON_AUTH_BASE_URL: https://auth.ci.example.test/neondb/auth
+      NEON_AUTH_COOKIE_SECRET: ci-only-cookie-secret-at-least-32-characters
+      AWS_ACCESS_KEY_ID: ci
+      AWS_SECRET_ACCESS_KEY: ci
+      AWS_ENDPOINT_URL_S3: https://storage.ci.example.test
+      AWS_REGION: ap-southeast-1
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build

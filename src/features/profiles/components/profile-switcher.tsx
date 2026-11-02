@@ -16,9 +16,21 @@ import type { OwnerProfileSummary } from "../queries";
 
 const NEW_PROFILE = "__new__";
 
-type ProfileSwitcherProps = { profiles: OwnerProfileSummary[]; currentId: string | null };
+type ProfileSwitcherProps = {
+  profiles: OwnerProfileSummary[];
+  currentId: string | null;
+  // Page to reload with ?profile=<id>, e.g. "/dashboard/links".
+  basePath: string;
+  // Offer "+ New profile" (only the profile editor can create one).
+  allowNew?: boolean;
+};
 
-export function ProfileSwitcher({ profiles, currentId }: ProfileSwitcherProps) {
+export function ProfileSwitcher({
+  profiles,
+  currentId,
+  basePath,
+  allowNew = false,
+}: ProfileSwitcherProps) {
   const t = useTranslations("ProfileEditor");
   const router = useRouter();
 
@@ -26,11 +38,7 @@ export function ProfileSwitcher({ profiles, currentId }: ProfileSwitcherProps) {
     <Select
       value={currentId ?? NEW_PROFILE}
       onValueChange={(value) =>
-        router.push(
-          value === NEW_PROFILE
-            ? "/dashboard/profile?new=1"
-            : `/dashboard/profile?profile=${value}`,
-        )
+        router.push(value === NEW_PROFILE ? `${basePath}?new=1` : `${basePath}?profile=${value}`)
       }
     >
       <SelectTrigger className="w-56" aria-label={t("switchProfile")}>
@@ -42,8 +50,12 @@ export function ProfileSwitcher({ profiles, currentId }: ProfileSwitcherProps) {
             {profile.displayName} (/{profile.slug})
           </SelectItem>
         ))}
-        <SelectSeparator />
-        <SelectItem value={NEW_PROFILE}>{t("newProfile")}</SelectItem>
+        {allowNew ? (
+          <>
+            <SelectSeparator />
+            <SelectItem value={NEW_PROFILE}>{t("newProfile")}</SelectItem>
+          </>
+        ) : null}
       </SelectContent>
     </Select>
   );

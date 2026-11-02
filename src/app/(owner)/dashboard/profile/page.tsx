@@ -63,7 +63,12 @@ export default async function ProfilePage({ searchParams }: PageProps<"/dashboar
           {profile ? t("title") : t("newTitle")}
         </h1>
         {ownerProfiles.length > 0 ? (
-          <ProfileSwitcher profiles={ownerProfiles} currentId={profile?.id ?? null} />
+          <ProfileSwitcher
+            profiles={ownerProfiles}
+            currentId={profile?.id ?? null}
+            basePath="/dashboard/profile"
+            allowNew
+          />
         ) : null}
       </div>
       <ProfileEditor

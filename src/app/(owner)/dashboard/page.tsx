@@ -13,6 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { OwnerStatsSection } from "@/features/analytics/components/owner-stats";
+import { getOwnerStats } from "@/features/analytics/queries";
 import { getOwnerCardCount } from "@/features/cards/queries";
 import { listOwnerProfiles } from "@/features/profiles/queries";
 import { requireUser } from "@/lib/auth/session";
@@ -23,9 +25,10 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
     searchParams,
     getTranslations("Dashboard"),
   ]);
-  const [ownerProfiles, cardCount] = await Promise.all([
+  const [ownerProfiles, cardCount, stats] = await Promise.all([
     listOwnerProfiles(user.id),
     getOwnerCardCount(user.id),
+    getOwnerStats(user.id),
   ]);
 
   return (
@@ -37,6 +40,8 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
         </h1>
         <p className="text-muted-foreground">{t("activeCards", { count: cardCount })}</p>
       </div>
+
+      <OwnerStatsSection stats={stats} />
 
       <section aria-labelledby="profiles-heading" className="flex flex-col gap-4">
         <div className="flex items-center justify-between">

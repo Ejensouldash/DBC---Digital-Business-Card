@@ -1,6 +1,6 @@
 import "server-only";
 
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
 import { cache } from "react";
 
@@ -28,6 +28,13 @@ export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
     isAdmin: "role" in user && user.role === "admin",
   };
 });
+
+// For admin pages: non-admins get a plain 404, so the admin area isn't advertised.
+export async function requireAdmin(returnTo: string): Promise<SessionUser> {
+  const user = await requireUser(returnTo);
+  if (!user.isAdmin) notFound();
+  return user;
+}
 
 // For pages: send signed-out visitors to login and come back afterwards.
 export async function requireUser(returnTo: string): Promise<SessionUser> {

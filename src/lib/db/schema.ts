@@ -6,7 +6,6 @@ import {
   integer,
   jsonb,
   pgEnum,
-  pgSchema,
   pgTable,
   text,
   timestamp,
@@ -14,20 +13,11 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-// Managed by Neon Auth. Declared only so foreign keys can reference it; not exported,
-// so drizzle-kit never tries to create or alter it.
-const neonAuthUser = pgSchema("neon_auth").table("user", { id: uuid("id").primaryKey() });
+import { LINK_TYPES } from "../link-types";
 
-export const linkType = pgEnum("link_type", [
-  "instagram",
-  "facebook",
-  "tiktok",
-  "linkedin",
-  "x",
-  "youtube",
-  "telegram",
-  "custom",
-]);
+import { neonAuthUser } from "./neon-auth";
+
+export const linkType = pgEnum("link_type", LINK_TYPES);
 export const cardStatus = pgEnum("card_status", ["unclaimed", "active", "disabled"]);
 export const tapSource = pgEnum("tap_source", ["nfc", "qr", "link"]);
 export const deviceType = pgEnum("device_type", ["mobile", "tablet", "desktop", "unknown"]);

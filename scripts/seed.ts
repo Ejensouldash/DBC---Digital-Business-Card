@@ -1,53 +1,36 @@
 // Dev seed: one batch of 5 unclaimed cards. Idempotent; re-running prints the same cards.
-// Run with `pnpm db:seed` (uses DATABASE_URL_UNPOOLED from .env.local).
+//   pnpm db:seed
 import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
 
-import { cardUrl, generateCardCode } from "../src/lib/card-code";
-import * as schema from "../src/lib/db/schema";
+import { createBatch } from "../src/features/admin/lib/create-batch";
+import { cardUrl } from "../src/lib/card-code";
+import { cardBatches, cards } from "../src/lib/db/schema";
+
+import { connect, runScript, siteUrl } from "./db";
 
 const BATCH_NAME = "Dev seed batch";
-const QUANTITY = 5;
 
-async function main() {
-  const connectionString = process.env.DATABASE_URL_UNPOOLED;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  if (!connectionString) throw new Error("DATABASE_URL_UNPOOLED is not set. Run `neon env pull`.");
-
-  const pool = new Pool({ connectionString });
-  const db = drizzle({ client: pool, schema });
-
+void runScript(async () => {
+  const { db, close } = connect();
   try {
-    let batch = await db.query.cardBatches.findFirst({
-      where: eq(schema.cardBatches.name, BATCH_NAME),
-    });
+    let batch = await db.query.cardBatches.findFirst({ where: eq(cardBatches.name, BATCH_NAME) });
     if (!batch) {
-      [batch] = await db
-        .insert(schema.cardBatches)
-        .values({ name: BATCH_NAME, quantity: QUANTITY, notes: "Created by scripts/seed.ts" })
-        .returning();
-      await db.insert(schema.cards).values(
-        Array.from({ length: QUANTITY }, () => ({
-          code: generateCardCode(),
-          batchId: batch!.id,
-        })),
-      );
+      await createBatch(db, {
+        name: BATCH_NAME,
+        quantity: 5,
+        notes: "Created by scripts/seed.ts",
+        createdBy: null,
+      });
+      batch = await db.query.cardBatches.findFirst({ where: eq(cardBatches.name, BATCH_NAME) });
     }
-
-    const cards = await db
-      .select({ code: schema.cards.code, status: schema.cards.status })
-      .from(schema.cards)
-      .where(eq(schema.cards.batchId, batch!.id));
+    const rows = await db
+      .select({ code: cards.code, status: cards.status })
+      .from(cards)
+      .where(eq(cards.batchId, batch!.id));
     console.log(`Batch "${BATCH_NAME}":`);
-    for (const card of cards)
-      console.log(`  ${card.status.padEnd(9)} ${cardUrl(siteUrl, card.code)}`);
+    for (const card of rows)
+      console.log(`  ${card.status.padEnd(9)} ${cardUrl(siteUrl(), card.code)}`);
   } finally {
-    await pool.end();
+    await close();
   }
-}
-
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
 });

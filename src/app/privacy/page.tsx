@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { Aurora } from "@/components/shared/aurora";
 import { env } from "@/lib/env";
 
 const SECTIONS = ["collect", "use", "share", "keep", "rights", "security", "contact"] as const;
@@ -31,7 +32,12 @@ async function Notice({ lang, id }: (typeof NOTICES)[number]) {
   const email = env.CONTACT_EMAIL;
 
   return (
-    <section lang={lang} id={id} aria-labelledby={`${id}-title`} className="flex flex-col gap-6">
+    <section
+      lang={lang}
+      id={id}
+      aria-labelledby={`${id}-title`}
+      className="flex flex-col gap-6 rounded-3xl glass p-6 sm:p-8"
+    >
       <header className="flex flex-col gap-1">
         <h2 id={`${id}-title`} className="text-2xl font-semibold tracking-tight">
           {t("title")}
@@ -74,6 +80,7 @@ export default async function PrivacyPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-2xl grow flex-col gap-10 px-4 py-10">
+      <Aurora />
       <h1 className="text-3xl font-semibold tracking-tight">{t("heading")}</h1>
       <nav aria-label={t("languages")} className="flex gap-4 text-sm">
         <Link href="#english" className="underline">

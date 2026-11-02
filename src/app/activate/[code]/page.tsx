@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
+import { Aurora } from "@/components/shared/aurora";
 import { StatusMessage } from "@/components/shared/status-message";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,7 +54,8 @@ export default async function ActivatePage({ params }: PageProps<"/activate/[cod
 
   return (
     <main className="mx-auto flex w-full max-w-md grow flex-col justify-center px-4 py-12">
-      <Card>
+      <Aurora />
+      <Card className="animate-rise rounded-3xl">
         <CardHeader>
           <CardTitle className="text-xl">
             <h1>{isFirstProfile ? t("onboardingTitle") : t("title")}</h1>

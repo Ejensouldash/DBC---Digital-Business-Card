@@ -37,9 +37,21 @@ describe("profileThemeSchema", () => {
   });
 });
 
+// Worst case for the glass card: translucent white over the navy background, with a faint
+// aurora blob behind it.
+const GLASS_SURFACE = "#1c2131";
+
+const contrast = (a: string, b: string) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi! + 0.05) / (lo! + 0.05);
+};
+
 describe("THEME_ACCENTS", () => {
-  it.each(Object.entries(THEME_ACCENTS))("%s has AA contrast with white text", (_, hex) => {
-    const contrast = (1 + 0.05) / (luminance(hex) + 0.05);
-    expect(contrast).toBeGreaterThanOrEqual(4.5);
+  it.each(Object.entries(THEME_ACCENTS))("%s button text is AA readable", (_, accent) => {
+    expect(contrast(accent.solid, accent.on)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it.each(Object.entries(THEME_ACCENTS))("%s soft colour is AA on the glass card", (_, accent) => {
+    expect(contrast(accent.soft, GLASS_SURFACE)).toBeGreaterThanOrEqual(4.5);
   });
 });

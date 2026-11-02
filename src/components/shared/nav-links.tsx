@@ -24,8 +24,9 @@ export function NavLinks({ label, items }: NavLinksProps) {
           href={item.href}
           aria-current={item.href === active ? "page" : undefined}
           className={cn(
-            "rounded-md px-2 py-1 text-sm whitespace-nowrap text-muted-foreground outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
-            item.href === active && "bg-muted font-medium text-foreground",
+            "rounded-lg px-2.5 py-1 text-sm whitespace-nowrap text-muted-foreground transition-colors outline-none hover:bg-white/5 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50",
+            item.href === active &&
+              "bg-white/10 font-medium text-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.1)] ring-1 ring-white/15",
           )}
         >
           {item.label}

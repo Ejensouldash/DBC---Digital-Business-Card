@@ -66,7 +66,7 @@ export function LeadFormDialog({ slug, ownerName }: LeadFormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="lg" className="h-11 w-full">
+        <Button variant="outline" size="lg" className="h-11 w-full lift rounded-xl">
           <SendIcon aria-hidden />
           {t("open")}
         </Button>

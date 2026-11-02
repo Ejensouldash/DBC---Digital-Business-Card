@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { CSSProperties } from "react";
 
+import { Aurora } from "@/components/shared/aurora";
 import { TapBeacon } from "@/features/analytics/components/tap-beacon";
 import { LeadFormDialog } from "@/features/leads/components/lead-form-dialog";
 import { ProfileShareActions } from "@/features/profiles/components/profile-share-actions";
@@ -10,7 +12,13 @@ import { ProfileView } from "@/features/profiles/components/profile-view";
 import { imageUrl } from "@/features/profiles/lib/images";
 import { getPublicProfile } from "@/features/profiles/queries";
 import { env } from "@/lib/env";
-import { parseTheme } from "@/lib/profile-theme";
+import { parseTheme, THEME_ACCENTS, type ProfileTheme } from "@/lib/profile-theme";
+
+// The background picks up the owner's accent.
+function auroraTint({ accent }: ProfileTheme): CSSProperties {
+  const { solid, soft } = THEME_ACCENTS[accent];
+  return { "--aurora-1": solid, "--aurora-2": soft, "--aurora-3": solid } as CSSProperties;
+}
 
 // The whole page depends on the slug and query, so it renders at request time.
 export const instant = false;
@@ -47,9 +55,11 @@ export default async function PublicProfilePage({ params, searchParams }: PagePr
   const source = query.src === "qr" ? "qr" : "link";
   const t = await getTranslations("Profile");
   const profileUrl = `${env.NEXT_PUBLIC_SITE_URL}/p/${profile.slug}`;
+  const theme = parseTheme(profile.theme);
 
   return (
-    <main className="flex grow flex-col items-center bg-muted/40 px-4 py-6">
+    <main className="flex grow flex-col items-center px-4 py-6 sm:py-10">
+      <Aurora style={auroraTint(theme)} />
       {isCardTap ? null : <TapBeacon slug={profile.slug} source={source} />}
       <div className="flex w-full max-w-[480px] flex-col gap-4">
         <ProfileView
@@ -57,7 +67,7 @@ export default async function PublicProfilePage({ params, searchParams }: PagePr
             ...profile,
             avatarUrl: imageUrl(profile.avatarPath),
             coverUrl: imageUrl(profile.coverPath),
-            theme: parseTheme(profile.theme),
+            theme,
           }}
         >
           <ProfileShareActions

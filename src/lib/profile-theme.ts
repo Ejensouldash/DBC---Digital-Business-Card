@@ -1,16 +1,18 @@
 import { z } from "zod";
 
-// Curated accents rather than a free colour picker: each one has at least 4.5:1 contrast with
-// white text (WCAG AA), so an owner can't pick a button colour visitors can't read.
+// Curated accents rather than a free colour picker, so an owner can't pick something visitors
+// can't read on the dark glass card. Each has:
+//   solid: button background, with `on` as its text colour (at least 4.5:1, WCAG AA)
+//   soft:  icons, glow and aurora tint on the dark surface (at least 4.5:1 against it)
 export const THEME_ACCENTS = {
-  neutral: "#18181b",
-  blue: "#1d4ed8",
-  teal: "#0f766e",
-  green: "#15803d",
-  orange: "#c2410c",
-  red: "#b91c1c",
-  pink: "#be185d",
-  purple: "#7e22ce",
+  neutral: { solid: "#e4e4e7", on: "#18181b", soft: "#e4e4e7" },
+  blue: { solid: "#2563eb", on: "#ffffff", soft: "#93c5fd" },
+  teal: { solid: "#0f766e", on: "#ffffff", soft: "#5eead4" },
+  green: { solid: "#15803d", on: "#ffffff", soft: "#86efac" },
+  orange: { solid: "#c2410c", on: "#ffffff", soft: "#fdba74" },
+  red: { solid: "#dc2626", on: "#ffffff", soft: "#fca5a5" },
+  pink: { solid: "#db2777", on: "#ffffff", soft: "#f9a8d4" },
+  purple: { solid: "#7c3aed", on: "#ffffff", soft: "#c4b5fd" },
 } as const;
 
 export type ThemeAccent = keyof typeof THEME_ACCENTS;

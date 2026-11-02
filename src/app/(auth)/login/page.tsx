@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { Aurora } from "@/components/shared/aurora";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LoginForm } from "@/features/auth/components/login-form";
@@ -27,7 +28,8 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
 
   return (
     <main className="mx-auto flex w-full max-w-sm grow flex-col justify-center px-4 py-12">
-      <Card>
+      <Aurora />
+      <Card className="animate-rise rounded-3xl">
         <CardHeader>
           <CardTitle className="text-xl">
             <h1>{t("title")}</h1>

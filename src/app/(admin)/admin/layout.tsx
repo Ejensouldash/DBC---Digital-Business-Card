@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
+import { Aurora } from "@/components/shared/aurora";
 import { NavLinks } from "@/components/shared/nav-links";
 import { SignOutButton } from "@/features/auth/components/sign-out-button";
 import { requireAdmin } from "@/lib/auth/session";
@@ -24,7 +25,8 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
 
   return (
     <div className="flex min-h-full flex-col">
-      <header className="border-b bg-muted/40">
+      <Aurora />
+      <header className="sticky top-0 z-20 border-b border-white/10 bg-[#070b1a]/60 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-6xl items-center gap-2 px-4 py-3">
           <Link href="/admin" className="mr-2 shrink-0 font-semibold">
             {t("brand")}

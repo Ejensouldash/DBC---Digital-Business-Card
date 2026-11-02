@@ -11,7 +11,10 @@ function StatTile({ label, value }: { label: string; value: number }) {
     <Card size="sm">
       <CardHeader>
         <CardDescription>{label}</CardDescription>
-        <CardTitle className="text-3xl tabular-nums">{value}</CardTitle>
+        <CardTitle>
+          {/* Inner span: the small-card title style would otherwise shrink the number. */}
+          <span className="text-3xl font-semibold tabular-nums">{value}</span>
+        </CardTitle>
       </CardHeader>
     </Card>
   );

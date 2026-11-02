@@ -49,7 +49,11 @@
         "description": "Change your title, number or links any time. The same card keeps working."
       }
     },
-    "privacy": "Privacy notice"
+    "privacy": "Privacy notice",
+    "eyebrow": "NFC business cards",
+    "cardName": "Aisyah Rahman",
+    "cardRole": "Sales Manager · Syarikat ABC",
+    "ctaTitle": "Your next introduction starts with a tap."
   },
   "Login": {
     "title": "Sign in",
@@ -188,7 +192,7 @@
       "accent": "Button colour",
       "layout": "Layout",
       "accents": {
-        "neutral": "Charcoal",
+        "neutral": "Silver",
         "blue": "Blue",
         "teal": "Teal",
         "green": "Green",

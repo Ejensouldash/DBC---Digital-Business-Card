@@ -29,6 +29,7 @@
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -83,38 +84,45 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Dark aurora theme. The app always renders dark (<html class="dark">). Hex values so the
+   pairs are easy to contrast-check: text on glass is 14.7:1, muted text 7.4:1. */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: #070b1a;
+  --foreground: #f1f5ff;
+  --card: rgb(255 255 255 / 0.06);
+  --card-foreground: #f1f5ff;
+  --popover: rgb(17 22 40 / 0.9);
+  --popover-foreground: #f1f5ff;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: rgb(255 255 255 / 0.08);
+  --secondary-foreground: #f1f5ff;
+  --muted: rgb(255 255 255 / 0.06);
+  --muted-foreground: #a7b0c8;
+  --accent: rgb(255 255 255 / 0.1);
+  --accent-foreground: #f1f5ff;
+  --accent-soft: #c4b5fd;
+  --destructive: #f87171;
+  --border: rgb(255 255 255 / 0.12);
+  --input: rgb(255 255 255 / 0.14);
+  --ring: #a78bfa;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: #0d1224;
+  --sidebar-foreground: #f1f5ff;
+  --sidebar-primary: #7c3aed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgb(255 255 255 / 0.1);
+  --sidebar-accent-foreground: #f1f5ff;
+  --sidebar-border: rgb(255 255 255 / 0.12);
+  --sidebar-ring: #a78bfa;
+  /* Aurora blob colours; the public profile swaps them for the owner's accent. */
+  --aurora-1: #7c3aed;
+  --aurora-2: #06b6d4;
+  --aurora-3: #db2777;
 }
 
 @layer base {
@@ -140,4 +148,190 @@
   --series-1: #3987e5;
   --series-2: #d95926;
   --series-3: #199e70;
+}
+
+/* ---------- Glass ---------- */
+
+@utility glass {
+  background-color: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  box-shadow:
+    0 12px 40px -12px rgb(0 0 0 / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.08);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+
+/* Without backdrop-filter, translucent panels would let the aurora bleed through text. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  [data-slot="card"] {
+    background-color: rgb(17 22 40 / 0.95);
+  }
+}
+
+/* shadcn components stay untouched; they pick up the glass look here. */
+@layer components {
+  [data-slot="card"] {
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    box-shadow:
+      0 12px 40px -12px rgb(0 0 0 / 0.6),
+      inset 0 1px 0 rgb(255 255 255 / 0.08);
+  }
+  [data-slot="dialog-content"],
+  [data-slot="dropdown-menu-content"] {
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+  }
+  [data-slot="dialog-overlay"] {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+}
+
+/* Accent glow for primary buttons: a soft halo in the current --primary colour. */
+@utility glow {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--primary) 60%, transparent),
+    0 12px 32px -10px color-mix(in oklab, var(--primary) 85%, transparent);
+}
+
+/* ---------- Aurora background ---------- */
+
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--background);
+}
+.aurora > span {
+  position: absolute;
+  width: 70vmax;
+  height: 70vmax;
+  border-radius: 9999px;
+  opacity: 0.35;
+  /* Radial gradients instead of filter: blur(), which is expensive on phones. */
+  background: radial-gradient(closest-side, var(--blob), transparent);
+  will-change: transform;
+  animation: aurora-drift 28s ease-in-out infinite alternate;
+}
+.aurora > span:nth-child(1) {
+  --blob: var(--aurora-1);
+  top: -30vmax;
+  left: -20vmax;
+}
+.aurora > span:nth-child(2) {
+  --blob: var(--aurora-2);
+  top: 10vmax;
+  right: -35vmax;
+  animation-duration: 34s;
+  animation-delay: -8s;
+}
+.aurora > span:nth-child(3) {
+  --blob: var(--aurora-3);
+  bottom: -40vmax;
+  left: 0;
+  opacity: 0.25;
+  animation-duration: 40s;
+  animation-delay: -16s;
+}
+/* A faint grid gives the glass something to refract. */
+.aurora::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+@keyframes aurora-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(8vmax, 6vmax, 0) scale(1.15);
+  }
+}
+
+/* ---------- CSS motion (used where we don't ship the motion library) ---------- */
+
+/* Staggered entrance: set --i on each child to delay it. */
+@utility animate-rise {
+  animation: rise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+}
+
+/* Rotating gradient ring, e.g. around the avatar. */
+@utility animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+/* Light sweep across a button every few seconds. (Not "shimmer": shadcn has a text effect
+   by that name.) */
+@utility sheen {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 30%,
+      rgb(255 255 255 / 0.35) 50%,
+      transparent 70%
+    );
+    transform: translateX(-100%);
+    pointer-events: none;
+    animation: sheen 4s ease-in-out 1.2s infinite;
+  }
+}
+@keyframes sheen {
+  0%,
+  60% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Gentle lift on hover for tiles and rows. */
+@utility lift {
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+  &:hover {
+    transform: translateY(-2px);
+  }
+  &:active {
+    transform: translateY(0) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Loading spinners keep turning: they carry meaning, not decoration. */
+  *:not(.animate-spin),
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .aurora > span {
+    animation: none;
+  }
 }

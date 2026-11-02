@@ -48,20 +48,20 @@ export function ProfileShareActions({
 
   return (
     <div className="flex w-full flex-col gap-2">
-      <Button asChild size="lg" className="h-12 w-full text-base">
+      <Button asChild size="lg" className="sheen h-12 w-full rounded-xl text-base glow">
         <a href={vcardUrl}>
           <UserPlusIcon aria-hidden />
           {t("saveContact")}
         </a>
       </Button>
       <div className="grid grid-cols-2 gap-2">
-        <Button variant="outline" size="lg" className="h-11" onClick={share}>
+        <Button variant="outline" size="lg" className="h-11 lift rounded-xl" onClick={share}>
           <Share2Icon aria-hidden />
           {t("share")}
         </Button>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" size="lg" className="h-11">
+            <Button variant="outline" size="lg" className="h-11 lift rounded-xl">
               <QrCodeIcon aria-hidden />
               {t("qr")}
             </Button>

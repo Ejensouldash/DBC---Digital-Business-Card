@@ -29,7 +29,9 @@ export default async function BatchesPage() {
       <PageHeader title={t("title")} description={t("description")} />
       <Card>
         <CardHeader>
-          <CardTitle>{t("createTitle")}</CardTitle>
+          <CardTitle>
+            <h2>{t("createTitle")}</h2>
+          </CardTitle>
           <CardDescription>{t("createDescription")}</CardDescription>
         </CardHeader>
         <CardContent>

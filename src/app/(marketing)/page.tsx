@@ -45,6 +45,11 @@ export default function LandingPage() {
           ))}
         </ul>
       </main>
+      <footer className="mx-auto w-full max-w-5xl px-4 py-6 text-sm text-muted-foreground">
+        <Link href="/privacy" className="hover:underline">
+          {t("privacy")}
+        </Link>
+      </footer>
     </div>
   );
 }

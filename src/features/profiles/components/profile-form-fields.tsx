@@ -17,6 +17,8 @@ import { Switch } from "@/components/ui/switch";
 
 import type { ProfileFormInput, ProfileFormValues } from "../schemas";
 
+import { ThemeFields } from "./theme-fields";
+
 type FieldsProps = {
   control: Control<ProfileFormInput, unknown, ProfileFormValues>;
   slugHint: string;
@@ -29,7 +31,7 @@ function ToggleField({
   description,
 }: {
   control: FieldsProps["control"];
-  name: "isPublished" | "allowIndexing";
+  name: "isPublished" | "allowIndexing" | "leadFormEnabled";
   label: string;
   description: string;
 }) {
@@ -136,8 +138,16 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
             label={t("fields.allowIndexing")}
             description={t("hints.allowIndexing")}
           />
+          <ToggleField
+            control={control}
+            name="leadFormEnabled"
+            label={t("fields.leadFormEnabled")}
+            description={t("hints.leadFormEnabled")}
+          />
         </FieldGroup>
       </FieldSet>
+
+      <ThemeFields control={control} />
     </FieldGroup>
   );
 }

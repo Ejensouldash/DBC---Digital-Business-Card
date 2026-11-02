@@ -14,6 +14,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { LINK_TYPES } from "../link-types";
+import type { ProfileTheme } from "../profile-theme";
 
 import { neonAuthUser } from "./neon-auth";
 
@@ -30,8 +31,6 @@ const updatedAt = () =>
     .defaultNow()
     .$onUpdate(() => new Date());
 const ownerRef = () => uuid("owner_id").references(() => neonAuthUser.id, { onDelete: "cascade" });
-
-export type ProfileTheme = { accent?: string; layout?: "classic" | "centered" };
 
 export const profiles = pgTable(
   "profiles",
@@ -51,7 +50,7 @@ export const profiles = pgTable(
     website: text("website"),
     address: text("address"),
     mapsUrl: text("maps_url"),
-    theme: jsonb("theme").$type<ProfileTheme>().notNull().default({}),
+    theme: jsonb("theme").$type<Partial<ProfileTheme>>().notNull().default({}),
     isPublished: boolean("is_published").notNull().default(false),
     allowIndexing: boolean("allow_indexing").notNull().default(false),
     leadFormEnabled: boolean("lead_form_enabled").notNull().default(false),

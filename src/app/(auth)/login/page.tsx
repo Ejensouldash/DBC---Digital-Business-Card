@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { Suspense } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,7 +29,9 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
     <main className="mx-auto flex w-full max-w-sm grow flex-col justify-center px-4 py-12">
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl">{t("title")}</CardTitle>
+          <CardTitle className="text-xl">
+            <h1>{t("title")}</h1>
+          </CardTitle>
           <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -37,6 +40,15 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
           </Suspense>
         </CardContent>
       </Card>
+      <p className="mt-4 text-center text-xs text-muted-foreground">
+        {t.rich("privacy", {
+          link: (chunks) => (
+            <Link href="/privacy" className="underline">
+              {chunks}
+            </Link>
+          ),
+        })}
+      </p>
     </main>
   );
 }

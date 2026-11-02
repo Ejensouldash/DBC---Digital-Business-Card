@@ -3,6 +3,7 @@ import "server-only";
 import {
   DeleteObjectCommand,
   HeadBucketCommand,
+  ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
@@ -39,6 +40,26 @@ export async function putPublicObject(
 
 export async function deleteObject(key: string): Promise<void> {
   await s3.send(new DeleteObjectCommand({ Bucket: AVATARS_BUCKET, Key: key }));
+}
+
+// Deletes every object under a prefix, e.g. all of one user's images ("<userId>/").
+export async function deleteObjectsWithPrefix(prefix: string): Promise<number> {
+  let deleted = 0;
+  let token: string | undefined;
+  do {
+    const page = await s3.send(
+      new ListObjectsV2Command({
+        Bucket: AVATARS_BUCKET,
+        Prefix: prefix,
+        ContinuationToken: token,
+      }),
+    );
+    const keys = (page.Contents ?? []).flatMap((object) => (object.Key ? [object.Key] : []));
+    await Promise.all(keys.map(deleteObject));
+    deleted += keys.length;
+    token = page.IsTruncated ? page.NextContinuationToken : undefined;
+  } while (token);
+  return deleted;
 }
 
 export async function checkBucket(): Promise<void> {

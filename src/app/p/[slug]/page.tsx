@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { TapBeacon } from "@/features/analytics/components/tap-beacon";
+import { LeadFormDialog } from "@/features/leads/components/lead-form-dialog";
 import { ProfileShareActions } from "@/features/profiles/components/profile-share-actions";
 import { ProfileView } from "@/features/profiles/components/profile-view";
 import { imageUrl } from "@/features/profiles/lib/images";
 import { getPublicProfile } from "@/features/profiles/queries";
 import { env } from "@/lib/env";
+import { parseTheme } from "@/lib/profile-theme";
 
 // The whole page depends on the slug and query, so it renders at request time.
 export const instant = false;
@@ -54,6 +57,7 @@ export default async function PublicProfilePage({ params, searchParams }: PagePr
             ...profile,
             avatarUrl: imageUrl(profile.avatarPath),
             coverUrl: imageUrl(profile.coverPath),
+            theme: parseTheme(profile.theme),
           }}
         >
           <ProfileShareActions
@@ -61,8 +65,16 @@ export default async function PublicProfilePage({ params, searchParams }: PagePr
             vcardUrl={`/api/vcard/${profile.slug}`}
             profileUrl={profileUrl}
           />
+          {profile.leadFormEnabled ? (
+            <LeadFormDialog slug={profile.slug} ownerName={profile.displayName} />
+          ) : null}
         </ProfileView>
-        <footer className="text-center text-xs text-muted-foreground">{t("poweredBy")}</footer>
+        <footer className="flex justify-center gap-3 text-xs text-muted-foreground">
+          <span>{t("poweredBy")}</span>
+          <Link href="/privacy" className="hover:underline">
+            {t("privacy")}
+          </Link>
+        </footer>
       </div>
     </main>
   );

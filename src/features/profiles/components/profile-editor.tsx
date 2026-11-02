@@ -9,6 +9,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { DEFAULT_THEME } from "@/lib/profile-theme";
 
 import { createProfile, updateProfile } from "../actions";
 import { profileFormSchema, type ProfileFormInput, type ProfileFormValues } from "../schemas";
@@ -59,6 +60,7 @@ export function ProfileEditor({
     mapsUrl: blankToNull(values.mapsUrl),
     ...images,
     links,
+    theme: { ...DEFAULT_THEME, ...values.theme },
   };
 
   // Send the raw input: the server validates it again with the same schema.

@@ -25,7 +25,9 @@
     "slugTooLong": "At most 30 characters.",
     "slugFormat": "Use lowercase letters, numbers and hyphens only (no hyphen at the start or end).",
     "slugReserved": "This name is reserved. Please pick another.",
-    "slugTaken": "This name is already taken. Please pick another."
+    "slugTaken": "This name is already taken. Please pick another.",
+    "consentRequired": "Please tick the box to continue.",
+    "contactRequired": "Enter a phone number or an email address."
   },
   "Landing": {
     "brand": "Digital Card",
@@ -46,7 +48,8 @@
         "title": "Always up to date",
         "description": "Change your title, number or links any time. The same card keeps working."
       }
-    }
+    },
+    "privacy": "Privacy notice"
   },
   "Login": {
     "title": "Sign in",
@@ -62,7 +65,8 @@
     "useOtherEmail": "Use a different email",
     "or": "or",
     "google": "Continue with Google",
-    "googleFailed": "Google sign-in failed. Try again."
+    "googleFailed": "Google sign-in failed. Try again.",
+    "privacy": "By signing in you agree to our <link>privacy notice</link>."
   },
   "CardState": {
     "invalid": {
@@ -111,6 +115,8 @@
       "profile": "Profile",
       "links": "Links",
       "cards": "My cards",
+      "leads": "Leads",
+      "settings": "Settings",
       "admin": "Admin"
     },
     "welcome": "Welcome, {name}",
@@ -159,14 +165,16 @@
       "address": "Address",
       "mapsUrl": "Google Maps link",
       "isPublished": "Publish profile",
-      "allowIndexing": "Allow search engines"
+      "allowIndexing": "Allow search engines",
+      "leadFormEnabled": "Exchange contacts form"
     },
     "hints": {
       "slug": "Your profile: {url}",
       "whatsapp": "Leave empty to use your phone number.",
       "mapsUrl": "Optional. If empty, we use your address.",
       "isPublished": "When off, your card and links show \"not active\".",
-      "allowIndexing": "Let Google show this profile in search results."
+      "allowIndexing": "Let Google show this profile in search results.",
+      "leadFormEnabled": "Let visitors send you their name and number. You'll find them under Leads."
     },
     "errors": {
       "unauthorized": "Please sign in again",
@@ -174,6 +182,27 @@
       "not_found": "Profile not found",
       "slug_taken": "This profile link is already taken",
       "unexpected": "Something went wrong. Try again."
+    },
+    "theme": {
+      "title": "Appearance",
+      "accent": "Button colour",
+      "layout": "Layout",
+      "accents": {
+        "neutral": "Charcoal",
+        "blue": "Blue",
+        "teal": "Teal",
+        "green": "Green",
+        "orange": "Orange",
+        "red": "Red",
+        "pink": "Pink",
+        "purple": "Purple"
+      },
+      "layouts": {
+        "cover": "With cover",
+        "coverDescription": "Banner image above your photo.",
+        "compact": "Compact",
+        "compactDescription": "No banner. Your photo and name come first."
+      }
     }
   },
   "Profile": {
@@ -202,6 +231,29 @@
       "youtube": "YouTube",
       "telegram": "Telegram",
       "custom": "Link"
+    },
+    "privacy": "Privacy"
+  },
+  "LeadForm": {
+    "open": "Exchange contacts",
+    "title": "Share your contact with {name}",
+    "description": "{name} will receive your details and can get back to you.",
+    "name": "Your name",
+    "phone": "Phone",
+    "email": "Email",
+    "company": "Company (optional)",
+    "message": "Message (optional)",
+    "contactHint": "Add a phone number, an email address, or both.",
+    "consent": "I agree that {name} may keep these details to contact me. <link>Privacy notice</link>",
+    "honeypot": "Leave this field empty",
+    "submit": "Send my contact",
+    "sent": "Thanks! {name} now has your contact.",
+    "close": "Close",
+    "errors": {
+      "invalid": "Please check the details you entered.",
+      "unavailable": "This form is no longer available.",
+      "rate_limited": "Too many messages right now. Please try again in a few minutes.",
+      "unexpected": "Something went wrong. Please try again."
     }
   },
   "Analytics": {
@@ -291,6 +343,53 @@
       "invalid": "Please check the details",
       "not_found": "Card or profile not found",
       "unexpected": "Something went wrong. Try again."
+    }
+  },
+  "Leads": {
+    "title": "Leads",
+    "description": "People who shared their contact through your profile.",
+    "empty": "No leads yet. Turn on the exchange contacts form in your profile to start collecting them.",
+    "export": "Export CSV",
+    "columns": {
+      "name": "Name",
+      "contact": "Contact",
+      "message": "Message",
+      "profile": "Profile",
+      "received": "Received",
+      "actions": "Actions"
+    },
+    "delete": "Delete lead from {name}",
+    "confirmDelete": "Delete the lead from {name}?",
+    "confirmDeleteDescription": "Their details will be removed. This can't be undone.",
+    "deleted": "Lead deleted",
+    "errors": {
+      "unauthorized": "Please sign in again.",
+      "invalid": "Something went wrong. Please try again.",
+      "not_found": "This lead no longer exists."
+    }
+  },
+  "Settings": {
+    "title": "Settings",
+    "account": {
+      "title": "Account",
+      "description": "You sign in with this email, using a one-time code or Google. To change it, <link>contact us</link>.",
+      "email": "Email"
+    },
+    "delete": {
+      "title": "Delete account",
+      "description": "Permanently delete your account and everything in it.",
+      "warning": "This deletes your profiles, links, leads, tap history and uploaded images straight away, and switches off your cards so nobody else can use them. It can't be undone.",
+      "confirmLabel": "Type {email} to confirm",
+      "confirmHint": "This makes sure nobody deletes your account by accident.",
+      "submit": "Delete my account",
+      "done": "Your account has been deleted.",
+      "errors": {
+        "unauthorized": "Please sign in again.",
+        "mismatch": "That doesn't match your email address.",
+        "last_admin": "You're the only admin. Make someone else an admin before deleting your account.",
+        "unavailable": "Account deletion isn't set up yet. Please contact us.",
+        "unexpected": "Something went wrong. Please try again."
+      }
     }
   },
   "Admin": {
@@ -393,6 +492,86 @@
       "confirmDemoteSelfDescription": "You'll lose access to this area.",
       "promoted": "{email} is now an admin",
       "demoted": "{email} is no longer an admin"
+    }
+  },
+  "Privacy": {
+    "heading": "Privacy",
+    "languages": "Languages",
+    "english": "English",
+    "malay": "Bahasa Melayu",
+    "en": {
+      "title": "Privacy notice",
+      "updated": "Last updated: 2 November 2026",
+      "intro": "This notice explains how Digital Card (“we”) handles personal data under Malaysia's Personal Data Protection Act 2010 (PDPA). It applies to card owners who create an account and to visitors who open a profile.",
+      "email": "Email: <link>{email}</link>",
+      "noEmail": "Contact us through the email address shown on our website.",
+      "sections": {
+        "collect": {
+          "title": "What we collect",
+          "body": "<ul><li><b>Card owners:</b> your email address and name, used to sign in, and the profile details you choose to publish, such as your name, job title, company, photo, contact details and links.</li><li><b>Visitors:</b> when a profile is opened we record the time, how it was opened (NFC tap, QR code or link), your browser and device type, your approximate country and the page you came from. We do not store IP addresses.</li><li><b>Exchange contacts form:</b> if you send your details to a profile owner, we store what you enter and the fact that you agreed.</li></ul>"
+        },
+        "use": {
+          "title": "Why we use it",
+          "body": "<ul><li>To run your account and show your public profile.</li><li>To give profile owners statistics about visits to their profile.</li><li>To pass the details you send through the exchange contacts form to the profile owner you chose.</li><li>To keep the service secure and prevent abuse.</li></ul>"
+        },
+        "share": {
+          "title": "Who can see it",
+          "body": "<ul><li>A published profile is public on purpose. Owners decide what it shows and can unpublish it at any time.</li><li>Details sent through the exchange contacts form are shown only to that profile's owner.</li><li>We use service providers to run the service: Neon (database, sign-in and file storage) and Vercel (website hosting). They process data only to provide their service to us.</li><li>We do not sell personal data.</li></ul>"
+        },
+        "keep": {
+          "title": "How long we keep it",
+          "body": "<p>We keep account and profile data until you delete your account. Visit statistics and leads are kept for as long as the profile exists. When you delete your account, your profiles, links, leads, visit statistics and uploaded images are erased straight away.</p>"
+        },
+        "rights": {
+          "title": "Your choices and rights",
+          "body": "<ul><li>Owners can view, correct or unpublish their profile at any time in the dashboard, delete individual leads, and delete their whole account under Settings.</li><li>If you sent your details to a profile owner and want them removed, ask that owner or contact us.</li><li>Under the PDPA you can ask for access to, or correction of, your personal data, and you can withdraw your consent. Contact us using the details below.</li><li>Giving your details is voluntary, but without them we can't create an account or pass on your contact.</li></ul>"
+        },
+        "security": {
+          "title": "Security",
+          "body": "<p>All traffic is encrypted with HTTPS. Only the account owner can see their dashboard, statistics and leads. The link stored on a card contains a random code, never personal data.</p>"
+        },
+        "contact": {
+          "title": "Contact us",
+          "body": "<p>For questions, requests to access or correct your data, or to withdraw consent, contact us.</p>"
+        }
+      }
+    },
+    "ms": {
+      "title": "Notis privasi",
+      "updated": "Kemas kini terakhir: 2 November 2026",
+      "intro": "Notis ini menerangkan cara Digital Card (“kami”) mengendalikan data peribadi di bawah Akta Perlindungan Data Peribadi 2010 (PDPA) Malaysia. Notis ini terpakai kepada pemilik kad yang membuat akaun dan pelawat yang membuka profil.",
+      "email": "E-mel: <link>{email}</link>",
+      "noEmail": "Hubungi kami melalui alamat e-mel yang tertera di laman web kami.",
+      "sections": {
+        "collect": {
+          "title": "Data yang kami kumpul",
+          "body": "<ul><li><b>Pemilik kad:</b> alamat e-mel dan nama anda untuk log masuk, serta butiran profil yang anda pilih untuk diterbitkan, seperti nama, jawatan, syarikat, foto, butiran hubungan dan pautan.</li><li><b>Pelawat:</b> apabila profil dibuka, kami merekodkan masa, cara ia dibuka (sentuhan NFC, kod QR atau pautan), jenis pelayar dan peranti, anggaran negara dan halaman asal anda. Kami tidak menyimpan alamat IP.</li><li><b>Borang tukar kenalan:</b> jika anda menghantar butiran anda kepada pemilik profil, kami menyimpan maklumat yang anda isi dan rekod persetujuan anda.</li></ul>"
+        },
+        "use": {
+          "title": "Tujuan kami menggunakannya",
+          "body": "<ul><li>Untuk mengendalikan akaun anda dan memaparkan profil awam anda.</li><li>Untuk memberi pemilik profil statistik lawatan ke profil mereka.</li><li>Untuk menyampaikan butiran yang anda hantar melalui borang tukar kenalan kepada pemilik profil yang anda pilih.</li><li>Untuk memastikan perkhidmatan selamat dan mencegah penyalahgunaan.</li></ul>"
+        },
+        "share": {
+          "title": "Siapa yang boleh melihatnya",
+          "body": "<ul><li>Profil yang diterbitkan memang terbuka kepada umum. Pemilik menentukan apa yang dipaparkan dan boleh menyahterbitkannya pada bila-bila masa.</li><li>Butiran yang dihantar melalui borang tukar kenalan hanya dipaparkan kepada pemilik profil tersebut.</li><li>Kami menggunakan penyedia perkhidmatan untuk menjalankan perkhidmatan ini: Neon (pangkalan data, log masuk dan storan fail) dan Vercel (pengehosan laman web). Mereka memproses data hanya untuk menyediakan perkhidmatan mereka kepada kami.</li><li>Kami tidak menjual data peribadi.</li></ul>"
+        },
+        "keep": {
+          "title": "Tempoh penyimpanan",
+          "body": "<p>Kami menyimpan data akaun dan profil sehingga anda memadam akaun anda. Statistik lawatan dan maklumat kenalan disimpan selagi profil wujud. Apabila anda memadam akaun, profil, pautan, maklumat kenalan, statistik lawatan dan imej yang dimuat naik akan dipadam serta-merta.</p>"
+        },
+        "rights": {
+          "title": "Pilihan dan hak anda",
+          "body": "<ul><li>Pemilik boleh melihat, membetulkan atau menyahterbitkan profil mereka pada bila-bila masa di papan pemuka, memadam maklumat kenalan satu per satu, dan memadam keseluruhan akaun di bahagian Tetapan.</li><li>Jika anda telah menghantar butiran anda kepada pemilik profil dan mahu ia dipadam, minta pemilik tersebut atau hubungi kami.</li><li>Di bawah PDPA, anda boleh meminta akses kepada, atau pembetulan, data peribadi anda, dan anda boleh menarik balik persetujuan anda. Hubungi kami menggunakan butiran di bawah.</li><li>Memberikan butiran anda adalah secara sukarela, tetapi tanpanya kami tidak dapat membuat akaun atau menyampaikan butiran hubungan anda.</li></ul>"
+        },
+        "security": {
+          "title": "Keselamatan",
+          "body": "<p>Semua trafik disulitkan dengan HTTPS. Hanya pemilik akaun boleh melihat papan pemuka, statistik dan maklumat kenalan mereka. Pautan yang disimpan dalam kad mengandungi kod rawak, bukan data peribadi.</p>"
+        },
+        "contact": {
+          "title": "Hubungi kami",
+          "body": "<p>Untuk pertanyaan, permintaan akses atau pembetulan data anda, atau untuk menarik balik persetujuan, hubungi kami.</p>"
+        }
+      }
     }
   }
 }

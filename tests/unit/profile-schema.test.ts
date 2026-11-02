@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { profileFormSchema, slugSchema } from "@/features/profiles/schemas";
+import { DEFAULT_THEME } from "@/lib/profile-theme";
 
 const issue = (input: string) => {
   const result = slugSchema.safeParse(input);
@@ -44,6 +45,8 @@ describe("profileFormSchema", () => {
     mapsUrl: "",
     isPublished: true,
     allowIndexing: false,
+    leadFormEnabled: false,
+    theme: DEFAULT_THEME,
   };
 
   it("turns empty optional fields into null", () => {

@@ -1,41 +1,11 @@
 import { z } from "zod";
 
-import { toInternationalDigits } from "@/lib/phone";
+import { profileThemeSchema } from "@/lib/profile-theme";
+import { optionalEmail, optionalPhone, optionalText, optionalUrl } from "@/lib/zod-fields";
 
 import { RESERVED_SLUGS } from "./lib/reserved-slugs";
 
 // Error messages are i18n keys under `Validation`, resolved in the form UI.
-const optionalText = (max: number) =>
-  z
-    .string()
-    .trim()
-    .max(max, "tooLong")
-    .transform((value) => value || null);
-
-const optionalPhone = z
-  .string()
-  .trim()
-  .max(20, "tooLong")
-  .refine((value) => !value || toInternationalDigits(value) !== null, "invalidPhone")
-  .transform((value) => value || null);
-
-const optionalUrl = z
-  .string()
-  .trim()
-  .max(2048, "tooLong")
-  .refine(
-    (value) => !value || z.url({ protocol: /^https?$/ }).safeParse(value).success,
-    "invalidUrl",
-  )
-  .transform((value) => value || null);
-
-const optionalEmail = z
-  .string()
-  .trim()
-  .max(254, "tooLong")
-  .refine((value) => !value || z.email().safeParse(value).success, "invalidEmail")
-  .transform((value) => value || null);
-
 export const slugSchema = z
   .string()
   .trim()
@@ -59,6 +29,8 @@ export const profileFormSchema = z.object({
   mapsUrl: optionalUrl,
   isPublished: z.boolean(),
   allowIndexing: z.boolean(),
+  leadFormEnabled: z.boolean(),
+  theme: profileThemeSchema,
 });
 
 export type ProfileFormInput = z.input<typeof profileFormSchema>;

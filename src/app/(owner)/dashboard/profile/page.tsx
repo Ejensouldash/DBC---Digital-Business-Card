@@ -9,6 +9,7 @@ import { listProfileLinks } from "@/features/links/queries";
 import { requireUser } from "@/lib/auth/session";
 import type { Profile } from "@/lib/db/schema";
 import { env } from "@/lib/env";
+import { DEFAULT_THEME, parseTheme } from "@/lib/profile-theme";
 
 const EMPTY_PROFILE: ProfileFormInput = {
   slug: "",
@@ -24,6 +25,8 @@ const EMPTY_PROFILE: ProfileFormInput = {
   mapsUrl: "",
   isPublished: true,
   allowIndexing: false,
+  leadFormEnabled: false,
+  theme: DEFAULT_THEME,
 };
 
 function toFormInput(profile: Profile): ProfileFormInput {
@@ -41,6 +44,8 @@ function toFormInput(profile: Profile): ProfileFormInput {
     mapsUrl: profile.mapsUrl ?? "",
     isPublished: profile.isPublished,
     allowIndexing: profile.allowIndexing,
+    leadFormEnabled: profile.leadFormEnabled,
+    theme: parseTheme(profile.theme),
   };
 }
 

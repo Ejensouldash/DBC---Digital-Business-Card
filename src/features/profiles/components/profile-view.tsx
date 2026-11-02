@@ -9,10 +9,11 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { LINK_ICONS } from "@/features/links/lib/link-icons";
 import type { LinkType } from "@/lib/link-types";
+import { THEME_ACCENTS, type ProfileTheme } from "@/lib/profile-theme";
 import { cn } from "@/lib/utils";
 
 import {
@@ -29,6 +30,7 @@ export type ProfileViewData = ContactFields & {
   avatarUrl: string | null;
   coverUrl: string | null;
   links: { id: string; type: LinkType; label: string | null; url: string }[];
+  theme: ProfileTheme;
 };
 
 const ACTION_ICONS: Record<ContactActionKind, LucideIcon> = {
@@ -58,24 +60,42 @@ export function ProfileView({ profile, preview = false, children }: ProfileViewP
   const actions = buildContactActions(profile);
   const subtitle = [profile.jobTitle, profile.company].filter(Boolean).join(" · ");
   const inert = preview ? "pointer-events-none" : undefined;
+  const compact = profile.theme.layout === "compact";
+  // The accent replaces the primary colour inside the card, so buttons pick it up as they are.
+  const accent = THEME_ACCENTS[profile.theme.accent];
+  const accentVars = {
+    "--primary": accent,
+    "--primary-foreground": "#ffffff",
+    "--ring": accent,
+  } as CSSProperties;
 
   return (
-    <article className="flex w-full flex-col overflow-hidden rounded-2xl border bg-card shadow-sm">
-      <div className="relative h-32 w-full bg-muted">
-        {profile.coverUrl ? (
-          <Image
-            src={profile.coverUrl}
-            alt=""
-            fill
-            priority={!preview}
-            unoptimized={preview}
-            sizes="(max-width: 480px) 100vw, 480px"
-            className="object-cover"
-          />
-        ) : null}
-      </div>
-      <div className="flex flex-col items-center gap-4 px-5 pb-6">
-        <div className="relative -mt-12 size-24 overflow-hidden rounded-full bg-muted ring-4 ring-card">
+    <article
+      style={accentVars}
+      className="flex w-full flex-col overflow-hidden rounded-2xl border bg-card shadow-sm"
+    >
+      {compact ? null : (
+        <div className="relative h-32 w-full bg-muted">
+          {profile.coverUrl ? (
+            <Image
+              src={profile.coverUrl}
+              alt=""
+              fill
+              priority={!preview}
+              unoptimized={preview}
+              sizes="(max-width: 480px) 100vw, 480px"
+              className="object-cover"
+            />
+          ) : null}
+        </div>
+      )}
+      <div className={cn("flex flex-col items-center gap-4 px-5 pb-6", compact && "pt-6")}>
+        <div
+          className={cn(
+            "relative size-24 overflow-hidden rounded-full bg-muted ring-4 ring-card",
+            !compact && "-mt-12",
+          )}
+        >
           {profile.avatarUrl ? (
             <Image
               src={profile.avatarUrl}
@@ -117,7 +137,7 @@ export function ProfileView({ profile, preview = false, children }: ProfileViewP
                       inert,
                     )}
                   >
-                    <Icon className="size-5" aria-hidden />
+                    <Icon className="size-5 text-primary" aria-hidden />
                     {t(`actions.${kind}`)}
                   </a>
                 </li>
@@ -142,7 +162,7 @@ export function ProfileView({ profile, preview = false, children }: ProfileViewP
                       inert,
                     )}
                   >
-                    <Icon className="size-4" aria-hidden />
+                    <Icon className="size-4 text-primary" aria-hidden />
                     {link.label || t(`linkTypes.${link.type}`)}
                   </a>
                 </li>

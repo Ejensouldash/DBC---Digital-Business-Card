@@ -56,7 +56,7 @@ export default async function ActivatePage({ params }: PageProps<"/activate/[cod
       <Card>
         <CardHeader>
           <CardTitle className="text-xl">
-            {isFirstProfile ? t("onboardingTitle") : t("title")}
+            <h1>{isFirstProfile ? t("onboardingTitle") : t("title")}</h1>
           </CardTitle>
           <CardDescription>
             {t("description", { code })} {t("signedInAs", { email: user.email })}

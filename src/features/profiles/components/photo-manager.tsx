@@ -25,7 +25,22 @@ export function PhotoManager({ photos, busy, onAdd, onRemove }: PhotoManagerProp
         <p className="text-sm text-muted-foreground">
           {t("count", { count: photos.length, max: MAX_PROFILE_PHOTOS })}
         </p>
-        {full ? null : <ImagePicker label={t("add")} busy={busy} multiple onFiles={onAdd} />}
+        {full ? null : (
+          <ImagePicker
+            label={t("add")}
+            busy={busy}
+            multiple
+            crop
+            cropTitle="Laraskan Gambar Galeri"
+            cropAspect={1}
+            cropAspectOptions={[
+              { label: "1:1", value: 1 },
+              { label: "4:3", value: 4 / 3 },
+              { label: "16:9", value: 16 / 9 },
+            ]}
+            onFiles={onAdd}
+          />
+        )}
       </div>
       {photos.length === 0 ? (
         <p className="rounded-xl border border-dashed p-6 text-center text-sm text-muted-foreground">

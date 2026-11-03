@@ -63,7 +63,21 @@ export function QuickProfileForm({ name, email }: { name: string; email: string 
           <img src={cover.url} alt="" className="size-full object-cover" />
         ) : null}
         <div className="absolute right-2 bottom-2">
-          <ImagePicker label={t("cover")} busy={false} onFiles={pick(setCover)} />
+          <ImagePicker
+            label={t("cover")}
+            busy={false}
+            onFiles={pick(setCover)}
+            crop
+            cropTitle="Laraskan Banner / Cover"
+            cropAspect={3}
+            cropAspectOptions={[
+              { label: "3:1 (Banner)", value: 3 },
+              { label: "16:9", value: 16 / 9 },
+              { label: "4:3", value: 4 / 3 },
+              { label: "1:1", value: 1 },
+            ]}
+            currentImageUrl={cover?.url}
+          />
         </div>
         <div className="absolute bottom-2 left-3 flex items-end gap-2">
           <div className="size-16 overflow-hidden rounded-full bg-white/10 ring-4 ring-[#0d1224]">
@@ -72,7 +86,16 @@ export function QuickProfileForm({ name, email }: { name: string; email: string 
               <img src={avatar.url} alt="" className="size-full object-cover" />
             ) : null}
           </div>
-          <ImagePicker label={t("photo")} busy={false} onFiles={pick(setAvatar)} />
+          <ImagePicker
+            label={t("photo")}
+            busy={false}
+            onFiles={pick(setAvatar)}
+            crop
+            cropTitle="Laraskan Gambar Profil"
+            cropAspect={1}
+            cropShape="round"
+            currentImageUrl={avatar?.url}
+          />
         </div>
       </div>
       <FieldGroup className="gap-4 sm:grid sm:grid-cols-2">

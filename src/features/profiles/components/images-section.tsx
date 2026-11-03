@@ -53,6 +53,21 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
                   label={images[kind] ? t(`images.${kind}.change`) : t(`images.${kind}.upload`)}
                   busy={busy === kind}
                   onFiles={([file]) => file && onPick(kind, file)}
+                  crop
+                  cropTitle={`Laraskan ${t(`images.${kind}.label`)}`}
+                  cropAspect={kind === "cover" ? 3 : 1}
+                  cropShape={kind === "avatar" ? "round" : "rect"}
+                  cropAspectOptions={
+                    kind === "cover"
+                      ? [
+                          { label: "3:1 (Banner)", value: 3 },
+                          { label: "16:9", value: 16 / 9 },
+                          { label: "4:3", value: 4 / 3 },
+                          { label: "1:1", value: 1 },
+                        ]
+                      : undefined
+                  }
+                  currentImageUrl={images[kind]}
                 />
               </div>
             </div>

@@ -1,10 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2Icon } from "lucide-react";
+import { EyeIcon, Loader2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -28,6 +28,7 @@ import { ImagesSection } from "./images-section";
 import { PhonePreview } from "./phone-preview";
 import { PhotoManager } from "./photo-manager";
 import { ProfileFormFields } from "./profile-form-fields";
+import { ProfilePreviewDrawer } from "./profile-preview-drawer";
 import { ProfileView, type ProfileViewData } from "./profile-view";
 import { useProfileMedia, type MediaPhoto } from "./use-profile-media";
 
@@ -55,6 +56,7 @@ export function ProfileEditor({
   const t = useTranslations("ProfileEditor");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [previewOpen, setPreviewOpen] = useState(false);
   const media = useProfileMedia(profileId, { images: initialImages, photos: initialPhotos });
   const form = useForm<ProfileFormInput, unknown, ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -111,16 +113,30 @@ export function ProfileEditor({
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
       <Tabs defaultValue={tab} className="min-w-0 gap-6">
-        <TabsList>
-          {EDITOR_TABS.map((key) => (
-            <TabsTrigger key={key} value={key}>
-              {t(`tabs.${key}`)}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+        <div className="flex items-center justify-between gap-3">
+          <TabsList>
+            {EDITOR_TABS.map((key) => (
+              <TabsTrigger key={key} value={key}>
+                {t(`tabs.${key}`)}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          {/* Quick Live Preview button on mobile */}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setPreviewOpen(true)}
+            className="flex h-9 items-center gap-1.5 rounded-full border-primary/30 px-3 text-xs font-medium text-primary shadow-sm hover:bg-primary/10 lg:hidden"
+          >
+            <EyeIcon className="size-3.5" aria-hidden />
+            <span>{t("preview")}</span>
+          </Button>
+        </div>
 
         <TabsContent value="details">
-          <form onSubmit={onSubmit} noValidate className="flex flex-col gap-8">
+          <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
             <ImagesSection
               images={media.images}
               busy={media.busy}
@@ -131,7 +147,7 @@ export function ProfileEditor({
               control={form.control}
               slugHint={t("hints.slug", { url: `${profileBaseUrl}${values.slug || "…"}` })}
             />
-            <div className="sticky bottom-0 -mx-4 border-t bg-background/90 px-4 py-3 backdrop-blur md:static md:mx-0 md:border-0 md:bg-transparent md:p-0">
+            <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-20 -mx-4 border-t bg-background/95 px-4 py-3 shadow-lg backdrop-blur-md sm:bottom-0 md:static md:mx-0 md:border-0 md:bg-transparent md:p-0 md:shadow-none">
               <Button type="submit" disabled={pending} className="w-full glow md:w-auto">
                 {pending ? <Loader2Icon className="animate-spin" aria-hidden /> : null}
                 {profileId ? t("save") : t("create")}
@@ -158,7 +174,8 @@ export function ProfileEditor({
         </TabsContent>
       </Tabs>
 
-      <aside className="lg:sticky lg:top-20 lg:self-start">
+      {/* Desktop-only static preview mockup */}
+      <aside className="hidden lg:sticky lg:top-20 lg:block lg:self-start">
         <PhonePreview label={t("preview")}>
           <ProfileView
             profile={preview}
@@ -168,6 +185,14 @@ export function ProfileEditor({
           />
         </PhonePreview>
       </aside>
+
+      {/* Mobile-only interactive Live Preview Drawer */}
+      <ProfilePreviewDrawer
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        profile={preview}
+        profileUrl={`${profileBaseUrl}${values.slug || ""}`}
+      />
     </div>
   );
 }

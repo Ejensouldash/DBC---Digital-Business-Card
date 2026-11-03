@@ -82,3 +82,33 @@ export function buildVCard(
 
   return lines.map(foldLine).join(CRLF) + CRLF;
 }
+
+export type ContactVCardData = {
+  name: string;
+  jobTitle?: string | null;
+  company?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  website?: string | null;
+  address?: string | null;
+  notes?: string | null;
+};
+
+export function buildContactVCard(contact: ContactVCardData): string {
+  const lines = ["BEGIN:VCARD", "VERSION:3.0"];
+  const name = escapeText(contact.name);
+
+  lines.push(`N:;${name};;;`, `FN:${name}`);
+  if (contact.company) lines.push(`ORG:${escapeText(contact.company)}`);
+  if (contact.jobTitle) lines.push(`TITLE:${escapeText(contact.jobTitle)}`);
+
+  const phone = contact.phone ? toInternationalDigits(contact.phone) : null;
+  if (phone) lines.push(`TEL;TYPE=CELL:+${phone}`);
+  if (contact.email) lines.push(`EMAIL;TYPE=INTERNET:${escapeText(contact.email)}`);
+  if (contact.website) lines.push(`URL:${contact.website}`);
+  if (contact.address) lines.push(`ADR;TYPE=WORK:;;${escapeText(contact.address)};;;;`);
+  if (contact.notes) lines.push(`NOTE:${escapeText(contact.notes)}`);
+  lines.push("END:VCARD");
+
+  return lines.map(foldLine).join(CRLF) + CRLF;
+}

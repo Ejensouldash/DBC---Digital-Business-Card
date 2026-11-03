@@ -103,3 +103,45 @@ describe("buildVCard", () => {
     expect(unfolded).toContain(`PHOTO;ENCODING=b;TYPE=JPEG:${photo}\r\n`);
   });
 });
+
+describe("buildContactVCard", () => {
+  it("builds a complete vCard for a scanned business card", async () => {
+    const { buildContactVCard } = await import("@/lib/vcard");
+    const vcard = buildContactVCard({
+      name: "Iskandar Zulkarnain",
+      jobTitle: "Senior Architect",
+      company: "Bubbles Technologies",
+      phone: "019-876 5432",
+      email: "iskandar@example.com",
+      website: "https://bubbles.example.com",
+      address: "Suite 8, KLCC",
+      notes: "Met at Tech Expo",
+    });
+
+    expect(vcard).toContain("BEGIN:VCARD\r\nVERSION:3.0\r\n");
+    expect(vcard).toContain("FN:Iskandar Zulkarnain\r\n");
+    expect(vcard).toContain("TITLE:Senior Architect\r\n");
+    expect(vcard).toContain("ORG:Bubbles Technologies\r\n");
+    expect(vcard).toContain("TEL;TYPE=CELL:+60198765432\r\n");
+    expect(vcard).toContain("EMAIL;TYPE=INTERNET:iskandar@example.com\r\n");
+    expect(vcard).toContain("URL:https://bubbles.example.com\r\n");
+    expect(vcard).toContain("ADR;TYPE=WORK:;;Suite 8\\, KLCC;;;;\r\n");
+    expect(vcard).toContain("NOTE:Met at Tech Expo\r\n");
+    expect(vcard).toContain("END:VCARD\r\n");
+  });
+
+  it("omits empty or null contact fields cleanly", async () => {
+    const { buildContactVCard } = await import("@/lib/vcard");
+    const vcard = buildContactVCard({
+      name: "Nurul Huda",
+      phone: null,
+      email: null,
+    });
+
+    expect(vcard).toContain("FN:Nurul Huda\r\n");
+    expect(vcard).not.toContain("TEL");
+    expect(vcard).not.toContain("EMAIL");
+    expect(vcard).not.toContain("ORG");
+    expect(vcard).not.toContain("TITLE");
+  });
+});

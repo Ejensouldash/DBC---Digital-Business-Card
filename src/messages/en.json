@@ -157,6 +157,7 @@
     "switchProfile": "Switch profile",
     "newProfile": "+ New profile",
     "preview": "Preview",
+    "livePreview": "Preview Card",
     "previewName": "Your name",
     "save": "Save changes",
     "create": "Create profile",
@@ -235,6 +236,9 @@
       "photos": "Photos"
     },
     "images": {
+      "change": "Change",
+      "adjust": "Adjust",
+      "upload": "Upload",
       "avatar": {
         "label": "Profile photo",
         "upload": "Upload profile photo",
@@ -445,8 +449,75 @@
       "not_found": "This lead no longer exists."
     }
   },
+  "Scanner": {
+    "title": "Business Card Scanner",
+    "description": "Snap or upload a paper business card to extract details and design with Gemini AI.",
+    "scanButton": "Scan Card",
+    "scanButtonDescription": "Scan physical business cards into your contacts",
+    "takePhoto": "Take Photo",
+    "uploadImage": "Upload Image",
+    "dragDropHint": "Drag & drop an image or use your device camera",
+    "tip": "Tip: Place the card on a plain, well-lit surface for best results.",
+    "analyzing": "Analyzing card with Gemini AI...",
+    "analyzingHint": "Extracting contact details and visual card palette...",
+    "reviewTitle": "Review & Save Contact",
+    "reviewDescription": "Check the AI-extracted details and card design before saving.",
+    "targetProfile": "Assign to Profile",
+    "name": "Full Name",
+    "jobTitle": "Job Title / Role",
+    "company": "Company",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "website": "Website",
+    "address": "Office Address",
+    "notes": "Notes / Tagline",
+    "cardPreview": "Digital Card Preview",
+    "originalPhoto": "Original Card Photo",
+    "modelBadge": "Extracted via {model}",
+    "scanAgain": "Scan Another",
+    "saveToLeads": "Save to Leads",
+    "saveAndVCard": "Save & Download vCard",
+    "saving": "Saving...",
+    "savedSuccess": "Business card contact saved successfully!",
+    "vcardDownloaded": "vCard (.vcf) downloaded to your device.",
+    "errors": {
+      "unauthorized": "Please sign in to scan cards.",
+      "no_image_provided": "Please select or capture a card image.",
+      "file_too_large": "Image must be under 10MB.",
+      "gemini_key_missing": "Gemini API key is not configured. Please add GEMINI_API_KEY to your .env.local file.",
+      "processing_failed": "Could not extract card details. Ensure the photo is clear and well-lit.",
+      "invalid_input": "Please provide at least a name and target profile.",
+      "profile_not_found": "Selected profile was not found.",
+      "database_error": "Failed to save contact. Please try again."
+    }
+  },
   "Settings": {
     "title": "Settings",
+    "description": "Manage your account, authentication and platform preferences.",
+    "overview": {
+      "title": "Account Overview",
+      "activeStatus": "Active Account",
+      "admin": "Administrator",
+      "owner": "Card Owner",
+      "profiles": "Profiles",
+      "cards": "NFC Cards",
+      "leads": "Leads",
+      "totalTaps": "Total Taps"
+    },
+    "security": {
+      "title": "Sign-in & Security",
+      "description": "How you access your Digital Business Card account.",
+      "methods": "Authentication methods",
+      "methodsHint": "One-time passcode (OTP) & Google Sign-In"
+    },
+    "support": {
+      "title": "Privacy & Support",
+      "description": "Data compliance, support and legal documentation.",
+      "privacyNotice": "Privacy Notice (PDPA 2010)",
+      "privacyNoticeDesc": "Read how your personal and visitor data is protected.",
+      "contactHelp": "Contact Support",
+      "contactHelpDesc": "Reach out to us for technical assistance or card orders."
+    },
     "account": {
       "title": "Account",
       "description": "You sign in with this email, using a one-time code or Google. To change it, <link>contact us</link>.",

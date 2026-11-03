@@ -166,6 +166,13 @@ export const tapEvents = pgTable(
   (t) => [index("tap_events_profile_created_idx").on(t.profileId, t.createdAt.desc())],
 );
 
+export type CardDesignMetadata = {
+  dominantColor?: string;
+  accentColor?: string;
+  textColor?: string;
+  styleTheme?: "dark" | "light" | "colorful";
+};
+
 // Append-only.
 export const leads = pgTable(
   "leads",
@@ -179,6 +186,12 @@ export const leads = pgTable(
     email: text("email"),
     company: text("company"),
     message: text("message"),
+    jobTitle: text("job_title"),
+    website: text("website"),
+    address: text("address"),
+    cardImagePath: text("card_image_path"),
+    cardDesign: jsonb("card_design").$type<CardDesignMetadata>(),
+    source: text("source").notNull().default("web_form"),
     consent: boolean("consent").notNull(),
     createdAt: createdAt(),
   },

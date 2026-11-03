@@ -15,6 +15,12 @@ export async function listOwnerLeads(ownerId: string) {
       email: leads.email,
       company: leads.company,
       message: leads.message,
+      jobTitle: leads.jobTitle,
+      website: leads.website,
+      address: leads.address,
+      cardImagePath: leads.cardImagePath,
+      cardDesign: leads.cardDesign,
+      source: leads.source,
       createdAt: leads.createdAt,
       profileSlug: profiles.slug,
     })

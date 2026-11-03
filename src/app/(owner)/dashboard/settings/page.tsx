@@ -1,9 +1,25 @@
+import {
+  CreditCardIcon,
+  ExternalLinkIcon,
+  HelpCircleIcon,
+  KeyRoundIcon,
+  ShieldAlertIcon,
+  ShieldCheckIcon,
+  SparklesIcon,
+  UserCheckIcon,
+  UsersIcon,
+  ZapIcon,
+} from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
 import { PageHeader } from "@/components/shared/page-header";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DeleteAccountForm } from "@/features/account/components/delete-account-form";
+import { listOwnerCards } from "@/features/cards/queries";
+import { listOwnerLeads } from "@/features/leads/queries";
+import { listOwnerProfiles } from "@/features/profiles/queries";
 import { requireUser } from "@/lib/auth/session";
 
 export default async function SettingsPage() {
@@ -12,35 +28,204 @@ export default async function SettingsPage() {
     getTranslations("Settings"),
   ]);
 
+  const [profiles, cards, leads] = await Promise.all([
+    listOwnerProfiles(user.id),
+    listOwnerCards(user.id),
+    listOwnerLeads(user.id),
+  ]);
+
+  const totalTaps = cards.reduce((sum, c) => sum + c.taps, 0);
+  const userInitial = user.name
+    ? user.name.trim().charAt(0).toUpperCase()
+    : user.email.charAt(0).toUpperCase();
+
   return (
-    <div className="flex max-w-2xl flex-col gap-6">
-      <PageHeader title={t("title")} />
-      <Card>
+    <div className="flex flex-col gap-6">
+      <PageHeader title={t("title")} description={t("description")} />
+
+      {/* 1. HERO ACCOUNT CARD */}
+      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-violet-950/40 via-card/80 to-[#070b1a] p-5 shadow-2xl backdrop-blur-xl sm:p-7">
+        <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full bg-primary/20 blur-3xl" />
+
+        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          {/* User Profile Info */}
+          <div className="flex items-center gap-4">
+            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/40 to-indigo-600/40 text-2xl font-bold text-white shadow-xl ring-2 ring-primary/40">
+              {userInitial}
+            </div>
+            <div className="flex min-w-0 flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="truncate text-xl font-bold tracking-tight text-foreground">
+                  {user.name || "Card Owner"}
+                </h2>
+                <Badge
+                  variant="outline"
+                  className="gap-1 border-primary/40 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary"
+                >
+                  {user.isAdmin ? (
+                    <>
+                      <ShieldCheckIcon className="size-3" />
+                      <span>{t("overview.admin")}</span>
+                    </>
+                  ) : (
+                    <>
+                      <UserCheckIcon className="size-3" />
+                      <span>{t("overview.owner")}</span>
+                    </>
+                  )}
+                </Badge>
+              </div>
+              <span className="truncate text-sm text-muted-foreground">{user.email}</span>
+            </div>
+          </div>
+
+          {/* Quick Metrics Tiles */}
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:gap-3">
+            <div className="flex flex-col rounded-2xl border border-white/10 bg-black/40 px-3.5 py-2.5 shadow-sm backdrop-blur-md">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                <SparklesIcon className="size-3 text-primary" />
+                <span>{t("overview.profiles")}</span>
+              </div>
+              <span className="mt-0.5 text-lg font-bold text-foreground">{profiles.length}</span>
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-white/10 bg-black/40 px-3.5 py-2.5 shadow-sm backdrop-blur-md">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                <CreditCardIcon className="size-3 text-cyan-400" />
+                <span>{t("overview.cards")}</span>
+              </div>
+              <span className="mt-0.5 text-lg font-bold text-foreground">{cards.length}</span>
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-white/10 bg-black/40 px-3.5 py-2.5 shadow-sm backdrop-blur-md">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                <UsersIcon className="size-3 text-emerald-400" />
+                <span>{t("overview.leads")}</span>
+              </div>
+              <span className="mt-0.5 text-lg font-bold text-foreground">{leads.length}</span>
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-white/10 bg-black/40 px-3.5 py-2.5 shadow-sm backdrop-blur-md">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
+                <ZapIcon className="size-3 text-amber-400" />
+                <span>{t("overview.totalTaps")}</span>
+              </div>
+              <span className="mt-0.5 text-lg font-bold text-foreground">{totalTaps}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. MAIN 2-COLUMN SETTINGS GRID */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Card: Authentication & Security */}
+        <Card className="rounded-3xl border-white/10 bg-card/60 shadow-lg backdrop-blur-md">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base font-semibold">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-primary/20 text-primary">
+                <KeyRoundIcon className="size-4" />
+              </div>
+              <span>{t("security.title")}</span>
+            </CardTitle>
+            <CardDescription>{t("security.description")}</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4 text-sm">
+            <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/[0.02] p-3.5">
+              <span className="text-xs font-semibold text-muted-foreground">
+                {t("account.email")}
+              </span>
+              <div className="flex items-center justify-between gap-2 pt-0.5">
+                <code className="truncate text-xs font-medium text-foreground sm:text-sm">
+                  {user.email}
+                </code>
+                <Badge
+                  variant="outline"
+                  className="border-emerald-500/30 bg-emerald-500/10 text-[10px] text-emerald-400"
+                >
+                  Verified
+                </Badge>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/[0.02] p-3.5">
+              <span className="text-xs font-semibold text-muted-foreground">
+                {t("security.methods")}
+              </span>
+              <span className="text-xs font-medium text-foreground/90">
+                {t("security.methodsHint")}
+              </span>
+            </div>
+
+            <p className="pt-1 text-xs leading-relaxed text-muted-foreground">
+              {t.rich("account.description", {
+                link: (chunks) => (
+                  <Link
+                    href="/privacy#contact"
+                    className="text-primary underline hover:text-primary/80"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Card: Privacy & Support */}
+        <Card className="rounded-3xl border-white/10 bg-card/60 shadow-lg backdrop-blur-md">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base font-semibold">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400">
+                <HelpCircleIcon className="size-4" />
+              </div>
+              <span>{t("support.title")}</span>
+            </CardTitle>
+            <CardDescription>{t("support.description")}</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3 text-sm">
+            {/* Privacy Policy Link item */}
+            <Link
+              href="/privacy"
+              className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] p-3.5 transition-colors hover:bg-white/[0.05]"
+            >
+              <div className="flex flex-col gap-0.5">
+                <span className="text-xs font-semibold text-foreground">
+                  {t("support.privacyNotice")}
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  {t("support.privacyNoticeDesc")}
+                </span>
+              </div>
+              <ExternalLinkIcon className="size-4 text-muted-foreground" />
+            </Link>
+
+            {/* Support link item */}
+            <Link
+              href="/privacy#contact"
+              className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] p-3.5 transition-colors hover:bg-white/[0.05]"
+            >
+              <div className="flex flex-col gap-0.5">
+                <span className="text-xs font-semibold text-foreground">
+                  {t("support.contactHelp")}
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  {t("support.contactHelpDesc")}
+                </span>
+              </div>
+              <ExternalLinkIcon className="size-4 text-muted-foreground" />
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* 3. DANGER ZONE */}
+      <Card className="rounded-3xl border-destructive/30 bg-destructive/[0.02] shadow-lg backdrop-blur-md">
         <CardHeader>
-          <CardTitle>
-            <h2>{t("account.title")}</h2>
-          </CardTitle>
-          <CardDescription>
-            {t.rich("account.description", {
-              link: (chunks) => (
-                <Link href="/privacy#contact" className="underline">
-                  {chunks}
-                </Link>
-              ),
-            })}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <dl className="grid gap-1 text-sm">
-            <dt className="text-muted-foreground">{t("account.email")}</dt>
-            <dd className="font-medium">{user.email}</dd>
-          </dl>
-        </CardContent>
-      </Card>
-      <Card className="border-destructive/40">
-        <CardHeader>
-          <CardTitle>
-            <h2>{t("delete.title")}</h2>
+          <CardTitle className="flex items-center gap-2 text-base font-semibold text-destructive">
+            <div className="flex size-8 items-center justify-center rounded-xl bg-destructive/15 text-destructive">
+              <ShieldAlertIcon className="size-4" />
+            </div>
+            <span>Danger Zone</span>
           </CardTitle>
           <CardDescription>{t("delete.description")}</CardDescription>
         </CardHeader>

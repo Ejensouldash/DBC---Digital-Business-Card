@@ -32,7 +32,10 @@ const serverEnvSchema = z.object({
   // Optional so the app still boots without it; account deletion is unavailable until it's set.
   NEON_API_KEY: z.string().min(1).optional(),
   NEON_PROJECT_ID: z.string().min(1).optional(),
-  NEON_BRANCH_ID: z.string().startsWith("br-").optional(),
+  NEON_BRANCH_ID: z.string().min(1).optional(),
+  // Google Gemini API for business card scanner with fallback models
+  GEMINI_API_KEY: z.string().optional(),
+  GEMINI_MODEL: z.string().optional(),
 });
 
 export const env = serverEnvSchema.parse({

@@ -30,7 +30,7 @@ export default async function ProfilePage({ searchParams }: PageProps<"/dashboar
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">
           {profile ? t("title") : t("newTitle")}
         </h1>

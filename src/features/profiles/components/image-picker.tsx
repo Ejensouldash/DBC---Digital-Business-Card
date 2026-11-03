@@ -2,12 +2,19 @@
 
 import { CropIcon, ImageUpIcon, Loader2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRef, useState, type ChangeEvent } from "react";
+import { useId, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
 import { ImageCropperDialog, type AspectRatioOption } from "./image-cropper-dialog";
+
+export type ImagePickerTriggerProps = {
+  openPicker: () => void;
+  openAdjust: () => void;
+  canAdjust: boolean;
+  busy: boolean;
+};
 
 export type ImagePickerProps = {
   label: string;
@@ -22,6 +29,7 @@ export type ImagePickerProps = {
   cropAspectOptions?: AspectRatioOption[];
   currentImageUrl?: string | null;
   allowEditCurrent?: boolean;
+  children?: (props: ImagePickerTriggerProps) => ReactNode;
 };
 
 function getProxyUrl(url: string | null | undefined): string | null {
@@ -46,8 +54,10 @@ export function ImagePicker({
   cropAspectOptions,
   currentImageUrl,
   allowEditCurrent = true,
+  children,
 }: ImagePickerProps) {
   const t = useTranslations("ProfileEditor");
+  const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Cropper state
@@ -88,10 +98,19 @@ export function ImagePicker({
     onFiles([croppedFile]);
   }
 
+  function openPicker() {
+    if (typeof document !== "undefined") {
+      document.getElementById(inputId)?.click();
+    }
+  }
+
+  const canAdjust = Boolean(allowEditCurrent && currentImageUrl && !busy && crop);
+
   return (
     <>
       <input
         ref={inputRef}
+        id={inputId}
         type="file"
         accept="image/*"
         multiple={multiple}
@@ -102,38 +121,47 @@ export function ImagePicker({
         disabled={busy}
       />
 
-      <div className="flex flex-wrap items-center gap-1.5">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={busy}
-          onClick={() => inputRef.current?.click()}
-          className="gap-1.5 text-xs font-medium"
-        >
-          {busy ? (
-            <Loader2Icon className="size-3.5 animate-spin" aria-hidden />
-          ) : (
-            <ImageUpIcon className="size-3.5" aria-hidden />
-          )}
-          {label}
-        </Button>
-
-        {/* Optional quick edit/adjust button if an image is already present */}
-        {allowEditCurrent && currentImageUrl && !busy && crop && (
+      {children ? (
+        children({
+          openPicker,
+          openAdjust: onEditExisting,
+          canAdjust,
+          busy,
+        })
+      ) : (
+        <div className="flex flex-wrap items-center gap-1.5">
           <Button
             type="button"
             variant="outline"
             size="sm"
-            onClick={onEditExisting}
-            title="Adjust / Crop"
-            className="gap-1 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+            disabled={busy}
+            onClick={openPicker}
+            className="gap-1.5 text-xs font-medium"
           >
-            <CropIcon className="size-3.5" aria-hidden />
-            <span>Adjust</span>
+            {busy ? (
+              <Loader2Icon className="size-3.5 animate-spin" aria-hidden />
+            ) : (
+              <ImageUpIcon className="size-3.5" aria-hidden />
+            )}
+            {label}
           </Button>
-        )}
-      </div>
+
+          {/* Optional quick edit/adjust button if an image is already present */}
+          {canAdjust && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onEditExisting}
+              title="Adjust / Crop"
+              className="gap-1 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <CropIcon className="size-3.5" aria-hidden />
+              <span>Adjust</span>
+            </Button>
+          )}
+        </div>
+      )}
 
       {crop && (
         <ImageCropperDialog

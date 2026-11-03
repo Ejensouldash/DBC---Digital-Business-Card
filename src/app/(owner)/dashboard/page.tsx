@@ -22,6 +22,7 @@ import { ShareHub } from "@/features/profiles/components/share-hub";
 import { imageUrl } from "@/features/profiles/lib/images";
 import { selectProfile } from "@/features/profiles/lib/select-profile";
 import { getOwnerProfile, listOwnerProfiles } from "@/features/profiles/queries";
+import { CardScannerDialog } from "@/features/scanner/components/card-scanner-dialog";
 import { requireUser } from "@/lib/auth/session";
 import { env } from "@/lib/env";
 
@@ -42,11 +43,21 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
   return (
     <div className="flex flex-col gap-8">
       {query.claimed === "1" ? <FlashToast message={t("claimedToast")} /> : null}
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {t("welcome", { name: user.name || user.email })}
-        </h1>
-        <p className="text-muted-foreground">{t("activeCards", { count: cardCount })}</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("welcome", { name: user.name || user.email })}
+          </h1>
+          <p className="text-muted-foreground">{t("activeCards", { count: cardCount })}</p>
+        </div>
+        {ownerProfiles.length > 0 ? (
+          <div>
+            <CardScannerDialog
+              profiles={ownerProfiles}
+              defaultProfileId={hubProfile?.id}
+            />
+          </div>
+        ) : null}
       </div>
 
       {hubProfile ? (

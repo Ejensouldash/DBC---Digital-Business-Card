@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 import type { OwnerProfileSummary } from "../queries";
 
@@ -23,6 +24,7 @@ type ProfileSwitcherProps = {
   basePath: string;
   // Offer "+ New profile" (only the profile editor can create one).
   allowNew?: boolean;
+  className?: string;
 };
 
 export function ProfileSwitcher({
@@ -30,6 +32,7 @@ export function ProfileSwitcher({
   currentId,
   basePath,
   allowNew = false,
+  className,
 }: ProfileSwitcherProps) {
   const t = useTranslations("ProfileEditor");
   const router = useRouter();
@@ -41,7 +44,7 @@ export function ProfileSwitcher({
         router.push(value === NEW_PROFILE ? `${basePath}?new=1` : `${basePath}?profile=${value}`)
       }
     >
-      <SelectTrigger className="w-56" aria-label={t("switchProfile")}>
+      <SelectTrigger className={cn("w-full sm:w-64", className)} aria-label={t("switchProfile")}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

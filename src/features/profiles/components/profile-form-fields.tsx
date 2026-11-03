@@ -1,19 +1,22 @@
 "use client";
 
+import {
+  Building2Icon,
+  ChevronDownIcon,
+  PaletteIcon,
+  PhoneCallIcon,
+  SlidersHorizontalIcon,
+  UserRoundIcon,
+  type LucideIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState, type ReactNode } from "react";
 import { Controller, type Control } from "react-hook-form";
 
 import { FormTextField } from "@/components/shared/form-text-field";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field";
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 import type { ProfileFormInput, ProfileFormValues } from "../schemas";
 
@@ -23,6 +26,76 @@ type FieldsProps = {
   control: Control<ProfileFormInput, unknown, ProfileFormValues>;
   slugHint: string;
 };
+
+type AccordionSectionProps = {
+  id: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  icon: LucideIcon;
+  iconColor: string;
+  title: string;
+  subtitle: string;
+  children: ReactNode;
+};
+
+function AccordionSection({
+  id,
+  isOpen,
+  onToggle,
+  icon: Icon,
+  iconColor,
+  title,
+  subtitle,
+  children,
+}: AccordionSectionProps) {
+  return (
+    <div
+      className={cn(
+        "overflow-hidden rounded-2xl border transition-all duration-200",
+        isOpen
+          ? "border-primary/30 bg-card/75 shadow-lg ring-1 ring-primary/20 backdrop-blur-md"
+          : "border-white/10 bg-card/40 hover:border-white/20 hover:bg-card/60 backdrop-blur-sm",
+      )}
+    >
+      <button
+        type="button"
+        id={`header-${id}`}
+        aria-controls={`content-${id}`}
+        aria-expanded={isOpen}
+        onClick={onToggle}
+        className="flex w-full items-center justify-between p-4 text-left transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <div className={cn("flex size-9 shrink-0 items-center justify-center rounded-xl", iconColor)}>
+            <Icon className="size-4" aria-hidden />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold tracking-tight text-foreground">{title}</span>
+            <span className="text-xs text-muted-foreground">{subtitle}</span>
+          </div>
+        </div>
+        <div
+          className={cn(
+            "flex size-7 items-center justify-center rounded-lg bg-white/[0.04] text-muted-foreground transition-transform duration-200",
+            isOpen && "rotate-180 text-foreground",
+          )}
+        >
+          <ChevronDownIcon className="size-4" aria-hidden />
+        </div>
+      </button>
+
+      {isOpen && (
+        <div
+          id={`content-${id}`}
+          aria-labelledby={`header-${id}`}
+          className="border-t border-white/5 px-4 pt-3 pb-5"
+        >
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function ToggleField({
   control,
@@ -55,10 +128,31 @@ function ToggleField({
 export function ProfileFormFields({ control, slugHint }: FieldsProps) {
   const t = useTranslations("ProfileEditor");
 
+  // Keep 'about' open by default, users can toggle others as needed
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    about: true,
+    company: false,
+    contact: false,
+    appearance: false,
+    visibility: false,
+  });
+
+  const toggleSection = (key: string) => {
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
   return (
-    <FieldGroup>
-      <FieldSet>
-        <FieldLegend>{t("sections.about")}</FieldLegend>
+    <div className="flex flex-col gap-3">
+      {/* 1. About You */}
+      <AccordionSection
+        id="about"
+        isOpen={openSections.about}
+        onToggle={() => toggleSection("about")}
+        icon={UserRoundIcon}
+        iconColor="bg-primary/20 text-primary shadow-[0_0_12px_rgba(124,58,237,0.3)] ring-1 ring-primary/40"
+        title={t("sections.about")}
+        subtitle="Display name, profile link, title & bio"
+      >
         <FieldGroup>
           <FormTextField
             control={control}
@@ -83,10 +177,18 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
           />
           <FormTextField control={control} name="bio" label={t("fields.bio")} multiline />
         </FieldGroup>
-      </FieldSet>
+      </AccordionSection>
 
-      <FieldSet>
-        <FieldLegend>{t("sections.company")}</FieldLegend>
+      {/* 2. Company */}
+      <AccordionSection
+        id="company"
+        isOpen={openSections.company}
+        onToggle={() => toggleSection("company")}
+        icon={Building2Icon}
+        iconColor="bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30"
+        title={t("sections.company")}
+        subtitle="Organization, industry & company links"
+      >
         <FieldGroup>
           <FormTextField
             control={control}
@@ -109,10 +211,18 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
             type="tel"
           />
         </FieldGroup>
-      </FieldSet>
+      </AccordionSection>
 
-      <FieldSet>
-        <FieldLegend>{t("sections.contact")}</FieldLegend>
+      {/* 3. Contact */}
+      <AccordionSection
+        id="contact"
+        isOpen={openSections.contact}
+        onToggle={() => toggleSection("contact")}
+        icon={PhoneCallIcon}
+        iconColor="bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30"
+        title={t("sections.contact")}
+        subtitle="Direct phone, WhatsApp, email & address"
+      >
         <FieldGroup>
           <FormTextField
             control={control}
@@ -152,10 +262,31 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
             placeholder="https://maps.app.goo.gl/…"
           />
         </FieldGroup>
-      </FieldSet>
+      </AccordionSection>
 
-      <FieldSet>
-        <FieldLegend>{t("sections.visibility")}</FieldLegend>
+      {/* 4. Appearance / Theme */}
+      <AccordionSection
+        id="appearance"
+        isOpen={openSections.appearance}
+        onToggle={() => toggleSection("appearance")}
+        icon={PaletteIcon}
+        iconColor="bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/30"
+        title={t("theme.title")}
+        subtitle="Button accent colours & layout style"
+      >
+        <ThemeFields control={control} embedded />
+      </AccordionSection>
+
+      {/* 5. Visibility & Settings */}
+      <AccordionSection
+        id="visibility"
+        isOpen={openSections.visibility}
+        onToggle={() => toggleSection("visibility")}
+        icon={SlidersHorizontalIcon}
+        iconColor="bg-amber-500/20 text-amber-400 ring-1 ring-amber-500/30"
+        title={t("sections.visibility")}
+        subtitle="Publishing status & lead exchange options"
+      >
         <FieldGroup>
           <ToggleField
             control={control}
@@ -176,9 +307,7 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
             description={t("hints.leadFormEnabled")}
           />
         </FieldGroup>
-      </FieldSet>
-
-      <ThemeFields control={control} />
-    </FieldGroup>
+      </AccordionSection>
+    </div>
   );
 }

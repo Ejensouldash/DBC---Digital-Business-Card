@@ -54,7 +54,7 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
                   busy={busy === kind}
                   onFiles={([file]) => file && onPick(kind, file)}
                   crop
-                  cropTitle={`Laraskan ${t(`images.${kind}.label`)}`}
+                  cropTitle={`Adjust ${t(`images.${kind}.label`)}`}
                   cropAspect={kind === "cover" ? 3 : 1}
                   cropShape={kind === "avatar" ? "round" : "rect"}
                   cropAspectOptions={

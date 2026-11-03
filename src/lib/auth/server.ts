@@ -7,7 +7,11 @@ import { env } from "@/lib/env";
 // Managed Better Auth hosted by Neon. Users and sessions live in the `neon_auth` schema.
 export const auth = createNeonAuth({
   baseUrl: env.NEON_AUTH_BASE_URL,
-  cookies: { secret: env.NEON_AUTH_COOKIE_SECRET },
+  cookies: {
+    secret: env.NEON_AUTH_COOKIE_SECRET,
+    // 30 days session data TTL to prevent session loss on browser close / restart
+    sessionDataTtl: 60 * 60 * 24 * 30,
+  },
 });
 
 type AdminApi = {

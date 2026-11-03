@@ -31,7 +31,7 @@ export function PhotoManager({ photos, busy, onAdd, onRemove }: PhotoManagerProp
             busy={busy}
             multiple
             crop
-            cropTitle="Laraskan Gambar Galeri"
+            cropTitle="Adjust Gallery Photo"
             cropAspect={1}
             cropAspectOptions={[
               { label: "1:1", value: 1 },

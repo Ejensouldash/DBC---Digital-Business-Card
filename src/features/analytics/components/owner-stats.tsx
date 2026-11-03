@@ -8,12 +8,12 @@ import { TapsChart } from "./taps-chart";
 
 function StatTile({ label, value }: { label: string; value: number }) {
   return (
-    <Card size="sm">
-      <CardHeader>
-        <CardDescription>{label}</CardDescription>
+    <Card size="sm" className="overflow-hidden">
+      <CardHeader className="p-3 sm:p-4">
+        <CardDescription className="truncate text-xs sm:text-sm">{label}</CardDescription>
         <CardTitle>
           {/* Inner span: the small-card title style would otherwise shrink the number. */}
-          <span className="text-3xl font-semibold tabular-nums">{value}</span>
+          <span className="text-2xl font-semibold tabular-nums sm:text-3xl">{value}</span>
         </CardTitle>
       </CardHeader>
     </Card>
@@ -28,7 +28,7 @@ export function OwnerStatsSection({ stats }: { stats: OwnerStats }) {
       <h2 id="stats-heading" className="text-lg font-semibold">
         {t("title")}
       </h2>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         <StatTile label={t("taps7")} value={stats.last7.all} />
         <StatTile label={t("taps30")} value={stats.last30.all} />
         <StatTile label={t("leads30")} value={stats.leads30} />

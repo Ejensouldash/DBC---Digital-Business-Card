@@ -102,7 +102,7 @@ export function ImagePicker({
         disabled={busy}
       />
 
-      <div className="flex items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-1.5">
         <Button
           type="button"
           variant="outline"
@@ -126,11 +126,11 @@ export function ImagePicker({
             variant="outline"
             size="sm"
             onClick={onEditExisting}
-            title="Laraskan / Crop"
+            title="Adjust / Crop"
             className="gap-1 px-2.5 text-xs text-muted-foreground hover:text-foreground"
           >
             <CropIcon className="size-3.5" aria-hidden />
-            <span>Laraskan</span>
+            <span>Adjust</span>
           </Button>
         )}
       </div>
@@ -141,11 +141,8 @@ export function ImagePicker({
           onOpenChange={setCropperOpen}
           imageSrc={cropSrc}
           fileName={pendingFileName}
-          title={cropTitle || "Laraskan Gambar"}
-          description={
-            cropDescription ||
-            "Gerakkan gambar untuk kedudukan yang sesuai, zoom atau rotate sebelum disimpan."
-          }
+          title={cropTitle || "Adjust Image"}
+          description={cropDescription || "Reposition, zoom, or rotate your image before saving."}
           aspect={cropAspect}
           cropShape={cropShape}
           aspectOptions={cropAspectOptions}

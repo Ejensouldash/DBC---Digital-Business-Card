@@ -57,18 +57,18 @@ export function QuickProfileForm({ name, email }: { name: string; email: string 
 
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5">
-      <div className="relative h-28 overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10">
+      <div className="relative h-32 overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 sm:h-36">
         {cover ? (
           // eslint-disable-next-line @next/next/no-img-element -- local preview
           <img src={cover.url} alt="" className="size-full object-cover" />
         ) : null}
-        <div className="absolute right-2 bottom-2">
+        <div className="absolute right-2 bottom-2 z-10">
           <ImagePicker
             label={t("cover")}
             busy={false}
             onFiles={pick(setCover)}
             crop
-            cropTitle="Laraskan Banner / Cover"
+            cropTitle="Adjust Cover / Banner"
             cropAspect={3}
             cropAspectOptions={[
               { label: "3:1 (Banner)", value: 3 },
@@ -79,7 +79,7 @@ export function QuickProfileForm({ name, email }: { name: string; email: string 
             currentImageUrl={cover?.url}
           />
         </div>
-        <div className="absolute bottom-2 left-3 flex items-end gap-2">
+        <div className="absolute bottom-2 left-3 z-10 flex items-end gap-2">
           <div className="size-16 overflow-hidden rounded-full bg-white/10 ring-4 ring-[#0d1224]">
             {avatar ? (
               // eslint-disable-next-line @next/next/no-img-element -- local preview
@@ -91,7 +91,7 @@ export function QuickProfileForm({ name, email }: { name: string; email: string 
             busy={false}
             onFiles={pick(setAvatar)}
             crop
-            cropTitle="Laraskan Gambar Profil"
+            cropTitle="Adjust Profile Photo"
             cropAspect={1}
             cropShape="round"
             currentImageUrl={avatar?.url}

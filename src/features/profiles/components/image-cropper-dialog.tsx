@@ -149,7 +149,7 @@ export function ImageCropperDialog({
         {/* Aspect ratio selector if multiple options are provided */}
         {aspectOptions && aspectOptions.length > 1 ? (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground">Nisbah / Aspect:</span>
+            <span className="text-xs font-medium text-muted-foreground">Aspect Ratio:</span>
             {aspectOptions.map((opt) => (
               <Button
                 key={opt.label}
@@ -231,7 +231,7 @@ export function ImageCropperDialog({
             disabled={processing}
             onClick={() => handleOpenChange(false)}
           >
-            Batal
+            Cancel
           </Button>
           <Button type="button" disabled={processing || !imageSrc} onClick={handleSave}>
             {processing ? (
@@ -239,7 +239,7 @@ export function ImageCropperDialog({
             ) : (
               <CheckIcon className="mr-1.5 size-4" />
             )}
-            Simpan & Gunakan
+            Save & Apply
           </Button>
         </DialogFooter>
       </DialogContent>

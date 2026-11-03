@@ -1,7 +1,8 @@
 "use client";
 
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, NfcIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,7 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth/client";
 
 import { emailSchema, otpSchema } from "../schemas";
-
-import { GoogleButton } from "./google-button";
+import { checkCanSignInWithEmail, verifyCardCodeForActivation } from "../server/actions";
 
 type Step = { name: "email" } | { name: "code"; email: string };
 
@@ -36,9 +36,15 @@ async function verifyCode(email: string, otp: string): Promise<boolean> {
 export function LoginForm({ next }: { next: string }) {
   const t = useTranslations("Login");
   const tv = useTranslations("Validation");
+  const router = useRouter();
   const [step, setStep] = useState<Step>({ name: "email" });
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+
+  // Physical card activation code state
+  const [cardCode, setCardCode] = useState("");
+  const [activating, setActivating] = useState(false);
+  const [activateError, setActivateError] = useState<string | null>(null);
 
   async function onSubmitEmail(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,6 +53,14 @@ export function LoginForm({ next }: { next: string }) {
 
     setPending(true);
     setError(null);
+
+    // Enforce paid customer check / card code gate
+    const check = await checkCanSignInWithEmail(parsed.data.email, next);
+    if (!check.allowed) {
+      setPending(false);
+      return setError(check.message);
+    }
+
     const sent = await sendCode(parsed.data.email);
     setPending(false);
     if (!sent) return setError(t("sendFailed"));
@@ -70,6 +84,27 @@ export function LoginForm({ next }: { next: string }) {
     window.location.assign(next);
   }
 
+  async function onActivateCard(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!cardCode.trim()) return;
+
+    setActivating(true);
+    setActivateError(null);
+
+    try {
+      const result = await verifyCardCodeForActivation(cardCode);
+      if (!result.ok) {
+        setActivateError(result.error);
+        return;
+      }
+      router.push(result.redirectUrl);
+    } catch {
+      setActivateError("An error occurred while validating your card code. Please try again.");
+    } finally {
+      setActivating(false);
+    }
+  }
+
   if (step.name === "code") {
     return (
       <form onSubmit={onSubmitCode} noValidate>
@@ -90,7 +125,7 @@ export function LoginForm({ next }: { next: string }) {
             <FieldDescription>{t("codeSent", { email: step.email })}</FieldDescription>
             <FieldError>{error}</FieldError>
           </Field>
-          <Button type="submit" disabled={pending}>
+          <Button type="submit" disabled={pending} className="w-full">
             {pending ? <Loader2Icon className="animate-spin" aria-hidden /> : null}
             {t("verify")}
           </Button>
@@ -126,18 +161,54 @@ export function LoginForm({ next }: { next: string }) {
             />
             <FieldError>{error}</FieldError>
           </Field>
-          <Button type="submit" disabled={pending}>
+          <Button type="submit" disabled={pending} className="w-full">
             {pending ? <Loader2Icon className="animate-spin" aria-hidden /> : null}
             {t("sendCode")}
           </Button>
         </FieldGroup>
       </form>
-      <div className="flex items-center gap-3 text-xs text-muted-foreground uppercase">
-        <span className="h-px flex-1 bg-border" />
-        {t("or")}
-        <span className="h-px flex-1 bg-border" />
+
+      {/* Card Activation Section for paying customers */}
+      <div className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+        <div className="flex items-center gap-2.5">
+          <div className="flex size-7 items-center justify-center rounded-lg bg-primary/20 text-primary ring-1 ring-primary/30">
+            <NfcIcon className="size-4" aria-hidden />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xs font-semibold text-foreground">Have a new physical card?</span>
+            <span className="text-[11px] text-muted-foreground">
+              Enter your 8-character card code to activate
+            </span>
+          </div>
+        </div>
+
+        <form onSubmit={onActivateCard} className="flex gap-2">
+          <Input
+            name="cardCode"
+            placeholder="e.g. 23456789"
+            maxLength={8}
+            value={cardCode}
+            onChange={(e) => setCardCode(e.target.value.toUpperCase())}
+            className="h-9 font-mono text-xs tracking-wider uppercase"
+            disabled={activating}
+            aria-label="Card activation code"
+          />
+          <Button
+            type="submit"
+            size="sm"
+            disabled={activating || !cardCode.trim()}
+            className="h-9 shrink-0 text-xs"
+          >
+            {activating ? (
+              <Loader2Icon className="size-3.5 animate-spin" aria-hidden />
+            ) : (
+              "Activate"
+            )}
+          </Button>
+        </form>
+
+        {activateError && <p className="text-xs text-destructive">{activateError}</p>}
       </div>
-      <GoogleButton next={next} label={t("google")} errorLabel={t("googleFailed")} />
     </div>
   );
 }

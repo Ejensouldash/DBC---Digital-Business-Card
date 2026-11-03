@@ -6,10 +6,11 @@ import { z } from "zod";
 import { onboardingSchema, type OnboardingInput } from "@/features/profiles/schemas";
 import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { getCurrentUser } from "@/lib/auth/session";
-import { cardCodeSchema } from "@/lib/card-code";
+import { cardCodeSchema, cardUrl, generateCardCode } from "@/lib/card-code";
 import { db } from "@/lib/db";
 import { isUniqueViolation } from "@/lib/db/errors";
 import { cards, profiles } from "@/lib/db/schema";
+import { env } from "@/lib/env";
 
 import { claimCardFor, type ClaimError } from "./lib/claim";
 import { cardLabelSchema } from "./schemas";
@@ -133,4 +134,67 @@ export async function pointCardAtProfile(
 export async function setCardEnabled(cardId: string, enabled: boolean): Promise<OwnerCardResult> {
   if (typeof enabled !== "boolean") return fail("invalid");
   return updateOwnCard(cardId, { status: enabled ? "active" : "disabled" });
+}
+
+export type RegisterCardResult = {
+  id: string;
+  code: string;
+  url: string;
+  label: string | null;
+};
+
+export type RegisterCardError = "unauthorized" | "invalid" | "profile_not_found" | "unexpected";
+
+export async function registerOwnerCard(input: {
+  label?: string;
+  profileId: string;
+}): Promise<ActionResult<RegisterCardResult, RegisterCardError>> {
+  const user = await getCurrentUser();
+  if (!user) return fail("unauthorized");
+  if (!z.uuid().safeParse(input.profileId).success) return fail("invalid");
+
+  const labelParsed = input.label?.trim() ? cardLabelSchema.safeParse(input.label) : null;
+  if (labelParsed && !labelParsed.success) return fail("invalid");
+
+  try {
+    const [profile] = await db
+      .select({ id: profiles.id })
+      .from(profiles)
+      .where(and(eq(profiles.id, input.profileId), eq(profiles.ownerId, user.id)))
+      .limit(1);
+    if (!profile) return fail("profile_not_found");
+
+    let inserted: { id: string; code: string; label: string | null } | undefined;
+    for (let round = 0; round < 5; round++) {
+      const code = generateCardCode();
+      const [res] = await db
+        .insert(cards)
+        .values({
+          code,
+          ownerId: user.id,
+          profileId: profile.id,
+          label: labelParsed?.data || null,
+          status: "active",
+          claimedAt: new Date(),
+        })
+        .onConflictDoNothing({ target: cards.code })
+        .returning({ id: cards.id, code: cards.code, label: cards.label });
+      if (res) {
+        inserted = res;
+        break;
+      }
+    }
+
+    if (!inserted) return fail("unexpected");
+
+    return ok({
+      id: inserted.id,
+      code: inserted.code,
+      label: inserted.label,
+      url: cardUrl(env.NEXT_PUBLIC_SITE_URL, inserted.code),
+    });
+  } catch (error) {
+    console.error("[cards] register card failed", error);
+    return fail("unexpected");
+  }
 }

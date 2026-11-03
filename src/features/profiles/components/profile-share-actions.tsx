@@ -2,8 +2,10 @@
 
 import { QrCodeIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { toast } from "sonner";
+
+import { normalizeProfileUrl, useClientOrigin } from "@/lib/client-origin";
 
 import { QrCode } from "@/components/shared/qr-code";
 import {
@@ -42,17 +44,8 @@ type ShareButtonProps = {
 
 export function ShareButton({ displayName, profileUrl, className, children }: ShareButtonProps) {
   const t = useTranslations("Profile");
-  const [effectiveUrl, setEffectiveUrl] = useState(profileUrl);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
-      setEffectiveUrl((prev) =>
-        prev.includes("localhost")
-          ? prev.replace(/^https?:\/\/localhost(:\d+)?/, window.location.origin)
-          : prev,
-      );
-    }
-  }, [profileUrl]);
+  const origin = useClientOrigin();
+  const effectiveUrl = normalizeProfileUrl(profileUrl, origin);
 
   return (
     <button
@@ -74,17 +67,8 @@ type QrButtonProps = { displayName: string; profileUrl: string; className: strin
 
 export function QrButton({ displayName, profileUrl, className }: QrButtonProps) {
   const t = useTranslations("Profile");
-  const [effectiveUrl, setEffectiveUrl] = useState(profileUrl);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
-      setEffectiveUrl((prev) =>
-        prev.includes("localhost")
-          ? prev.replace(/^https?:\/\/localhost(:\d+)?/, window.location.origin)
-          : prev,
-      );
-    }
-  }, [profileUrl]);
+  const origin = useClientOrigin();
+  const effectiveUrl = normalizeProfileUrl(profileUrl, origin);
 
   return (
     <Dialog>

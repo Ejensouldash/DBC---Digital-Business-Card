@@ -10,8 +10,9 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import QRCode from "qrcode";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
+import { normalizeProfileUrl, useClientOrigin } from "@/lib/client-origin";
 
 import { QrCode } from "@/components/shared/qr-code";
 
@@ -39,18 +40,8 @@ export function ShareHub(props: ShareHubProps) {
   const { displayName, jobTitle, company, avatarUrl, slug, profileUrl, isPublished } = props;
   const t = useTranslations("Dashboard.share");
   const tProfile = useTranslations("Profile");
-  // If in browser on production, ensure profileUrl reflects the actual site domain
-  const [effectiveProfileUrl, setEffectiveProfileUrl] = useState(profileUrl);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
-      setEffectiveProfileUrl((prev) =>
-        prev.includes("localhost")
-          ? prev.replace(/^https?:\/\/localhost(:\d+)?/, window.location.origin)
-          : prev,
-      );
-    }
-  }, [profileUrl]);
+  const origin = useClientOrigin();
+  const effectiveProfileUrl = normalizeProfileUrl(profileUrl, origin);
 
   const qrUrl = `${effectiveProfileUrl}?src=qr`;
   const subtitle = [jobTitle, company].filter(Boolean).join(" · ");

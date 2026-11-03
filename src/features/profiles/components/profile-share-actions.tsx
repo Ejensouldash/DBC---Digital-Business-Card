@@ -2,7 +2,7 @@
 
 import { QrCodeIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
 import { QrCode } from "@/components/shared/qr-code";
@@ -42,12 +42,27 @@ type ShareButtonProps = {
 
 export function ShareButton({ displayName, profileUrl, className, children }: ShareButtonProps) {
   const t = useTranslations("Profile");
+  const [effectiveUrl, setEffectiveUrl] = useState(profileUrl);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
+      setEffectiveUrl((prev) =>
+        prev.includes("localhost")
+          ? prev.replace(/^https?:\/\/localhost(:\d+)?/, window.location.origin)
+          : prev,
+      );
+    }
+  }, [profileUrl]);
+
   return (
     <button
       type="button"
       className={className}
       onClick={() =>
-        shareProfile(displayName, profileUrl, { copied: t("linkCopied"), failed: t("copyFailed") })
+        shareProfile(displayName, effectiveUrl, {
+          copied: t("linkCopied"),
+          failed: t("copyFailed"),
+        })
       }
     >
       {children}
@@ -59,6 +74,18 @@ type QrButtonProps = { displayName: string; profileUrl: string; className: strin
 
 export function QrButton({ displayName, profileUrl, className }: QrButtonProps) {
   const t = useTranslations("Profile");
+  const [effectiveUrl, setEffectiveUrl] = useState(profileUrl);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
+      setEffectiveUrl((prev) =>
+        prev.includes("localhost")
+          ? prev.replace(/^https?:\/\/localhost(:\d+)?/, window.location.origin)
+          : prev,
+      );
+    }
+  }, [profileUrl]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -73,7 +100,7 @@ export function QrButton({ displayName, profileUrl, className }: QrButtonProps) 
           <DialogDescription>{t("qrDescription", { name: displayName })}</DialogDescription>
         </DialogHeader>
         <div className="flex justify-center py-2">
-          <QrCode value={`${profileUrl}?src=qr`} label={t("qrTitle")} />
+          <QrCode value={`${effectiveUrl}?src=qr`} label={t("qrTitle")} />
         </div>
       </DialogContent>
     </Dialog>

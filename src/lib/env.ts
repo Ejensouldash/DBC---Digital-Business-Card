@@ -2,6 +2,16 @@ import "server-only";
 
 import { z } from "zod";
 
+// Automatically detect Vercel production domain if NEXT_PUBLIC_SITE_URL is left as localhost or unset in production
+const rawSiteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes("localhost")
+    ? process.env.NEXT_PUBLIC_SITE_URL
+    : process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.NEXT_PUBLIC_SITE_URL;
+
 // Server-side env, validated once at boot. Neon vars come from `neon deploy` / `neon env pull`.
 const serverEnvSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.url(),
@@ -25,4 +35,7 @@ const serverEnvSchema = z.object({
   NEON_BRANCH_ID: z.string().startsWith("br-").optional(),
 });
 
-export const env = serverEnvSchema.parse(process.env);
+export const env = serverEnvSchema.parse({
+  ...process.env,
+  NEXT_PUBLIC_SITE_URL: rawSiteUrl,
+});

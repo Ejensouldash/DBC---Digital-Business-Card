@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import QRCode from "qrcode";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { QrCode } from "@/components/shared/qr-code";
@@ -38,12 +39,25 @@ export function ShareHub(props: ShareHubProps) {
   const { displayName, jobTitle, company, avatarUrl, slug, profileUrl, isPublished } = props;
   const t = useTranslations("Dashboard.share");
   const tProfile = useTranslations("Profile");
-  const qrUrl = `${profileUrl}?src=qr`;
+  // If in browser on production, ensure profileUrl reflects the actual site domain
+  const [effectiveProfileUrl, setEffectiveProfileUrl] = useState(profileUrl);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
+      setEffectiveProfileUrl((prev) =>
+        prev.includes("localhost")
+          ? prev.replace(/^https?:\/\/localhost(:\d+)?/, window.location.origin)
+          : prev,
+      );
+    }
+  }, [profileUrl]);
+
+  const qrUrl = `${effectiveProfileUrl}?src=qr`;
   const subtitle = [jobTitle, company].filter(Boolean).join(" · ");
 
   async function copyLink() {
     try {
-      await navigator.clipboard.writeText(profileUrl);
+      await navigator.clipboard.writeText(effectiveProfileUrl);
       toast.success(tProfile("linkCopied"));
     } catch {
       toast.error(tProfile("copyFailed"));
@@ -66,19 +80,19 @@ export function ShareHub(props: ShareHubProps) {
       key: "whatsapp",
       label: t("whatsapp"),
       Icon: MessageCircleIcon,
-      href: `https://wa.me/?text=${encodeURIComponent(`${displayName}: ${profileUrl}`)}`,
+      href: `https://wa.me/?text=${encodeURIComponent(`${displayName}: ${effectiveProfileUrl}`)}`,
     },
     {
       key: "share",
       label: t("share"),
       Icon: Share2Icon,
       onClick: () =>
-        shareProfile(displayName, profileUrl, {
+        shareProfile(displayName, effectiveProfileUrl, {
           copied: tProfile("linkCopied"),
           failed: tProfile("copyFailed"),
         }),
     },
-    { key: "open", label: t("open"), Icon: ExternalLinkIcon, href: profileUrl },
+    { key: "open", label: t("open"), Icon: ExternalLinkIcon, href: effectiveProfileUrl },
   ];
 
   return (
@@ -110,7 +124,7 @@ export function ShareHub(props: ShareHubProps) {
           <QrCode value={qrUrl} size={200} label={t("qrLabel", { name: displayName })} />
         </div>
         <p className="max-w-full truncate font-mono text-sm text-muted-foreground">
-          {profileUrl.replace(/^https?:\/\//, "")}
+          {effectiveProfileUrl.replace(/^https?:\/\//, "")}
         </p>
         {isPublished ? null : (
           <p className="rounded-full bg-amber-400/15 px-3 py-1 text-xs text-amber-200">

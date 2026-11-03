@@ -1,11 +1,3 @@
-import {
-  CreditCardIcon,
-  LayoutDashboardIcon,
-  SettingsIcon,
-  ShieldCheckIcon,
-  UserRoundIcon,
-  UsersIcon,
-} from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
@@ -26,12 +18,12 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
   const t = await getTranslations("Dashboard");
 
   const navItems: MobileNavItem[] = [
-    { href: "/dashboard", label: t("nav.overview"), icon: LayoutDashboardIcon },
-    { href: "/dashboard/profile", label: t("nav.profile"), icon: UserRoundIcon },
-    { href: "/dashboard/cards", label: t("nav.cards"), icon: CreditCardIcon },
-    { href: "/dashboard/leads", label: t("nav.leads"), icon: UsersIcon },
-    { href: "/dashboard/settings", label: t("nav.settings"), icon: SettingsIcon },
-    ...(user.isAdmin ? [{ href: "/admin", label: t("nav.admin"), icon: ShieldCheckIcon }] : []),
+    { href: "/dashboard", label: t("nav.overview"), icon: "overview" },
+    { href: "/dashboard/profile", label: t("nav.profile"), icon: "profile" },
+    { href: "/dashboard/cards", label: t("nav.cards"), icon: "cards" },
+    { href: "/dashboard/leads", label: t("nav.leads"), icon: "leads" },
+    { href: "/dashboard/settings", label: t("nav.settings"), icon: "settings" },
+    ...(user.isAdmin ? [{ href: "/admin", label: t("nav.admin"), icon: "admin" as const }] : []),
   ];
 
   const desktopNav = navItems.map(({ href, label }) => ({ href, label }));

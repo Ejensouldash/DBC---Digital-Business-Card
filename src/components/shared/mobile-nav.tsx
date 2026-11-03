@@ -1,15 +1,38 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
+import {
+  CreditCardIcon,
+  LayersIcon,
+  LayoutDashboardIcon,
+  SettingsIcon,
+  ShieldCheckIcon,
+  UserRoundIcon,
+  UsersIcon,
+  type LucideIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
+export type MobileNavIconKey =
+  "overview" | "profile" | "cards" | "leads" | "settings" | "admin" | "batches" | "users";
+
 export type MobileNavItem = {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: MobileNavIconKey;
+};
+
+const ICON_MAP: Record<MobileNavIconKey, LucideIcon> = {
+  overview: LayoutDashboardIcon,
+  profile: UserRoundIcon,
+  cards: CreditCardIcon,
+  leads: UsersIcon,
+  settings: SettingsIcon,
+  admin: ShieldCheckIcon,
+  batches: LayersIcon,
+  users: UsersIcon,
 };
 
 type MobileNavProps = {
@@ -37,7 +60,7 @@ export function MobileNav({ items }: MobileNavProps) {
     >
       <div className="flex h-16 items-center justify-around px-1">
         {items.map((item) => {
-          const Icon = item.icon;
+          const Icon = ICON_MAP[item.icon] ?? LayoutDashboardIcon;
           const isActive = item.href === activeHref;
 
           return (

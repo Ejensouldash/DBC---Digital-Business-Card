@@ -101,13 +101,21 @@ export default async function AdminCardsPage({ searchParams }: PageProps<"/admin
             <Button asChild variant="outline" size="sm">
               <Link href={pageHref(filter, filter.page - 1)}>{t("previous")}</Link>
             </Button>
-          ) : null}
+          ) : (
+            <Button variant="outline" size="sm" disabled>
+              {t("previous")}
+            </Button>
+          )}
           <span className="text-muted-foreground">{t("pageOf", { page: filter.page, pages })}</span>
           {filter.page < pages ? (
             <Button asChild variant="outline" size="sm">
               <Link href={pageHref(filter, filter.page + 1)}>{t("next")}</Link>
             </Button>
-          ) : null}
+          ) : (
+            <Button variant="outline" size="sm" disabled>
+              {t("next")}
+            </Button>
+          )}
         </nav>
       ) : null}
     </div>

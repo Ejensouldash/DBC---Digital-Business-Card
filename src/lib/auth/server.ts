@@ -16,6 +16,7 @@ export const auth = createNeonAuth({
 
 type AdminApi = {
   setRole(input: { userId: string; role: string }): Promise<{ error: unknown }>;
+  removeUser(input: { userId: string }): Promise<{ error: unknown }>;
 };
 
 // The admin endpoints exist at runtime (the SDK builds them from its endpoint table) but

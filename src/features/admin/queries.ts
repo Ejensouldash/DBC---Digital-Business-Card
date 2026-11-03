@@ -7,7 +7,7 @@ import { escapeLike } from "@/lib/db/like";
 import { neonAuthUser } from "@/lib/db/neon-auth";
 import { cardBatches, cards, profiles } from "@/lib/db/schema";
 
-import { CARDS_PAGE_SIZE, type CardFilter } from "./schemas";
+import { BATCHES_PAGE_SIZE, CARDS_PAGE_SIZE, USERS_PAGE_SIZE, type CardFilter } from "./schemas";
 
 const countWhere = (condition: SQL) =>
   sql<number>`count(*) filter (where ${condition})`.mapWith(Number);
@@ -28,6 +28,31 @@ export async function listBatches() {
     .leftJoin(cards, eq(cards.batchId, cardBatches.id))
     .groupBy(cardBatches.id)
     .orderBy(desc(cardBatches.createdAt));
+}
+
+export async function searchBatches(page: number = 1) {
+  const [rows, [total]] = await Promise.all([
+    db
+      .select({
+        id: cardBatches.id,
+        name: cardBatches.name,
+        quantity: cardBatches.quantity,
+        notes: cardBatches.notes,
+        createdAt: cardBatches.createdAt,
+        unclaimed: countWhere(sql`${cards.status} = 'unclaimed'`),
+        active: countWhere(sql`${cards.status} = 'active'`),
+        disabled: countWhere(sql`${cards.status} = 'disabled'`),
+      })
+      .from(cardBatches)
+      .leftJoin(cards, eq(cards.batchId, cardBatches.id))
+      .groupBy(cardBatches.id)
+      .orderBy(desc(cardBatches.createdAt))
+      .limit(BATCHES_PAGE_SIZE)
+      .offset((page - 1) * BATCHES_PAGE_SIZE),
+    db.select({ value: count() }).from(cardBatches),
+  ]);
+
+  return { rows, total: total?.value ?? 0 };
 }
 
 export async function getBatchForExport(batchId: string) {
@@ -76,35 +101,48 @@ export async function searchCards({ status, batch, q, page }: CardFilter) {
 
 export type AdminCardRow = Awaited<ReturnType<typeof searchCards>>["rows"][number];
 
-export async function listUsers(search: string | undefined) {
-  const term = search?.trim();
-  return db
-    .select({
-      id: neonAuthUser.id,
-      name: neonAuthUser.name,
-      email: neonAuthUser.email,
-      role: neonAuthUser.role,
-      createdAt: neonAuthUser.createdAt,
-      // Distinct, because joining both tables multiplies rows (profiles × cards).
-      profiles: countDistinct(profiles.id),
-      cards: countDistinct(cards.id),
-    })
-    .from(neonAuthUser)
-    .leftJoin(profiles, eq(profiles.ownerId, neonAuthUser.id))
-    .leftJoin(cards, eq(cards.ownerId, neonAuthUser.id))
-    .where(term ? ilike(neonAuthUser.email, `%${escapeLike(term)}%`) : undefined)
-    .groupBy(
-      neonAuthUser.id,
-      neonAuthUser.name,
-      neonAuthUser.email,
-      neonAuthUser.role,
-      neonAuthUser.createdAt,
-    )
-    .orderBy(desc(neonAuthUser.createdAt))
-    .limit(200);
+export async function searchUsers({ q, page = 1 }: { q?: string; page?: number }) {
+  const term = q?.trim();
+  const where = term ? ilike(neonAuthUser.email, `%${escapeLike(term)}%`) : undefined;
+
+  const [rows, [total]] = await Promise.all([
+    db
+      .select({
+        id: neonAuthUser.id,
+        name: neonAuthUser.name,
+        email: neonAuthUser.email,
+        role: neonAuthUser.role,
+        createdAt: neonAuthUser.createdAt,
+        // Distinct, because joining both tables multiplies rows (profiles × cards).
+        profiles: countDistinct(profiles.id),
+        cards: countDistinct(cards.id),
+      })
+      .from(neonAuthUser)
+      .leftJoin(profiles, eq(profiles.ownerId, neonAuthUser.id))
+      .leftJoin(cards, eq(cards.ownerId, neonAuthUser.id))
+      .where(where)
+      .groupBy(
+        neonAuthUser.id,
+        neonAuthUser.name,
+        neonAuthUser.email,
+        neonAuthUser.role,
+        neonAuthUser.createdAt,
+      )
+      .orderBy(desc(neonAuthUser.createdAt))
+      .limit(USERS_PAGE_SIZE)
+      .offset((page - 1) * USERS_PAGE_SIZE),
+    db.select({ value: count() }).from(neonAuthUser).where(where),
+  ]);
+
+  return { rows, total: total?.value ?? 0 };
 }
 
-export type AdminUserRow = Awaited<ReturnType<typeof listUsers>>[number];
+export type AdminUserRow = Awaited<ReturnType<typeof searchUsers>>["rows"][number];
+
+export async function listUsers(search: string | undefined) {
+  const result = await searchUsers({ q: search, page: 1 });
+  return result.rows;
+}
 
 export async function countAdmins(): Promise<number> {
   return db.$count(neonAuthUser, eq(neonAuthUser.role, "admin"));

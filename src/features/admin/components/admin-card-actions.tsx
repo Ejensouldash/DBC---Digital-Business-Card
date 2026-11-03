@@ -26,7 +26,7 @@ import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { ActionResult } from "@/lib/action-result";
 
-import { reassignCard, resetCard, setCardDisabled, type AdminError } from "../actions";
+import { deleteCard, reassignCard, resetCard, setCardDisabled, type AdminError } from "../actions";
 import type { AdminCardRow } from "../queries";
 
 export function AdminCardActions({ card }: { card: Pick<AdminCardRow, "id" | "code" | "status"> }) {
@@ -96,6 +96,20 @@ export function AdminCardActions({ card }: { card: Pick<AdminCardRow, "id" | "co
             }}
           >
             {t("reset")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            variant="destructive"
+            onSelect={async () => {
+              const confirmed = await confirm({
+                title: t("confirmDelete", { code: card.code }),
+                description: t("confirmDeleteDescription"),
+                confirmLabel: t("delete"),
+                destructive: true,
+              });
+              if (confirmed) run(() => deleteCard(card.id), t("deleteDone"));
+            }}
+          >
+            {t("delete")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

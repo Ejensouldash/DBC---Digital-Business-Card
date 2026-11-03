@@ -7,8 +7,10 @@ import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { authAdmin } from "@/lib/auth/server";
 import { getCurrentUser, type SessionUser } from "@/lib/auth/session";
 import { db } from "@/lib/db";
-import { cards, profiles } from "@/lib/db/schema";
+import { neonAuthUser } from "@/lib/db/neon-auth";
+import { cardBatches, cards, profiles } from "@/lib/db/schema";
 import { env } from "@/lib/env";
+import { deleteAuthUser, isNeonApiConfigured } from "@/lib/neon-api";
 
 import { batchCsv, batchFilename, createBatch } from "./lib/create-batch";
 import { countAdmins, getBatchForExport } from "./queries";
@@ -125,6 +127,64 @@ export async function setUserRole(userId: string, role: string): Promise<Result>
       console.error("[admin] setRole rejected", error);
       return fail("unexpected");
     }
+    return ok();
+  });
+}
+
+export async function deleteCard(cardId: string): Promise<Result> {
+  return asAdmin(async () => {
+    if (!idSchema.safeParse(cardId).success) return fail("invalid");
+    const deleted = await db.delete(cards).where(eq(cards.id, cardId)).returning({ id: cards.id });
+    return deleted.length > 0 ? ok() : fail("not_found");
+  });
+}
+
+export async function deleteCardBatch(batchId: string): Promise<Result> {
+  return asAdmin(async () => {
+    if (!idSchema.safeParse(batchId).success) return fail("invalid");
+    // Delete cards belonging to this batch
+    await db.delete(cards).where(eq(cards.batchId, batchId));
+    const deleted = await db
+      .delete(cardBatches)
+      .where(eq(cardBatches.id, batchId))
+      .returning({ id: cardBatches.id });
+    return deleted.length > 0 ? ok() : fail("not_found");
+  });
+}
+
+export async function deleteUser(userId: string): Promise<Result> {
+  return asAdmin(async (admin) => {
+    if (!idSchema.safeParse(userId).success) return fail("invalid");
+    if (userId === admin.id) return fail("forbidden");
+
+    const [targetUser] = await db
+      .select({ id: neonAuthUser.id, role: neonAuthUser.role })
+      .from(neonAuthUser)
+      .where(eq(neonAuthUser.id, userId))
+      .limit(1);
+
+    if (!targetUser) return fail("not_found");
+    if (targetUser.role === "admin" && (await countAdmins()) <= 1) return fail("last_admin");
+
+    // Detach cards owned by this user
+    await db
+      .update(cards)
+      .set({ status: "disabled", label: null, ownerId: null, profileId: null })
+      .where(eq(cards.ownerId, userId));
+
+    // Attempt deletion via Better Auth admin removeUser
+    let removed = false;
+    try {
+      const { error } = await authAdmin.removeUser({ userId });
+      if (!error) removed = true;
+    } catch (err) {
+      console.error("[admin] authAdmin.removeUser error", err);
+    }
+
+    if (!removed && isNeonApiConfigured()) {
+      await deleteAuthUser(userId);
+    }
+
     return ok();
   });
 }

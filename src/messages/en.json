@@ -505,7 +505,15 @@
       "active": "Active",
       "disabled": "Off",
       "download": "Download",
-      "downloadFor": "Download CSV for {name}"
+      "downloadFor": "Download CSV for {name}",
+      "delete": "Delete batch",
+      "confirmDelete": "Delete batch {name}?",
+      "confirmDeleteDescription": "This permanently deletes this batch and all cards in this batch. This cannot be undone.",
+      "deleteDone": "Batch deleted",
+      "pagination": "Pages",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {pages}"
     },
     "cards": {
       "title": "Cards",
@@ -540,6 +548,10 @@
       "confirmReset": "Reset card {code}?",
       "confirmResetDescription": "It will be unlinked from its owner and can be activated again.",
       "resetDone": "Card reset",
+      "delete": "Delete card",
+      "confirmDelete": "Delete card {code}?",
+      "confirmDeleteDescription": "This permanently deletes this card from the system. This cannot be undone.",
+      "deleteDone": "Card deleted",
       "pagination": "Pages",
       "previous": "Previous",
       "next": "Next",
@@ -568,7 +580,17 @@
       "confirmDemoteSelf": "Remove your own admin access?",
       "confirmDemoteSelfDescription": "You'll lose access to this area.",
       "promoted": "{email} is now an admin",
-      "demoted": "{email} is no longer an admin"
+      "demoted": "{email} is no longer an admin",
+      "delete": "Delete user",
+      "deleteFor": "Delete user {email}",
+      "confirmDelete": "Delete user {email}?",
+      "confirmDeleteDescription": "This permanently deletes this user account and all their profiles, links, and leads. This cannot be undone.",
+      "deleteDone": "User deleted",
+      "cannotDeleteSelf": "You cannot delete your own account from here",
+      "pagination": "Pages",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {pages}"
     }
   },
   "Privacy": {

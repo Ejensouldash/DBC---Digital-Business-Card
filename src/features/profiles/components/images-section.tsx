@@ -38,16 +38,16 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
       </div>
 
       {/* Interactive Profile Card Header */}
-      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.08] to-white/[0.02] shadow-xl backdrop-blur-md">
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs">
         {/* Cover Photo Area */}
         <div className="group/cover relative h-36 w-full overflow-hidden bg-muted/40 sm:h-44">
           {images.cover ? (
             // eslint-disable-next-line @next/next/no-img-element -- user uploaded blob or cdn url
             <img src={images.cover} alt="Cover preview" className="size-full object-cover" />
           ) : (
-            <div className="flex size-full items-center justify-center bg-gradient-to-br from-indigo-950/40 via-purple-950/30 to-background/50 text-muted-foreground/60">
+            <div className="flex size-full items-center justify-center bg-gradient-to-br from-teal-50/70 via-slate-100 to-slate-200/60 text-slate-500">
               <div className="flex items-center gap-2 text-xs font-medium tracking-wide uppercase">
-                <ImageIcon className="size-4" />
+                <ImageIcon className="size-4 text-teal-600" />
                 <span>{t("images.cover.label")}</span>
               </div>
             </div>
@@ -106,7 +106,7 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
         </div>
 
         {/* Profile Avatar & Company Logo Row */}
-        <div className="relative -mt-12 flex flex-wrap items-end justify-between gap-3 px-4 pb-4 sm:-mt-14">
+        <div className="relative -mt-12 flex flex-wrap items-end justify-between gap-3 px-4 pb-4 sm:-mt-14 sm:px-6 sm:pb-6">
           {/* Avatar Section */}
           <ImagePicker
             label={images.avatar ? t("images.avatar.change") : t("images.avatar.upload")}
@@ -120,7 +120,7 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
           >
             {({ openPicker, openAdjust, canAdjust, busy: isBusy }) => (
               <div className="relative group shrink-0">
-                <div className="flex size-24 items-center justify-center overflow-hidden rounded-full border-4 border-[#0b1021] bg-card shadow-2xl sm:size-28">
+                <div className="flex size-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-100 shadow-md ring-1 ring-slate-200 sm:size-28">
                   {images.avatar ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -139,7 +139,7 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
                   onClick={openPicker}
                   disabled={isBusy}
                   title={images.avatar ? t("images.avatar.change") : t("images.avatar.upload")}
-                  className="absolute right-0 bottom-0 z-10 flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg ring-2 ring-[#0b1021] transition-transform hover:scale-105 active:scale-95"
+                  className="absolute right-0 bottom-0 z-10 flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg ring-2 ring-white transition-transform hover:scale-105 active:scale-95"
                 >
                   {isBusy ? (
                     <Loader2Icon className="size-3.5 animate-spin" aria-hidden />
@@ -153,7 +153,7 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
                     type="button"
                     onClick={openAdjust}
                     title="Adjust avatar"
-                    className="absolute top-0 right-0 z-10 flex size-7 items-center justify-center rounded-full border border-white/20 bg-muted/90 text-foreground shadow-md ring-2 ring-[#0b1021] transition-transform hover:scale-105 active:scale-95"
+                    className="absolute top-0 right-0 z-10 flex size-7 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-md ring-2 ring-white transition-transform hover:scale-105 active:scale-95"
                   >
                     <CropIcon className="size-3" aria-hidden />
                   </button>
@@ -174,10 +174,10 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
             currentImageUrl={images.logo}
           >
             {({ openPicker, openAdjust, canAdjust, busy: isBusy }) => (
-              <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-black/40 p-2 shadow-sm backdrop-blur-md">
+              <div className="flex items-center gap-3 rounded-2xl border border-slate-200/90 bg-slate-50/90 p-2 sm:p-2.5 shadow-2xs backdrop-blur-xs">
                 <div
-                  className={`size-12 shrink-0 overflow-hidden rounded-lg border border-white/10 ${
-                    images.logo ? "bg-white p-1" : "flex items-center justify-center bg-muted/40"
+                  className={`size-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xs ${
+                    images.logo ? "p-1.5" : "flex items-center justify-center"
                   }`}
                 >
                   {images.logo ? (
@@ -188,12 +188,12 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
                       className="size-full object-contain"
                     />
                   ) : (
-                    <Building2Icon className="size-5 text-muted-foreground" />
+                    <Building2Icon className="size-5 text-slate-400" />
                   )}
                 </div>
 
                 <div className="flex min-w-0 flex-col gap-1">
-                  <span className="truncate text-xs font-medium text-foreground">
+                  <span className="truncate text-xs font-semibold text-slate-800">
                     {t("images.logo.label")}
                   </span>
                   <div className="flex items-center gap-1.5">
@@ -203,12 +203,12 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
                       size="sm"
                       disabled={isBusy}
                       onClick={openPicker}
-                      className="h-6 gap-1 rounded-md px-2 text-[11px] font-medium"
+                      className="h-6.5 gap-1 rounded-lg border-slate-200 bg-white px-2.5 text-[11px] font-medium text-slate-700 shadow-2xs hover:bg-slate-100 hover:text-teal-700"
                     >
                       {isBusy ? (
                         <Loader2Icon className="size-3 animate-spin" aria-hidden />
                       ) : (
-                        <CameraIcon className="size-3" aria-hidden />
+                        <CameraIcon className="size-3 text-teal-600" aria-hidden />
                       )}
                       <span>{images.logo ? t("images.change") : t("images.upload")}</span>
                     </Button>
@@ -219,7 +219,7 @@ export function ImagesSection({ images, busy, pendingHint, onPick }: ImagesSecti
                         size="sm"
                         onClick={openAdjust}
                         title="Adjust logo"
-                        className="h-6 px-1.5 text-[11px] text-muted-foreground hover:text-foreground"
+                        className="size-6.5 rounded-lg p-0 text-slate-400 hover:bg-slate-200/70 hover:text-teal-700"
                       >
                         <CropIcon className="size-3" aria-hidden />
                         <span className="sr-only">{t("images.adjust")}</span>

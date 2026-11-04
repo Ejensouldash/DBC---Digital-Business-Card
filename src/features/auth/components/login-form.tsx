@@ -169,9 +169,9 @@ export function LoginForm({ next }: { next: string }) {
       </form>
 
       {/* Card Activation Section for paying customers */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+      <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/90 bg-slate-50/80 p-4 shadow-2xs">
         <div className="flex items-center gap-2.5">
-          <div className="flex size-7 items-center justify-center rounded-lg bg-primary/20 text-primary ring-1 ring-primary/30">
+          <div className="flex size-7 items-center justify-center rounded-lg bg-teal-50 text-teal-600 ring-1 ring-teal-500/20">
             <NfcIcon className="size-4" aria-hidden />
           </div>
           <div className="flex flex-col">

@@ -90,7 +90,7 @@ export default async function DashboardPage({ searchParams }: PageProps<"/dashbo
         >
           <div
             aria-hidden
-            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgb(124_58_237/0.35),transparent_60%)]"
+            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgb(0_168_182/0.08),transparent_60%)]"
           />
           <h2 id="onboarding-title" className="text-xl font-semibold sm:text-2xl">
             {t("onboarding.title")}

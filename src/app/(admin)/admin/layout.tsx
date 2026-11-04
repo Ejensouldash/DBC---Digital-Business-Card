@@ -29,7 +29,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <div className="flex min-h-full flex-col">
       <Aurora />
-      <header className="sticky top-0 z-20 border-b border-white/10 bg-[#070b1a]/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/85 backdrop-blur-md shadow-xs">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-2 px-4 py-3">
           <div className="flex items-center gap-6">
             <Link href="/admin" className="shrink-0 font-semibold tracking-tight text-foreground">

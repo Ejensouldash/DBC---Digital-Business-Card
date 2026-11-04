@@ -53,8 +53,8 @@ function AccordionSection({
       className={cn(
         "overflow-hidden rounded-2xl border transition-all duration-200",
         isOpen
-          ? "border-primary/30 bg-card/75 shadow-lg ring-1 ring-primary/20 backdrop-blur-md"
-          : "border-white/10 bg-card/40 hover:border-white/20 hover:bg-card/60 backdrop-blur-sm",
+          ? "border-teal-500/40 bg-white shadow-xs ring-1 ring-teal-500/20"
+          : "border-slate-200/90 bg-white hover:border-slate-300 shadow-2xs",
       )}
     >
       <button
@@ -76,7 +76,7 @@ function AccordionSection({
         </div>
         <div
           className={cn(
-            "flex size-7 items-center justify-center rounded-lg bg-white/[0.04] text-muted-foreground transition-transform duration-200",
+            "flex size-7 items-center justify-center rounded-lg bg-slate-100 text-muted-foreground transition-transform duration-200",
             isOpen && "rotate-180 text-foreground",
           )}
         >
@@ -88,7 +88,7 @@ function AccordionSection({
         <div
           id={`content-${id}`}
           aria-labelledby={`header-${id}`}
-          className="border-t border-white/5 px-4 pt-3 pb-5"
+          className="border-t border-slate-100 px-4 pt-3 pb-5"
         >
           {children}
         </div>
@@ -149,7 +149,7 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
         isOpen={openSections.about}
         onToggle={() => toggleSection("about")}
         icon={UserRoundIcon}
-        iconColor="bg-primary/20 text-primary shadow-[0_0_12px_rgba(124,58,237,0.3)] ring-1 ring-primary/40"
+        iconColor="bg-teal-50 text-teal-600 ring-1 ring-teal-500/25"
         title={t("sections.about")}
         subtitle="Display name, profile link, title & bio"
       >
@@ -185,7 +185,7 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
         isOpen={openSections.company}
         onToggle={() => toggleSection("company")}
         icon={Building2Icon}
-        iconColor="bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30"
+        iconColor="bg-sky-50 text-sky-600 ring-1 ring-sky-500/25"
         title={t("sections.company")}
         subtitle="Organization, industry & company links"
       >
@@ -219,7 +219,7 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
         isOpen={openSections.contact}
         onToggle={() => toggleSection("contact")}
         icon={PhoneCallIcon}
-        iconColor="bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30"
+        iconColor="bg-emerald-50 text-emerald-600 ring-1 ring-emerald-500/25"
         title={t("sections.contact")}
         subtitle="Direct phone, WhatsApp, email & address"
       >
@@ -270,7 +270,7 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
         isOpen={openSections.appearance}
         onToggle={() => toggleSection("appearance")}
         icon={PaletteIcon}
-        iconColor="bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/30"
+        iconColor="bg-teal-50 text-teal-600 ring-1 ring-teal-500/25"
         title={t("theme.title")}
         subtitle="Button accent colours & layout style"
       >
@@ -283,7 +283,7 @@ export function ProfileFormFields({ control, slugHint }: FieldsProps) {
         isOpen={openSections.visibility}
         onToggle={() => toggleSection("visibility")}
         icon={SlidersHorizontalIcon}
-        iconColor="bg-amber-500/20 text-amber-400 ring-1 ring-amber-500/30"
+        iconColor="bg-amber-50 text-amber-600 ring-1 ring-amber-500/25"
         title={t("sections.visibility")}
         subtitle="Publishing status & lead exchange options"
       >

@@ -25,8 +25,8 @@ export default async function CardsPage() {
       </div>
 
       {cards.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-center sm:p-12">
-          <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/20">
+        <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-center shadow-xs sm:p-12">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 ring-1 ring-teal-500/20">
             <NfcIcon className="size-7" />
           </div>
           <div className="flex flex-col gap-1.5">

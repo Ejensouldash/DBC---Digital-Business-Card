@@ -90,13 +90,13 @@ export default async function LeadsPage() {
               return (
                 <div
                   key={lead.id}
-                  className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-card/60 p-4 shadow-lg backdrop-blur-md"
+                  className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 shadow-xs"
                 >
                   {/* Top Header: Avatar + Name/Company + Delete */}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3 min-w-0">
                       {/* Lead Avatar Initial */}
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600/30 via-primary/20 to-indigo-600/30 text-base font-bold text-primary ring-1 ring-primary/30 shadow-inner">
+                      <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-teal-50 text-base font-bold text-teal-700 ring-1 ring-teal-500/20 shadow-xs">
                         {initial}
                       </div>
                       <div className="flex flex-col min-w-0">
@@ -107,7 +107,7 @@ export default async function LeadsPage() {
                           {isScanned ? (
                             <Badge
                               variant="outline"
-                              className="border-violet-500/30 bg-violet-500/10 text-violet-300 text-[10px] px-1.5 py-0 h-4 gap-1"
+                              className="border-emerald-200 bg-emerald-50 text-emerald-700 text-[10px] px-1.5 py-0 h-4 gap-1"
                             >
                               <SparklesIcon className="size-2.5" />
                               <span>Scanned</span>
@@ -127,7 +127,7 @@ export default async function LeadsPage() {
 
                   {/* Message / Tagline Bubble (if exists) */}
                   {lead.message ? (
-                    <div className="flex flex-col gap-1 rounded-xl border border-white/5 bg-white/[0.03] p-3 text-xs">
+                    <div className="flex flex-col gap-1 rounded-xl border border-border bg-slate-50/70 p-3 text-xs">
                       <div className="flex items-center gap-1.5 font-medium text-muted-foreground/80">
                         <MessageSquareQuoteIcon className="size-3.5" />
                         <span>{t("columns.message")}</span>
@@ -145,7 +145,7 @@ export default async function LeadsPage() {
                         variant="outline"
                         size="sm"
                         asChild
-                        className="h-7 gap-1.5 rounded-full border-emerald-500/30 px-3 text-xs font-medium text-emerald-400 hover:bg-emerald-500/10"
+                        className="h-7 gap-1.5 rounded-full border-emerald-200 bg-emerald-50 px-3 text-xs font-medium text-emerald-700 hover:bg-emerald-100"
                       >
                         <a href={tel}>
                           <PhoneIcon className="size-3" />
@@ -159,7 +159,7 @@ export default async function LeadsPage() {
                         variant="outline"
                         size="sm"
                         asChild
-                        className="h-7 gap-1.5 rounded-full border-green-500/30 px-3 text-xs font-medium text-green-400 hover:bg-green-500/10"
+                        className="h-7 gap-1.5 rounded-full border-emerald-200 bg-emerald-50 px-3 text-xs font-medium text-emerald-700 hover:bg-emerald-100"
                       >
                         <a href={wa} target="_blank" rel="noopener noreferrer">
                           <MessageCircleIcon className="size-3" />
@@ -173,7 +173,7 @@ export default async function LeadsPage() {
                         variant="outline"
                         size="sm"
                         asChild
-                        className="h-7 gap-1.5 rounded-full border-blue-500/30 px-3 text-xs font-medium text-blue-400 hover:bg-blue-500/10"
+                        className="h-7 gap-1.5 rounded-full border-sky-200 bg-sky-50 px-3 text-xs font-medium text-sky-700 hover:bg-sky-100"
                       >
                         <a href={`mailto:${lead.email}`}>
                           <MailIcon className="size-3" />
@@ -207,7 +207,7 @@ export default async function LeadsPage() {
                   </div>
 
                   {/* Footer: Source Profile & Formatted Date */}
-                  <div className="flex items-center justify-between border-t border-white/5 pt-2 text-[11px] text-muted-foreground">
+                  <div className="flex items-center justify-between border-t border-border pt-2 text-[11px] text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <GlobeIcon className="size-3" />
                       <span>/p/{lead.profileSlug}</span>
@@ -224,16 +224,16 @@ export default async function LeadsPage() {
           {/* ─────────────────────────────────────────────────────────────
               2. DESKTOP / LAPTOP / TABLET LANDSCAPE VIEW
           ───────────────────────────────────────────────────────────── */}
-          <div className="hidden sm:block">
+          <div className="hidden sm:block rounded-xl border border-border bg-card overflow-hidden shadow-xs">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>{t("columns.name")}</TableHead>
-                  <TableHead>{t("columns.contact")}</TableHead>
-                  <TableHead>{t("columns.message")}</TableHead>
-                  <TableHead>{t("columns.profile")}</TableHead>
-                  <TableHead>{t("columns.received")}</TableHead>
-                  <TableHead className="text-right">{t("columns.actions")}</TableHead>
+                <TableRow className="border-border hover:bg-transparent">
+                  <TableHead className="w-[28%]">{t("columns.name")}</TableHead>
+                  <TableHead className="w-[22%]">{t("columns.contact")}</TableHead>
+                  <TableHead className="w-[18%]">{t("columns.message")}</TableHead>
+                  <TableHead className="w-[12%]">{t("columns.profile")}</TableHead>
+                  <TableHead className="w-[10%]">{t("columns.received")}</TableHead>
+                  <TableHead className="w-[10%] text-right">{t("columns.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -244,14 +244,14 @@ export default async function LeadsPage() {
                   const imageUrl = lead.cardImagePath ? publicObjectUrl(lead.cardImagePath) : null;
 
                   return (
-                    <TableRow key={lead.id} className="align-top">
+                    <TableRow key={lead.id} className="align-middle border-border/70 hover:bg-slate-50/70">
                       <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{lead.name}</span>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-semibold text-foreground">{lead.name}</span>
                           {isScanned ? (
                             <Badge
                               variant="outline"
-                              className="border-violet-500/30 bg-violet-500/10 text-violet-300 text-[10px] px-1.5 py-0 gap-1"
+                              className="border-emerald-200 bg-emerald-50 text-emerald-700 text-[10px] px-1.5 py-0 h-4 gap-1 shrink-0"
                             >
                               <SparklesIcon className="size-2.5" />
                               <span>Scanned</span>
@@ -259,37 +259,43 @@ export default async function LeadsPage() {
                           ) : null}
                         </div>
                         {subtitle ? (
-                          <div className="text-xs text-muted-foreground">{subtitle}</div>
+                          <div className="text-xs text-muted-foreground truncate max-w-[240px] mt-0.5">
+                            {subtitle}
+                          </div>
                         ) : null}
                       </TableCell>
                       <TableCell>
-                        <div className="flex flex-col text-sm">
+                        <div className="flex flex-col text-xs leading-relaxed">
                           {lead.phone && tel ? (
-                            <a href={tel} className="hover:underline">
+                            <a href={tel} className="hover:text-primary transition-colors font-medium">
                               {lead.phone}
                             </a>
                           ) : (
-                            lead.phone
+                            <span className="text-muted-foreground">{lead.phone || "—"}</span>
                           )}
                           {lead.email ? (
-                            <a href={`mailto:${lead.email}`} className="hover:underline">
+                            <a href={`mailto:${lead.email}`} className="text-muted-foreground hover:text-primary transition-colors truncate max-w-[200px]">
                               {lead.email}
                             </a>
                           ) : null}
                         </div>
                       </TableCell>
-                      <TableCell className="max-w-64 whitespace-pre-line text-sm">
-                        {lead.message ?? "—"}
+                      <TableCell className="max-w-[180px] text-xs text-muted-foreground">
+                        <span className="truncate block" title={lead.message ?? undefined}>
+                          {lead.message || "—"}
+                        </span>
                       </TableCell>
-                      <TableCell className="text-sm">/p/{lead.profileSlug}</TableCell>
-                      <TableCell className="text-sm">
+                      <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                        /p/{lead.profileSlug}
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
                         {format.dateTime(lead.createdAt, {
                           dateStyle: "medium",
                           timeStyle: "short",
                         })}
                       </TableCell>
                       <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1.5">
                           {isScanned || lead.cardDesign || imageUrl ? (
                             <ViewScannedCardDialog
                               lead={lead}
@@ -309,15 +315,14 @@ export default async function LeadsPage() {
                             }}
                             variant="outline"
                             size="sm"
-                            className="h-8 gap-1.5 rounded-lg border-white/10 bg-white/[0.03] px-2.5 text-xs font-medium text-foreground hover:bg-white/10 hover:border-white/20 transition-colors shadow-xs"
-                            showText
+                            className="size-8 p-0 rounded-lg border-white/10 bg-white/[0.03] text-foreground hover:bg-white/10 hover:border-white/20 transition-colors shadow-xs"
+                            showText={false}
                           />
-                          <div className="h-4 w-px bg-white/10 mx-0.5" aria-hidden />
                           <DeleteLeadButton
                             leadId={lead.id}
                             name={lead.name}
                             variant="outline"
-                            className="size-8 rounded-lg border-white/10 bg-white/[0.02] text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive transition-colors shadow-xs"
+                            className="size-8 p-0 rounded-lg border-white/10 bg-white/[0.02] text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive transition-colors shadow-xs"
                           />
                         </div>
                       </TableCell>

@@ -57,7 +57,7 @@ export function QuickProfileForm({ name, email }: { name: string; email: string 
 
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5">
-      <div className="relative h-32 overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 sm:h-36">
+      <div className="relative h-32 overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200 sm:h-36">
         {cover ? (
           // eslint-disable-next-line @next/next/no-img-element -- local preview
           <img src={cover.url} alt="" className="size-full object-cover" />
@@ -80,7 +80,7 @@ export function QuickProfileForm({ name, email }: { name: string; email: string 
           />
         </div>
         <div className="absolute bottom-2 left-3 z-10 flex items-end gap-2">
-          <div className="size-16 overflow-hidden rounded-full bg-white/10 ring-4 ring-[#0d1224]">
+          <div className="size-16 overflow-hidden rounded-full bg-slate-200 ring-4 ring-white shadow-xs">
             {avatar ? (
               // eslint-disable-next-line @next/next/no-img-element -- local preview
               <img src={avatar.url} alt="" className="size-full object-cover" />

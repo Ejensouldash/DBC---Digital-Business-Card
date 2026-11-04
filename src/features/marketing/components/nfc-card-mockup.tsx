@@ -47,9 +47,9 @@ export function NfcCardMockup() {
           className="relative aspect-[1.586] overflow-hidden rounded-3xl glass p-6"
         >
           {/* Holographic tint and a glare that follows the pointer. */}
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgb(124_58_237/0.35),transparent_45%,rgb(6_182_212/0.3))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgb(0_168_182/0.15),transparent_45%,rgb(140_198_63/0.12))]" />
           <m.div
-            className="absolute inset-y-0 w-1/2 bg-[linear-gradient(105deg,transparent,rgb(255_255_255/0.18),transparent)]"
+            className="absolute inset-y-0 w-1/2 bg-[linear-gradient(105deg,transparent,rgb(255_255_255/0.3),transparent)]"
             style={{ left: glareX, x: "-50%" }}
           />
           <div className="relative flex h-full flex-col justify-between">
@@ -59,7 +59,7 @@ export function NfcCardMockup() {
                 {RIPPLES.map((i) => (
                   <m.span
                     key={i}
-                    className="absolute inset-0 rounded-full border border-cyan-300/70"
+                    className="absolute inset-0 rounded-full border border-teal-400/50"
                     initial={{ scale: 0.6, opacity: 0 }}
                     animate={{ scale: [0.6, 2.4], opacity: [0.8, 0] }}
                     transition={{
@@ -70,7 +70,7 @@ export function NfcCardMockup() {
                     }}
                   />
                 ))}
-                <NfcIcon className="relative size-6 text-cyan-200" />
+                <NfcIcon className="relative size-6 text-teal-600" />
               </span>
             </div>
             <div>
@@ -81,7 +81,7 @@ export function NfcCardMockup() {
         </m.div>
       </m.div>
       {/* Soft reflection under the card. */}
-      <div className="mx-auto mt-6 h-6 w-2/3 rounded-full bg-violet-500/30 blur-2xl" />
+      <div className="mx-auto mt-6 h-6 w-2/3 rounded-full bg-teal-500/15 blur-2xl" />
     </div>
   );
 }

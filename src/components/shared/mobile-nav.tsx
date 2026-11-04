@@ -56,7 +56,7 @@ export function MobileNav({ items }: MobileNavProps) {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-[#070b1a]/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl sm:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200/80 bg-white/92 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl shadow-lg sm:hidden"
     >
       <div className="flex h-16 items-center justify-around px-1">
         {items.map((item) => {
@@ -71,16 +71,16 @@ export function MobileNav({ items }: MobileNavProps) {
               className={cn(
                 "flex flex-1 flex-col items-center justify-center gap-1 py-1 text-center transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                 isActive
-                  ? "font-medium text-primary"
-                  : "text-muted-foreground hover:text-foreground",
+                  ? "font-semibold text-teal-700"
+                  : "text-slate-500 hover:text-slate-800",
               )}
             >
               <div
                 className={cn(
                   "flex size-7 items-center justify-center rounded-xl transition-all",
                   isActive
-                    ? "bg-primary/20 text-primary shadow-[0_0_12px_rgba(124,58,237,0.3)] ring-1 ring-primary/40"
-                    : "text-muted-foreground",
+                    ? "bg-teal-50 text-teal-600 ring-1 ring-teal-500/25 shadow-xs"
+                    : "text-slate-400",
                 )}
               >
                 <Icon className="size-4" aria-hidden />

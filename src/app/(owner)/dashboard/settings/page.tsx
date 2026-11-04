@@ -44,13 +44,14 @@ export default async function SettingsPage() {
       <PageHeader title={t("title")} description={t("description")} />
 
       {/* 1. HERO ACCOUNT CARD */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-violet-950/40 via-card/80 to-[#070b1a] p-5 shadow-2xl backdrop-blur-xl sm:p-7">
-        <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full bg-primary/20 blur-3xl" />
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xs sm:p-7">
+        <div className="pointer-events-none absolute -right-12 -top-12 size-48 rounded-full bg-teal-400/10 blur-3xl" />
+        <div className="pointer-events-none absolute -left-12 -bottom-12 size-48 rounded-full bg-emerald-400/10 blur-3xl" />
 
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           {/* User Profile Info */}
           <div className="flex items-center gap-4">
-            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/40 to-indigo-600/40 text-2xl font-bold text-white shadow-xl ring-2 ring-primary/40">
+            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-teal-700 text-2xl font-bold text-white shadow-sm ring-2 ring-teal-200/60">
               {userInitial}
             </div>
             <div className="flex min-w-0 flex-col gap-1">
@@ -60,16 +61,16 @@ export default async function SettingsPage() {
                 </h2>
                 <Badge
                   variant="outline"
-                  className="gap-1 border-primary/40 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary"
+                  className="gap-1 border-teal-200 bg-teal-50 px-2.5 py-0.5 text-xs font-semibold text-teal-800"
                 >
                   {user.isAdmin ? (
                     <>
-                      <ShieldCheckIcon className="size-3" />
+                      <ShieldCheckIcon className="size-3 text-teal-600" />
                       <span>{t("overview.admin")}</span>
                     </>
                   ) : (
                     <>
-                      <UserCheckIcon className="size-3" />
+                      <UserCheckIcon className="size-3 text-teal-600" />
                       <span>{t("overview.owner")}</span>
                     </>
                   )}
@@ -81,33 +82,33 @@ export default async function SettingsPage() {
 
           {/* Quick Metrics Tiles */}
           <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:gap-3">
-            <div className="flex flex-col rounded-2xl border border-white/10 bg-black/40 px-3.5 py-2.5 shadow-sm backdrop-blur-md">
+            <div className="flex flex-col rounded-2xl border border-slate-200/80 bg-slate-50/70 px-3.5 py-2.5 shadow-2xs">
               <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                <SparklesIcon className="size-3 text-primary" />
+                <SparklesIcon className="size-3 text-teal-600" />
                 <span>{t("overview.profiles")}</span>
               </div>
               <span className="mt-0.5 text-lg font-bold text-foreground">{profiles.length}</span>
             </div>
 
-            <div className="flex flex-col rounded-2xl border border-white/10 bg-black/40 px-3.5 py-2.5 shadow-sm backdrop-blur-md">
+            <div className="flex flex-col rounded-2xl border border-slate-200/80 bg-slate-50/70 px-3.5 py-2.5 shadow-2xs">
               <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                <CreditCardIcon className="size-3 text-cyan-400" />
+                <CreditCardIcon className="size-3 text-teal-600" />
                 <span>{t("overview.cards")}</span>
               </div>
               <span className="mt-0.5 text-lg font-bold text-foreground">{cards.length}</span>
             </div>
 
-            <div className="flex flex-col rounded-2xl border border-white/10 bg-black/40 px-3.5 py-2.5 shadow-sm backdrop-blur-md">
+            <div className="flex flex-col rounded-2xl border border-slate-200/80 bg-slate-50/70 px-3.5 py-2.5 shadow-2xs">
               <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                <UsersIcon className="size-3 text-emerald-400" />
+                <UsersIcon className="size-3 text-emerald-600" />
                 <span>{t("overview.leads")}</span>
               </div>
               <span className="mt-0.5 text-lg font-bold text-foreground">{leads.length}</span>
             </div>
 
-            <div className="flex flex-col rounded-2xl border border-white/10 bg-black/40 px-3.5 py-2.5 shadow-sm backdrop-blur-md">
+            <div className="flex flex-col rounded-2xl border border-slate-200/80 bg-slate-50/70 px-3.5 py-2.5 shadow-2xs">
               <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
-                <ZapIcon className="size-3 text-amber-400" />
+                <ZapIcon className="size-3 text-amber-500" />
                 <span>{t("overview.totalTaps")}</span>
               </div>
               <span className="mt-0.5 text-lg font-bold text-foreground">{totalTaps}</span>
@@ -119,10 +120,10 @@ export default async function SettingsPage() {
       {/* 2. MAIN 2-COLUMN SETTINGS GRID */}
       <div className="grid gap-6 md:grid-cols-2">
         {/* Card: Authentication & Security */}
-        <Card className="rounded-3xl border-white/10 bg-card/60 shadow-lg backdrop-blur-md">
+        <Card className="rounded-3xl border-slate-200/80 bg-white shadow-xs">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base font-semibold">
-              <div className="flex size-8 items-center justify-center rounded-xl bg-primary/20 text-primary">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-teal-50 text-teal-600 ring-1 ring-teal-500/20">
                 <KeyRoundIcon className="size-4" />
               </div>
               <span>{t("security.title")}</span>
@@ -130,7 +131,7 @@ export default async function SettingsPage() {
             <CardDescription>{t("security.description")}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4 text-sm">
-            <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/[0.02] p-3.5">
+            <div className="flex flex-col gap-1 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3.5">
               <span className="text-xs font-semibold text-muted-foreground">
                 {t("account.email")}
               </span>
@@ -140,14 +141,14 @@ export default async function SettingsPage() {
                 </code>
                 <Badge
                   variant="outline"
-                  className="border-emerald-500/30 bg-emerald-500/10 text-[10px] text-emerald-400"
+                  className="border-emerald-200 bg-emerald-50 text-[10px] text-emerald-700"
                 >
                   Verified
                 </Badge>
               </div>
             </div>
 
-            <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/[0.02] p-3.5">
+            <div className="flex flex-col gap-1 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3.5">
               <span className="text-xs font-semibold text-muted-foreground">
                 {t("security.methods")}
               </span>
@@ -172,10 +173,10 @@ export default async function SettingsPage() {
         </Card>
 
         {/* Card: Privacy & Support */}
-        <Card className="rounded-3xl border-white/10 bg-card/60 shadow-lg backdrop-blur-md">
+        <Card className="rounded-3xl border-slate-200/80 bg-white shadow-xs">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base font-semibold">
-              <div className="flex size-8 items-center justify-center rounded-xl bg-blue-500/20 text-blue-400">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-teal-50 text-teal-600 ring-1 ring-teal-500/20">
                 <HelpCircleIcon className="size-4" />
               </div>
               <span>{t("support.title")}</span>
@@ -186,7 +187,7 @@ export default async function SettingsPage() {
             {/* Privacy Policy Link item */}
             <Link
               href="/privacy"
-              className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] p-3.5 transition-colors hover:bg-white/[0.05]"
+              className="flex items-center justify-between rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3.5 transition-colors hover:bg-teal-50/50 hover:border-teal-200"
             >
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs font-semibold text-foreground">
@@ -202,7 +203,7 @@ export default async function SettingsPage() {
             {/* Support link item */}
             <Link
               href="/privacy#contact"
-              className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] p-3.5 transition-colors hover:bg-white/[0.05]"
+              className="flex items-center justify-between rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3.5 transition-colors hover:bg-teal-50/50 hover:border-teal-200"
             >
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs font-semibold text-foreground">
@@ -219,10 +220,10 @@ export default async function SettingsPage() {
       </div>
 
       {/* 3. DANGER ZONE */}
-      <Card className="rounded-3xl border-destructive/30 bg-destructive/[0.02] shadow-lg backdrop-blur-md">
+      <Card className="rounded-3xl border-rose-200 bg-white shadow-xs">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base font-semibold text-destructive">
-            <div className="flex size-8 items-center justify-center rounded-xl bg-destructive/15 text-destructive">
+            <div className="flex size-8 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
               <ShieldAlertIcon className="size-4" />
             </div>
             <span>Danger Zone</span>

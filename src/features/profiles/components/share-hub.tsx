@@ -33,7 +33,7 @@ type Action = { key: string; label: string; Icon: LucideIcon } & (
 );
 
 const ACTION =
-  "flex flex-col items-center gap-1.5 rounded-2xl px-1 py-2 text-xs text-muted-foreground outline-none transition hover:bg-white/10 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/60";
+  "flex flex-col items-center gap-1.5 rounded-2xl px-1 py-2 text-xs text-slate-600 outline-none transition hover:bg-slate-100 hover:text-teal-700 focus-visible:ring-3 focus-visible:ring-ring/60";
 
 // The owner's card as a shareable object: name, big QR, URL and one-tap share actions.
 export function ShareHub(props: ShareHubProps) {
@@ -93,10 +93,10 @@ export function ShareHub(props: ShareHubProps) {
     >
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,rgb(124_58_237/0.35),transparent_60%),radial-gradient(ellipse_at_bottom_right,rgb(6_182_212/0.25),transparent_60%)]"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,rgb(0_168_182/0.08),transparent_60%),radial-gradient(ellipse_at_bottom_right,rgb(140_198_63/0.08),transparent_60%)]"
       />
       <div className="flex items-center gap-3">
-        <div className="size-12 shrink-0 overflow-hidden rounded-full bg-white/10 ring-2 ring-white/20">
+        <div className="size-12 shrink-0 overflow-hidden rounded-full bg-slate-100 ring-2 ring-slate-200">
           {avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element -- small, already resized
             <img src={avatarUrl} alt="" className="size-full object-cover" />
@@ -111,14 +111,14 @@ export function ShareHub(props: ShareHubProps) {
       </div>
 
       <div className="mt-5 flex flex-col items-center gap-3">
-        <div className="rounded-3xl bg-white p-3 shadow-[0_0_40px_-8px_rgb(167_139_250/0.6)]">
+        <div className="rounded-3xl bg-white p-3 shadow-md border border-slate-200/80">
           <QrCode value={qrUrl} size={200} label={t("qrLabel", { name: displayName })} />
         </div>
         <p className="max-w-full truncate font-mono text-sm text-muted-foreground">
           {effectiveProfileUrl.replace(/^https?:\/\//, "")}
         </p>
         {isPublished ? null : (
-          <p className="rounded-full bg-amber-400/15 px-3 py-1 text-xs text-amber-200">
+          <p className="rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-medium text-amber-800">
             {t("draft")}
           </p>
         )}
@@ -129,12 +129,12 @@ export function ShareHub(props: ShareHubProps) {
           <li key={action.key}>
             {"href" in action ? (
               <a href={action.href} target="_blank" rel="noopener noreferrer" className={ACTION}>
-                <action.Icon className="size-5 text-foreground" aria-hidden />
+                <action.Icon className="size-5 text-teal-600" aria-hidden />
                 {action.label}
               </a>
             ) : (
               <button type="button" onClick={action.onClick} className={`${ACTION} w-full`}>
-                <action.Icon className="size-5 text-foreground" aria-hidden />
+                <action.Icon className="size-5 text-teal-600" aria-hidden />
                 {action.label}
               </button>
             )}

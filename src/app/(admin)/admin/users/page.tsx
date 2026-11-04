@@ -80,12 +80,12 @@ export default async function AdminUsersPage({
               return (
                 <div
                   key={user.id}
-                  className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-card/60 p-4 shadow-lg backdrop-blur-md"
+                  className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 shadow-xs"
                 >
                   {/* Header: User Info & Role Badge */}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/30 to-indigo-600/30 text-sm font-bold text-primary ring-1 ring-primary/30 shadow-inner">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-teal-50 text-sm font-bold text-teal-700 ring-1 ring-teal-500/20 shadow-xs">
                         {userInitial}
                       </div>
                       <div className="flex flex-col min-w-0">
@@ -104,16 +104,16 @@ export default async function AdminUsersPage({
                   </div>
 
                   {/* Metrics & Joined Date */}
-                  <div className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-2.5 text-xs text-muted-foreground">
+                  <div className="flex items-center justify-between rounded-xl border border-border bg-slate-50/80 p-2.5 text-xs text-muted-foreground">
                     <div className="flex items-center gap-3">
                       <span className="flex items-center gap-1">
-                        <SparklesIcon className="size-3 text-primary" />
+                        <SparklesIcon className="size-3 text-teal-600" />
                         <span>
                           {user.profiles} {t("profiles")}
                         </span>
                       </span>
                       <span className="flex items-center gap-1">
-                        <CreditCardIcon className="size-3 text-cyan-400" />
+                        <CreditCardIcon className="size-3 text-teal-600" />
                         <span>
                           {user.cards} {t("cards")}
                         </span>
@@ -127,7 +127,7 @@ export default async function AdminUsersPage({
                   </div>
 
                   {/* Actions Footer */}
-                  <div className="border-t border-white/5 pt-2">
+                  <div className="border-t border-border pt-2">
                     <UserActions
                       userId={user.id}
                       email={user.email}

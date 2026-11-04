@@ -43,7 +43,7 @@ export default async function BatchesPage({
   return (
     <div className="flex flex-col gap-8">
       <PageHeader title={t("title")} description={t("description")} />
-      <Card className="rounded-3xl border-white/10 bg-card/60 shadow-xl backdrop-blur-md">
+      <Card className="rounded-3xl border-border bg-card shadow-xs">
         <CardHeader>
           <CardTitle className="text-base font-semibold">
             <h2>{t("createTitle")}</h2>
@@ -75,7 +75,7 @@ export default async function BatchesPage({
               {batches.map((batch) => (
                 <div
                   key={batch.id}
-                  className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-card/60 p-4 shadow-lg backdrop-blur-md"
+                  className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 shadow-xs"
                 >
                   {/* Header: Batch Name + Actions */}
                   <div className="flex items-start justify-between gap-2">
@@ -98,7 +98,7 @@ export default async function BatchesPage({
                   </div>
 
                   {/* 4 Quantities Stats Pill Grid */}
-                  <div className="grid grid-cols-4 gap-1.5 rounded-xl border border-white/5 bg-white/[0.02] p-2 text-center">
+                  <div className="grid grid-cols-4 gap-1.5 rounded-xl border border-border bg-slate-50/80 p-2 text-center">
                     <div className="flex flex-col">
                       <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
                         {t("quantity")}
@@ -116,25 +116,25 @@ export default async function BatchesPage({
                       </span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[10px] text-emerald-400 uppercase tracking-wider">
+                      <span className="text-[10px] text-emerald-600 uppercase tracking-wider">
                         {t("active")}
                       </span>
-                      <span className="font-mono text-xs font-semibold text-emerald-400">
+                      <span className="font-mono text-xs font-semibold text-emerald-600">
                         {batch.active}
                       </span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[10px] text-rose-400 uppercase tracking-wider">
+                      <span className="text-[10px] text-rose-600 uppercase tracking-wider">
                         {t("disabled")}
                       </span>
-                      <span className="font-mono text-xs font-semibold text-rose-400">
+                      <span className="font-mono text-xs font-semibold text-rose-600">
                         {batch.disabled}
                       </span>
                     </div>
                   </div>
 
                   {/* Footer: Date */}
-                  <div className="flex items-center justify-between border-t border-white/5 pt-2 text-[11px] text-muted-foreground">
+                  <div className="flex items-center justify-between border-t border-border pt-2 text-[11px] text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <CalendarIcon className="size-3 text-muted-foreground/70" />
                       <span>{format.dateTime(batch.createdAt, { dateStyle: "medium" })}</span>

@@ -57,12 +57,12 @@ export default async function AdminCardsPage({ searchParams }: PageProps<"/admin
             {rows.map((card) => (
               <div
                 key={card.id}
-                className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-card/60 p-4 shadow-lg backdrop-blur-md"
+                className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 shadow-xs"
               >
                 {/* Header: Code + Status + Action Menu */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <code className="rounded-lg border border-white/10 bg-white/[0.06] px-2.5 py-1 font-mono text-xs font-bold tracking-wider text-white">
+                    <code className="rounded-lg border border-slate-200 bg-slate-100 px-2.5 py-1 font-mono text-xs font-bold tracking-wider text-slate-800">
                       {card.code}
                     </code>
                     <Badge variant={card.status === "active" ? "default" : "secondary"}>
@@ -73,7 +73,7 @@ export default async function AdminCardsPage({ searchParams }: PageProps<"/admin
                 </div>
 
                 {/* Body: Owner & Profile */}
-                <div className="flex flex-col gap-1.5 rounded-xl border border-white/5 bg-white/[0.02] p-2.5 text-xs">
+                <div className="flex flex-col gap-1.5 rounded-xl border border-border bg-slate-50/80 p-2.5 text-xs">
                   <div className="flex items-center gap-2 text-foreground/90">
                     <UserIcon className="size-3.5 text-muted-foreground shrink-0" />
                     <span className="truncate">{card.ownerEmail ?? t("status.unclaimed")}</span>
@@ -94,7 +94,7 @@ export default async function AdminCardsPage({ searchParams }: PageProps<"/admin
                 </div>
 
                 {/* Footer: Batch & Claimed Date */}
-                <div className="flex items-center justify-between border-t border-white/5 pt-2 text-[11px] text-muted-foreground">
+                <div className="flex items-center justify-between border-t border-border pt-2 text-[11px] text-muted-foreground">
                   <span className="flex items-center gap-1.5">
                     <LayersIcon className="size-3 text-muted-foreground/70" />
                     <span className="truncate max-w-[140px]">{card.batchName ?? "—"}</span>

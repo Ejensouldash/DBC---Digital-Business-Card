@@ -13,7 +13,7 @@ export function HeroHeadline({ text }: { text: string }) {
         {words.map((word, i) => (
           <m.span
             key={`${word}-${i}`}
-            className="inline-block bg-gradient-to-br from-white via-violet-200 to-cyan-200 bg-clip-text pr-[0.25em] text-transparent"
+            className="inline-block bg-gradient-to-br from-slate-900 via-teal-900 to-teal-600 bg-clip-text pr-[0.25em] text-transparent"
             initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease: [0.2, 0.8, 0.2, 1] }}

@@ -59,7 +59,7 @@ export function ViewScannedCardDialog({
           <Button
             variant="outline"
             size="sm"
-            className="h-8 gap-1.5 rounded-lg border-violet-500/30 bg-violet-500/5 px-2.5 text-xs font-medium text-violet-300 hover:bg-violet-500/15 hover:border-violet-500/50 transition-colors"
+            className="h-8 gap-1.5 rounded-lg border-teal-500/30 bg-teal-50 px-2.5 text-xs font-medium text-teal-700 hover:bg-teal-100 hover:border-teal-500/50 transition-colors"
           >
             <CreditCardIcon className="size-3.5" />
             <span>View Card</span>
@@ -70,7 +70,7 @@ export function ViewScannedCardDialog({
       <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto p-5 sm:p-6">
         <DialogHeader className="space-y-1">
           <div className="flex items-center gap-2">
-            <div className="flex size-7 items-center justify-center rounded-lg bg-violet-500/15 text-violet-400">
+            <div className="flex size-7 items-center justify-center rounded-lg bg-teal-50 text-teal-600 ring-1 ring-teal-500/20">
               <SparklesIcon className="size-4" />
             </div>
             <DialogTitle className="text-base font-semibold">
@@ -87,10 +87,10 @@ export function ViewScannedCardDialog({
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-                <SparklesIcon className="size-3.5 text-violet-400" />
+                <SparklesIcon className="size-3.5 text-teal-600" />
                 Digital Replica
               </span>
-              <Badge variant="outline" className="text-[10px] py-0 px-2 border-violet-500/30 text-violet-300">
+              <Badge variant="outline" className="text-[10px] py-0 px-2 border-teal-500/30 bg-teal-50 text-teal-700">
                 AI Extracted
               </Badge>
             </div>
@@ -167,7 +167,7 @@ export function ViewScannedCardDialog({
                 <ImageIcon className="size-3.5" />
                 Original Photo
               </span>
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-white/10 bg-black/40 shadow-inner">
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border bg-slate-100 shadow-inner">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={cardImageUrl}
@@ -179,7 +179,7 @@ export function ViewScannedCardDialog({
           ) : null}
 
           {/* Detailed attributes */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 rounded-xl border border-white/5 bg-white/[0.02] p-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 rounded-xl border border-border bg-slate-50/70 p-3 text-xs">
             {lead.phone ? (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <PhoneIcon className="size-3.5 text-foreground/70" />
@@ -214,7 +214,7 @@ export function ViewScannedCardDialog({
           </div>
 
           {/* Action Footer */}
-          <div className="flex items-center justify-end gap-2 border-t border-white/10 pt-3">
+          <div className="flex items-center justify-end gap-2 border-t border-border pt-3">
             <LeadVCardButton
               contact={{
                 name: lead.name,

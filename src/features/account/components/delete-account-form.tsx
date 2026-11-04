@@ -76,7 +76,7 @@ export function DeleteAccountForm({ email }: { email: string }) {
           spellCheck={false}
           aria-invalid={error === "mismatch"}
           aria-describedby="confirm-email-hint"
-          className="bg-black/40 text-xs"
+          className="bg-white text-xs"
         />
         <FieldDescription id="confirm-email-hint" className="text-[11px]">
           {t("confirmHint")}

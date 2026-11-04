@@ -18,7 +18,7 @@ export function CardFilters({ filter, batches }: CardFiltersProps) {
   return (
     <form
       method="get"
-      className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-card/40 p-3.5 backdrop-blur-md sm:flex-row sm:flex-wrap sm:items-end sm:border-0 sm:bg-transparent sm:p-0"
+      className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-3.5 shadow-2xs sm:flex-row sm:flex-wrap sm:items-end sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none"
       role="search"
     >
       <div className="flex flex-1 flex-col gap-1 text-sm sm:max-w-xs">

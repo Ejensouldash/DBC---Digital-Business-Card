@@ -86,12 +86,12 @@ export function OwnerCardItem({ card, profiles, cardUrl }: OwnerCardItemProps) {
       {/* ─────────────────────────────────────────────────────────────
           1. MOBILE VIEW (< sm) - Sleek Fintech NFC Card + Tabs
       ───────────────────────────────────────────────────────────── */}
-      <div className="flex flex-col gap-3.5 rounded-3xl border border-white/10 bg-card/60 p-3.5 shadow-xl backdrop-blur-md sm:hidden">
+      <div className="flex flex-col gap-3.5 rounded-3xl border border-border bg-card p-3.5 shadow-xs sm:hidden">
         {/* Virtual NFC Physical Card Mockup */}
-        <div className="relative aspect-[1.8] w-full overflow-hidden rounded-2xl border border-white/20 bg-gradient-to-br from-violet-900/40 via-[#0d122b] to-[#070b1a] p-4 text-white shadow-xl">
+        <div className="relative aspect-[1.8] w-full overflow-hidden rounded-2xl border border-teal-500/20 bg-gradient-to-br from-teal-900/90 via-slate-900 to-slate-950 p-4 text-white shadow-lg">
           {/* Subtle glow orbs */}
-          <div className="pointer-events-none absolute -right-12 -top-12 size-36 rounded-full bg-primary/25 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-12 -left-12 size-36 rounded-full bg-cyan-500/15 blur-2xl" />
+          <div className="pointer-events-none absolute -right-12 -top-12 size-36 rounded-full bg-teal-400/20 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-12 -left-12 size-36 rounded-full bg-emerald-400/15 blur-2xl" />
 
           {/* Top Row: Chip + NFC Icon + Status Badge */}
           <div className="relative flex items-center justify-between">
@@ -106,8 +106,8 @@ export function OwnerCardItem({ card, profiles, cardUrl }: OwnerCardItemProps) {
               className={cn(
                 "px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase",
                 card.status === "active"
-                  ? "bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.2)]"
-                  : "bg-zinc-800 text-zinc-400",
+                  ? "bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40"
+                  : "bg-slate-800 text-slate-400",
               )}
             >
               {t(`status.${card.status}`)}
@@ -180,7 +180,7 @@ export function OwnerCardItem({ card, profiles, cardUrl }: OwnerCardItemProps) {
         </div>
 
         {/* Segmented Mode Switcher (Settings vs QR Code) */}
-        <div className="grid grid-cols-2 rounded-xl border border-white/10 bg-white/[0.04] p-1 text-xs font-medium">
+        <div className="grid grid-cols-2 rounded-xl border border-border bg-muted/60 p-1 text-xs font-medium">
           <button
             type="button"
             onClick={() => setMobileTab("settings")}
@@ -213,7 +213,7 @@ export function OwnerCardItem({ card, profiles, cardUrl }: OwnerCardItemProps) {
         {mobileTab === "settings" ? (
           <div className="flex flex-col gap-3 pt-1">
             {/* Target Profile Selector */}
-            <div className="flex flex-col gap-1.5 rounded-xl border border-white/10 bg-white/[0.02] p-3">
+            <div className="flex flex-col gap-1.5 rounded-xl border border-border bg-slate-50/80 p-3">
               <label htmlFor={`profile-mobile-${card.id}`} className="text-xs font-semibold text-foreground">
                 {t("opens")}
               </label>
@@ -238,7 +238,7 @@ export function OwnerCardItem({ card, profiles, cardUrl }: OwnerCardItemProps) {
             </div>
 
             {/* Card Status Switch */}
-            <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] p-3">
+            <div className="flex items-center justify-between rounded-xl border border-border bg-slate-50/80 p-3">
               <div className="flex flex-col gap-0.5 pr-2">
                 <span className="text-xs font-semibold text-foreground">{t("enabled")}</span>
                 <span className="text-[11px] text-muted-foreground">{t("enabledHint")}</span>
@@ -257,10 +257,10 @@ export function OwnerCardItem({ card, profiles, cardUrl }: OwnerCardItemProps) {
             </div>
 
             {/* Chip URL Box */}
-            <div className="flex flex-col gap-1.5 rounded-xl border border-white/10 bg-white/[0.02] p-3">
+            <div className="flex flex-col gap-1.5 rounded-xl border border-border bg-slate-50/80 p-3">
               <span className="text-xs font-semibold text-muted-foreground">{t("cardUrl")}</span>
               <div className="flex items-center gap-1.5">
-                <code className="flex-1 truncate rounded-md bg-black/40 px-2 py-1 text-xs text-foreground/90">
+                <code className="flex-1 truncate rounded-md bg-slate-100 border border-slate-200 px-2 py-1 text-xs text-slate-800">
                   {cardUrl}
                 </code>
                 <Button variant="outline" size="sm" onClick={copyUrl} className="h-7 gap-1 px-2.5 text-xs">
@@ -282,8 +282,8 @@ export function OwnerCardItem({ card, profiles, cardUrl }: OwnerCardItemProps) {
           </div>
         ) : (
           /* Tab 2: QR Code View */
-          <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-white/10 bg-white/[0.02] p-4">
-            <div className="rounded-2xl border border-white/15 bg-white p-3 shadow-xl">
+          <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-border bg-slate-50/80 p-4">
+            <div className="rounded-2xl border border-border bg-white p-3 shadow-md">
               <QrCode value={qrUrl} size={150} label={t("qrLabel", { code: card.code })} />
             </div>
             <div className="flex w-full flex-col items-center gap-2">

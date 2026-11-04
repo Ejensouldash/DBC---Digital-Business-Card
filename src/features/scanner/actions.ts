@@ -59,6 +59,7 @@ export async function scanCardImage(formData: FormData): Promise<
     const result = await extractBusinessCardWithGemini(dataUrl);
 
     if (!result.ok) {
+      console.warn("[Card Scanner] Extraction failed:", result.error);
       if (result.error === "gemini_key_missing") {
         return fail("gemini_key_missing");
       }

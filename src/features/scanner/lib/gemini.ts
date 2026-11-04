@@ -52,12 +52,17 @@ export async function extractBusinessCardWithGemini(
   // Model fallback chain:
   // Starts with user configured model or gemini-2.5-flash, falls back gracefully.
   const configuredModel = env.GEMINI_MODEL || process.env.GEMINI_MODEL;
+  const fallbackModels = [
+    "gemini-3.5-flash-lite",
+    "gemini-2.5-flash",
+    "gemini-3-flash-preview",
+    "gemini-3.5-flash",
+    "gemini-3.8-flash",
+  ];
   const modelsToTry = [
     ...(configuredModel ? [configuredModel] : []),
-    "gemini-2.5-flash",
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
-  ].filter((value, index, self) => self.indexOf(value) === index);
+    ...fallbackModels,
+  ].filter((value, index, self): value is string => Boolean(value) && self.indexOf(value) === index);
 
   const prompt = `Analyze this physical business card image and extract contact details and design properties accurately.
 Return a clean JSON object with:
@@ -121,13 +126,22 @@ Return a clean JSON object with:
         continue;
       }
 
-      // Parse structured JSON response
-      const parsed = JSON.parse(rawText) as ExtractedBusinessCard;
+      // Parse structured JSON response (strip markdown code blocks if present)
+      let cleanJson = rawText.trim();
+      if (cleanJson.startsWith("```")) {
+        cleanJson = cleanJson.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+      }
+      const parsed = JSON.parse(cleanJson) as ExtractedBusinessCard;
 
-      if (!parsed.name || typeof parsed.name !== "string") {
-        lastError = "Could not find a valid name on the business card.";
+      const rawName = typeof parsed.name === "string" ? parsed.name.trim() : "";
+      const rawCompany = typeof parsed.company === "string" ? parsed.company.trim() : "";
+
+      if (!rawName && !rawCompany) {
+        lastError = "Could not find a valid name or company on the business card.";
         continue;
       }
+
+      parsed.name = rawName || rawCompany;
 
       // Normalize design fallback if AI didn't provide hex
       const design: ExtractedCardDesign = {

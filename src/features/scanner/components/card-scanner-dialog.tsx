@@ -45,6 +45,7 @@ import { buildContactVCard } from "@/lib/vcard";
 
 import { saveScannedLead, scanCardImage } from "../actions";
 import type { ExtractedBusinessCard, ExtractedCardDesign } from "../lib/gemini";
+import { optimizeImageForOcr } from "../lib/image";
 
 type ProfileOption = {
   id: string;
@@ -120,58 +121,56 @@ export function CardScannerDialog({
   const handleProcessFile = async (file: File) => {
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
+    if (file.type && !file.type.startsWith("image/")) {
       toast.error(t("errors.no_image_provided"));
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > 30 * 1024 * 1024) {
       toast.error(t("errors.file_too_large"));
       return;
     }
 
-    // Set preview and transition to scanning state
-    const reader = new FileReader();
-    reader.onload = async () => {
-      const preview = reader.result as string;
-      setImagePreview(preview);
-      setStep("scanning");
+    setStep("scanning");
+
+    try {
+      // Downscale high-resolution mobile camera photos (e.g. 10MB -> ~250KB)
+      // to avoid Vercel 4.5MB payload limits, Next.js action limits, and timeouts.
+      const { file: optimizedFile, dataUrl } = await optimizeImageForOcr(file);
+      setImagePreview(dataUrl);
 
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("image", optimizedFile);
 
-      try {
-        const result = await scanCardImage(formData);
+      const result = await scanCardImage(formData);
 
-        if (!result.ok) {
-          if (result.error === "gemini_key_missing") {
-            toast.error(t("errors.gemini_key_missing"), { duration: 6000 });
-          } else {
-            toast.error(t("errors.processing_failed"));
-          }
-          setStep("capture");
-          return;
+      if (!result.ok) {
+        if (result.error === "gemini_key_missing") {
+          toast.error(t("errors.gemini_key_missing"), { duration: 6000 });
+        } else {
+          toast.error(t("errors.processing_failed"));
         }
-
-        const data: ExtractedBusinessCard = result.data.card;
-        setName(data.name || "");
-        setJobTitle(data.jobTitle || "");
-        setCompany(data.company || "");
-        setPhone(data.phone || "");
-        setEmail(data.email || "");
-        setWebsite(data.website || "");
-        setAddress(data.address || "");
-        setNotes(data.notes || "");
-        setCardDesign(data.design || null);
-        setModelUsed(result.data.modelUsed);
-        setStep("review");
-      } catch (err) {
-        console.error(err);
-        toast.error(t("errors.processing_failed"));
         setStep("capture");
+        return;
       }
-    };
-    reader.readAsDataURL(file);
+
+      const data: ExtractedBusinessCard = result.data.card;
+      setName(data.name || "");
+      setJobTitle(data.jobTitle || "");
+      setCompany(data.company || "");
+      setPhone(data.phone || "");
+      setEmail(data.email || "");
+      setWebsite(data.website || "");
+      setAddress(data.address || "");
+      setNotes(data.notes || "");
+      setCardDesign(data.design || null);
+      setModelUsed(result.data.modelUsed);
+      setStep("review");
+    } catch (err) {
+      console.error("[Card Scanner] Error processing card image:", err);
+      toast.error(t("errors.processing_failed"));
+      setStep("capture");
+    }
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

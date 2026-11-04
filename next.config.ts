@@ -8,6 +8,11 @@ const r2Host = process.env.R2_PUBLIC_URL ? new URL(process.env.R2_PUBLIC_URL).ho
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
+  },
   images: {
     // Profile images come from the R2 bucket's public URL (r2.dev, or a custom domain).
     remotePatterns: [

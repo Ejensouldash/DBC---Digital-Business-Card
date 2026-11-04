@@ -55,8 +55,8 @@ export default async function LeadsPage() {
         }
       />
       {leads.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-white/10 bg-white/[0.01] p-12 text-center">
-          <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/20">
+        <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center shadow-xs">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 ring-1 ring-teal-500/20">
             <SparklesIcon className="size-6" />
           </div>
           <div className="space-y-1 max-w-md">
@@ -315,14 +315,14 @@ export default async function LeadsPage() {
                             }}
                             variant="outline"
                             size="sm"
-                            className="size-8 p-0 rounded-lg border-white/10 bg-white/[0.03] text-foreground hover:bg-white/10 hover:border-white/20 transition-colors shadow-xs"
+                            className="size-8 p-0 rounded-lg border-border bg-white text-foreground hover:bg-slate-50 hover:border-slate-300 transition-colors shadow-2xs"
                             showText={false}
                           />
                           <DeleteLeadButton
                             leadId={lead.id}
                             name={lead.name}
                             variant="outline"
-                            className="size-8 p-0 rounded-lg border-white/10 bg-white/[0.02] text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive transition-colors shadow-xs"
+                            className="size-8 p-0 rounded-lg border-border bg-white text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive transition-colors shadow-2xs"
                           />
                         </div>
                       </TableCell>

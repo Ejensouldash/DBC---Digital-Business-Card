@@ -49,8 +49,15 @@ export function LeadVCardButton({
       className={className}
       onClick={handleDownload}
       title="Download vCard contact file"
+      aria-label={
+        showText
+          ? undefined
+          : contact.name
+            ? `Download vCard for ${contact.name}`
+            : "Download vCard contact file"
+      }
     >
-      <DownloadIcon className="size-3.5" />
+      <DownloadIcon className="size-3.5" aria-hidden />
       {showText ? <span>vCard</span> : null}
     </Button>
   );

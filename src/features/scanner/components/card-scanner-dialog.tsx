@@ -282,7 +282,7 @@ export function CardScannerDialog({
         className={
           step === "review"
             ? "w-full max-w-[calc(100vw-1.5rem)] sm:max-w-4xl max-h-[92vh] flex flex-col p-0 overflow-hidden rounded-2xl sm:rounded-3xl border-slate-200 bg-white shadow-xl"
-            : "w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl p-5 sm:p-7 overflow-hidden rounded-2xl sm:rounded-3xl border-slate-200 bg-white shadow-xl"
+            : "w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl p-0 overflow-hidden rounded-2xl sm:rounded-3xl border-slate-200 bg-white shadow-xl"
         }
       >
         {/* Header - Pinned at top */}
@@ -348,7 +348,7 @@ export function CardScannerDialog({
             STEP 1: CAPTURE / UPLOAD (Clean, Minimalist Dropzone for Laptop & Mobile)
         ───────────────────────────────────────────────────────────── */}
         {step === "capture" && (
-          <div className="flex flex-col gap-5 pt-1">
+          <div className="flex flex-col gap-5 px-5 pt-4 pb-5 sm:px-6 sm:pb-6">
             {/* Hidden native file inputs */}
             <input
               type="file"
@@ -476,7 +476,7 @@ export function CardScannerDialog({
             STEP 2: SCANNING / ANALYZING ANIMATION
         ───────────────────────────────────────────────────────────── */}
         {step === "scanning" && (
-          <div className="flex flex-col items-center justify-center gap-6 py-10 text-center">
+          <div className="flex flex-col items-center justify-center gap-6 px-5 py-10 text-center sm:px-6">
             {/* Card preview with scanning beam animation */}
             <div className="relative h-48 w-80 max-w-full overflow-hidden rounded-2xl border border-teal-200 bg-slate-100 shadow-lg">
               {imagePreview && (
@@ -541,17 +541,17 @@ export function CardScannerDialog({
                         <div
                           className="size-3 rounded-full border border-slate-300 shadow-2xs"
                           style={{ backgroundColor: cardDesign?.dominantColor || "#00a8b6" }}
-                          title={`Background: ${cardDesign?.dominantColor}`}
+                          title={`Background: ${cardDesign?.dominantColor || "#00a8b6"}`}
                         />
                         <div
                           className="size-3 rounded-full border border-slate-300 shadow-2xs"
                           style={{ backgroundColor: cardDesign?.accentColor || "#8cc63f" }}
-                          title={`Accent: ${cardDesign?.accentColor}`}
+                          title={`Accent: ${cardDesign?.accentColor || "#8cc63f"}`}
                         />
                         <div
                           className="size-3 rounded-full border border-slate-300 shadow-2xs"
                           style={{ backgroundColor: cardDesign?.textColor || "#0f172a" }}
-                          title={`Text: ${cardDesign?.textColor}`}
+                          title={`Text: ${cardDesign?.textColor || "#0f172a"}`}
                         />
                       </div>
                     </div>
